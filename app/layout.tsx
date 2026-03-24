@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { ThemeProvider } from "next-themes";
-import { EB_Garamond, Geist, Geist_Mono, Inter, Space_Grotesk } from "next/font/google";
+import Providers from '@/components/providers/providers';
+import { EB_Garamond, Geist_Mono, Outfit, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -13,13 +13,7 @@ export const metadata: Metadata = {
   description: "The fastest way to build apps with Next.js and Supabase",
 };
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  display: "swap",
-  subsets: ["latin"],
-});
-
-const fontSans = Inter({
+const fontSans = Outfit({
   subsets: ["latin"],
   variable: "--font-sans",
 });
@@ -46,15 +40,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+      <body className={`${fontSans.variable} ${fontSerif.variable} ${fontHeading.variable} ${fontMono.variable} antialiased`}>
+        <Providers>
           {children}
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );
