@@ -1,7 +1,7 @@
 import { ThemeProvider } from 'next-themes'
 import React from 'react'
 import { TooltipProvider } from '../ui/tooltip'
-import { Toaster } from 'sonner'
+import { Toaster } from '@/components/toast/toaster';
 
 export default function Providers({ children }: { children: React.ReactNode}) {
   return (
@@ -15,7 +15,7 @@ export default function Providers({ children }: { children: React.ReactNode}) {
           {children}
       </TooltipProvider>
 
-      <Toaster position="top-right" />
+      <Toaster />
     </ThemeProvider>
   )
 }
