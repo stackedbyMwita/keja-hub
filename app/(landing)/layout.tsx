@@ -1,3 +1,5 @@
+import { FooterExtensive } from "./_components/footer/footer-extensive";
+import { FooterMinimal } from "./_components/footer/footer-minimal";
 import Navbar from "./_components/navbar/Navbar";
 
 
@@ -6,6 +8,7 @@ export default function LandingLayout({ children }: { children: React.ReactNode 
     <div className="min-h-screen flex flex-col">
       <Navbar/>
       <main className="flex-1">{children}</main>
+      <FooterExtensive />
     </div>
   )
 }
