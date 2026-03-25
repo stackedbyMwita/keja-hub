@@ -8,7 +8,7 @@ interface MaxWidthWrapperProps {
 export default function MaxWidthWrapper({ children, className }: MaxWidthWrapperProps) {
   return (
     <div className={cn(
-      'mx-auto w-full max-w-6xl px-2.5 md:px-20',
+      'mx-auto w-full max-w-6xl px-4 py-8 md:px-8 md:py-12 lg:py-16',
       className
     )}>
       {children}

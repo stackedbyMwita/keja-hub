@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <MaxWidthWrapper className="p-8">
+      <MaxWidthWrapper>
         <Display />
       </MaxWidthWrapper>
     </div>

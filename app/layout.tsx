@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Providers from '@/components/providers/providers';
 import { EB_Garamond, Geist_Mono, Outfit, Space_Grotesk, Geist } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/lib/utils";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -14,7 +13,10 @@ export const metadata: Metadata = {
   description: "The fastest way to build apps with Next.js and Supabase",
 };
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const fontSans = Outfit({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
 
 const fontHeading = EB_Garamond({
   subsets: ["latin"],
@@ -37,8 +39,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
-      <body className={`${geist.variable} ${fontSerif.variable} ${fontHeading.variable} ${fontMono.variable} antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${fontSans.variable} ${fontSerif.variable} ${fontHeading.variable} ${fontMono.variable} antialiased`}>
         <Providers>
           {children}
         </Providers>
