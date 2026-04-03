@@ -1,80 +1,189 @@
-// hooks/usePosts.ts
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { fetchPosts, createPost, likePost, unlikePost, checkIfLiked, fetchCurrentUserProfile } from '@/lib/api/posts'
+import {
+  fetchPosts, fetchUserPosts, fetchPost, fetchPostComments,
+  fetchCurrentUserProfile, createPost, updatePost, deletePost,
+  createComment, deleteComment, likePost, unlikePost, checkIfLiked,
+  repostPost, savePost, unsavePost, checkIfSaved,
+} from '@/lib/api/posts'
 import { useUser } from '@clerk/nextjs'
+import { useSupabaseClient } from '@/lib/supabase/client'
 
-// Hook for fetching all posts
 export function usePosts() {
+  const supabase = useSupabaseClient()
   return useQuery({
     queryKey: ['posts'],
-    queryFn: fetchPosts,
+    queryFn: () => fetchPosts(supabase),
   })
 }
 
-// Hook for fetching current user profile
+export function useUserPosts(userId?: string) {
+  const supabase = useSupabaseClient()
+  return useQuery({
+    queryKey: ['posts', 'user', userId],
+    queryFn: () => fetchUserPosts(supabase, userId!),
+    enabled: !!userId,
+  })
+}
+
+export function usePost(id: string) {
+  const supabase = useSupabaseClient()
+  return useQuery({
+    queryKey: ['post', id],
+    queryFn: () => fetchPost(supabase, id),
+    enabled: !!id,
+  })
+}
+
+export function usePostComments(postId: string) {
+  const supabase = useSupabaseClient()
+  return useQuery({
+    queryKey: ['comments', postId],
+    queryFn: () => fetchPostComments(supabase, postId),
+    enabled: !!postId,
+  })
+}
+
 export function useCurrentUserProfile() {
   const { user } = useUser()
-  
+  const supabase = useSupabaseClient()
   return useQuery({
     queryKey: ['profile', user?.id],
-    queryFn: () => fetchCurrentUserProfile(user!.id),
+    queryFn: () => fetchCurrentUserProfile(supabase, user!.id),
     enabled: !!user,
   })
 }
 
-// Hook for creating a post
 export function useCreatePost() {
   const queryClient = useQueryClient()
   const { user } = useUser()
-  
+  const supabase = useSupabaseClient()
   return useMutation({
-    mutationFn: (content: string) => createPost(content, user!.id),
+    mutationFn: (content: string) => createPost(supabase, content, user!.id),
     onSuccess: () => {
-      // Invalidate and refetch posts after creating a new one
       queryClient.invalidateQueries({ queryKey: ['posts'] })
     },
   })
 }
 
-// Hook for liking/unliking a post
+export function useUpdatePost() {
+  const queryClient = useQueryClient()
+  const supabase = useSupabaseClient()
+  return useMutation({
+    mutationFn: ({ id, content }: { id: string; content: string }) =>
+      updatePost(supabase, id, content),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
+    },
+  })
+}
+
+export function useDeletePost() {
+  const queryClient = useQueryClient()
+  const supabase = useSupabaseClient()
+  return useMutation({
+    mutationFn: (id: string) => deletePost(supabase, id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
+    },
+  })
+}
+
+export function useCreateComment(postId: string) {
+  const queryClient = useQueryClient()
+  const { user } = useUser()
+  const supabase = useSupabaseClient()
+  return useMutation({
+    mutationFn: (content: string) => createComment(supabase, postId, user!.id, content),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments', postId] })
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
+    },
+  })
+}
+
+export function useDeleteComment(postId: string) {
+  const queryClient = useQueryClient()
+  const supabase = useSupabaseClient()
+  return useMutation({
+    mutationFn: (id: string) => deleteComment(supabase, id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['comments', postId] })
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
+    },
+  })
+}
+
 export function useLikePost(postId: string) {
   const queryClient = useQueryClient()
   const { user } = useUser()
-  
+  const supabase = useSupabaseClient()
+
   const { data: isLiked } = useQuery({
     queryKey: ['like', postId, user?.id],
-    queryFn: () => checkIfLiked(postId, user!.id),
+    queryFn: () => checkIfLiked(supabase, postId, user!.id),
     enabled: !!user,
   })
-  
+
   const likeMutation = useMutation({
-    mutationFn: () => likePost(postId, user!.id),
+    mutationFn: () => likePost(supabase, postId, user!.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] })
-      queryClient.invalidateQueries({ queryKey: ['like', postId, user?.id] })
+      queryClient.setQueryData(['like', postId, user?.id], true)
     },
   })
-  
+
   const unlikeMutation = useMutation({
-    mutationFn: () => unlikePost(postId, user!.id),
+    mutationFn: () => unlikePost(supabase, postId, user!.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['posts'] })
-      queryClient.invalidateQueries({ queryKey: ['like', postId, user?.id] })
+      queryClient.setQueryData(['like', postId, user?.id], false)
     },
   })
-  
-  const toggleLike = () => {
-    if (isLiked) {
-      unlikeMutation.mutate()
-    } else {
-      likeMutation.mutate()
-    }
-  }
-  
+
   return {
-    isLiked,
-    toggleLike,
-    isLiking: likeMutation.isPending,
-    isUnliking: unlikeMutation.isPending,
+    isLiked: isLiked ?? false,
+    toggleLike: () => isLiked ? unlikeMutation.mutate() : likeMutation.mutate(),
+    isLiking: likeMutation.isPending || unlikeMutation.isPending,
   }
+}
+
+export function useSavePost(postId: string) {
+  const queryClient = useQueryClient()
+  const { user } = useUser()
+  const supabase = useSupabaseClient()
+
+  const { data: isSaved } = useQuery({
+    queryKey: ['saved', postId, user?.id],
+    queryFn: () => checkIfSaved(supabase, postId, user!.id),
+    enabled: !!user,
+  })
+
+  const saveMutation = useMutation({
+    mutationFn: () => savePost(supabase, postId, user!.id),
+    onSuccess: () => queryClient.setQueryData(['saved', postId, user?.id], true),
+  })
+
+  const unsaveMutation = useMutation({
+    mutationFn: () => unsavePost(supabase, postId, user!.id),
+    onSuccess: () => queryClient.setQueryData(['saved', postId, user?.id], false),
+  })
+
+  return {
+    isSaved: isSaved ?? false,
+    toggleSave: () => isSaved ? unsaveMutation.mutate() : saveMutation.mutate(),
+    isSaving: saveMutation.isPending || unsaveMutation.isPending,
+  }
+}
+
+export function useRepostPost() {
+  const queryClient = useQueryClient()
+  const { user } = useUser()
+  const supabase = useSupabaseClient()
+  return useMutation({
+    mutationFn: ({ postId, content }: { postId: string; content?: string }) =>
+      repostPost(supabase, postId, user!.id, content),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
+    },
+  })
 }
