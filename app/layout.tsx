@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Providers from '@/components/providers/providers';
 import { EB_Garamond, Geist_Mono, Outfit, Space_Grotesk, Geist } from "next/font/google";
 import "./globals.css";
+import { APP_CONSTANTS } from "@/constants";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -9,8 +10,8 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: `${APP_CONSTANTS.name}`,
+  description: `${APP_CONSTANTS.description}`,
 };
 
 const fontSans = Outfit({

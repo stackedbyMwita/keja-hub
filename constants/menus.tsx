@@ -44,48 +44,12 @@ export type FooterSocialProps = {
 const size = 16
 
 export const LANDING_PAGE_MENU: LandingPageMenuProps[] = [
-  {
-    id: 0,
-    label: "Home",
-    icon: <House size={size} />,
-    path: "/",
-    section: true,
-  },
-  {
-    id: 1,
-    label: "Features",
-    icon: <Zap size={size} />,
-    path: "/#features",
-    section: true,
-  },
-  {
-    id: 2,
-    label: "Pricing",
-    icon: <CreditCard size={size} />,
-    path: "/#pricing",
-    section: true,
-  },
-  {
-    id: 3,
-    label: "Customers",
-    icon: <Users size={size} />,
-    path: "/#customers",
-    section: true,
-  },
-  {
-    id: 4,
-    label: "Explore",
-    icon: <Compass size={size} />,
-    path: "/explore",
-    section: false,
-  },
-  {
-    id: 5,
-    label: "FAQ",
-    icon: <HelpCircle size={size} />,
-    path: "/#faq",
-    section: true,
-  },
+  { id: 0, label: "Home", icon: <House size={size} />, path: "/", section: true },
+  { id: 1, label: "Features", icon: <Zap size={size} />, path: "/#features", section: true },
+  { id: 2, label: "Pricing", icon: <CreditCard size={size} />, path: "/#pricing", section: true },
+  { id: 3, label: "Customers", icon: <Users size={size} />, path: "/#customers", section: true },
+  { id: 4, label: "Explore", icon: <Compass size={size} />, path: "/explore", section: false },
+  { id: 5, label: "FAQ", icon: <HelpCircle size={size} />, path: "/#faq", section: true },
 ]
 
 export const FOOTER_COLUMNS: FooterColumnProps[] = [
@@ -136,34 +100,9 @@ export const FOOTER_COLUMNS: FooterColumnProps[] = [
 ]
 
 export const FOOTER_SOCIALS: FooterSocialProps[] = [
-  {
-    id: 0,
-    label: "Twitter",
-    icon: <Twitter size={size} />,
-    path: "https://twitter.com",
-  },
-  {
-    id: 1,
-    label: "GitHub",
-    icon: <Github size={size} />,
-    path: "https://github.com",
-  },
-  {
-    id: 2,
-    label: "LinkedIn",
-    icon: <Linkedin size={size} />,
-    path: "https://linkedin.com",
-  },
-  {
-    id: 3,
-    label: "YouTube",
-    icon: <Youtube size={size} />,
-    path: "https://youtube.com",
-  },
-  {
-    id: 4,
-    label: "Email",
-    icon: <Mail size={size} />,
-    path: "mailto:support@helloworld.com",
-  },
+  { id: 0, label: "Twitter", icon: <Twitter size={size} />, path: "https://twitter.com" },
+  { id: 1, label: "GitHub", icon: <Github size={size} />, path: "https://github.com" },
+  { id: 2, label: "LinkedIn", icon: <Linkedin size={size} />, path: "https://linkedin.com" },
+  { id: 3, label: "YouTube", icon: <Youtube size={size} />, path: "https://youtube.com" },
+  { id: 4, label: "Email", icon: <Mail size={size} />, path: "mailto:support@helloworld.com" },
 ]

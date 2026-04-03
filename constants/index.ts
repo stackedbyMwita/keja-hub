@@ -1,7 +1,5 @@
-import { ReactNode } from "react"
-import { FooterColumnProps, FooterSocialProps, LandingPageMenuProps } from "./menus"
-import { FOOTER_COLUMNS, FOOTER_SOCIALS, LANDING_PAGE_MENU } from "./menus"
 import { LucideIcon, Star } from 'lucide-react'
+import { FOOTER_COLUMNS, FOOTER_SOCIALS, FooterColumnProps, FooterSocialProps, LANDING_PAGE_MENU, LandingPageMenuProps } from "./menus"
 
 export type AppConstantsProps = {
   name: string

@@ -14,7 +14,7 @@ export default function NavMenu({ orientation }: MenuProps) {
 
   if (orientation === "desktop") {
     return (
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 p-1 bg-accent text-accent-foreground rounded-md">
         {APP_CONSTANTS.landingPageMenu.map((menuItem) => {
           const isActive = section === menuItem.path
           return (
@@ -23,9 +23,9 @@ export default function NavMenu({ orientation }: MenuProps) {
               href={menuItem.path}
               {...(menuItem.section && { onClick: () => onSetSection(menuItem.path) })}
               className={cn(
-                "flex items-center gap-1.5 px-4 py-1.5 rounded-md text-sm transition-colors",
+                "flex items-center gap-1.5 px-3 py-1 rounded-md text-sm transition-colors",
                 isActive
-                  ? "bg-accent text-accent-foreground font-medium"
+                  ? "font-medium bg-secondary"
                   : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
               )}
             >

@@ -11,7 +11,15 @@ export default function ThemeSwitch() {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => setMounted(true), [])
-  if (!mounted) return null
+  if (!mounted) {
+    return (
+      <div className="relative inline-flex h-8 w-14 items-center rounded-full bg-muted">
+        <div className="flex items-center justify-center h-6 w-6 rounded-full bg-background shadow-sm translate-x-1">
+          <Sun size={13} />
+        </div>
+      </div>
+    )
+  }
 
   const isDark = theme === 'dark'
 
