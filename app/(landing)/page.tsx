@@ -5,7 +5,7 @@ import { PostCard } from '@/components/posts/PostCard'
 import { Button } from '@/components/ui/button'
 import { usePosts } from '@/hooks/usePosts'
 import { useUser } from '@clerk/nextjs'
-import { Loader2, ArrowRight, Zap, Shield, Users } from 'lucide-react'
+import { ArrowRight, Loader2, Shield, Users, Zap } from 'lucide-react'
 import Link from 'next/link'
 
 function PublicFeed() {

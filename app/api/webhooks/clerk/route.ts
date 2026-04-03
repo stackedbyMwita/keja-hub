@@ -1,17 +1,14 @@
-import { Webhook } from 'svix'
-import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
+import { headers } from 'next/headers'
+import { Webhook } from 'svix'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
 
-// ============================================
 // HELPERS
-// ============================================
-
 function getAvatar(data: any): string {
   const googleAccount = data.external_accounts?.find(
     (a: any) => a.provider === 'google'
@@ -58,9 +55,7 @@ function getFullName(data: any): string | null {
     return null;
 }
 
-// ============================================
 // WEBHOOK HANDLER
-// ============================================
 export async function GET() {
   return new Response('Webhook route is reachable', { status: 200 })
 }
@@ -97,9 +92,7 @@ export async function POST(req: Request) {
     return new Response('Invalid webhook signature', { status: 400 })
   }
 
-  // ============================================
   // USER CREATED OR UPDATED (using upsert)
-  // ============================================
   if (evt.type === 'user.created' || evt.type === 'user.updated') {
     const d = evt.data
 
@@ -135,9 +128,7 @@ export async function POST(req: Request) {
     console.log(`Profile upserted for ${d.id} (event: ${evt.type})`)
   }
 
-  // ============================================
   // USER DELETED
-  // ============================================
   if (evt.type === 'user.deleted') {
     const { id } = evt.data
 

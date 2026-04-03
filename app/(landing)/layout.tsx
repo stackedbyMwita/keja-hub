@@ -1,7 +1,5 @@
 import { FooterExtensive } from "./_components/footer/footer-extensive";
-import { FooterMinimal } from "./_components/footer/footer-minimal";
 import Navbar from "./_components/navbar/Navbar";
-
 
 export default function LandingLayout({ children }: { children: React.ReactNode }) {
   return (
