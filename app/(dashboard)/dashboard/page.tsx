@@ -142,7 +142,7 @@ export default function DashboardPage() {
 
           <CreatePostBox />
 
-          <Tabs defaultValue="feed">
+          <Tabs defaultValue="feed" className='flex flex-col'>
             <TabsList className="w-full">
               <TabsTrigger value="feed" className="flex-1">Feed</TabsTrigger>
               <TabsTrigger value="my-posts" className="flex-1">My Posts</TabsTrigger>
