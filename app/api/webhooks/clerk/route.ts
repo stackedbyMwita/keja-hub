@@ -2,62 +2,57 @@ import { WebhookEvent } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
 import { headers } from 'next/headers'
 import { Webhook } from 'svix'
+import { clerkClient } from '@clerk/nextjs/server'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
 
-// HELPERS
+// ─── HELPERS ────────────────────────────────────────────────────────────────
+
 function getAvatar(data: any): string {
-  const googleAccount = data.external_accounts?.find(
+  const google = data.external_accounts?.find(
     (a: any) => a.provider === 'google'
   )
-  if (googleAccount?.image_url) return googleAccount.image_url
+  if (google?.image_url) return google.image_url
+  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.username ?? data.id}`
+}
 
-  const seed = data.first_name ?? data.id
-  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${seed}`
+function getName(data: any): { first: string | null; last: string | null; full: string | null } {
+  const google = data.external_accounts?.find(
+    (a: any) => a.provider === 'google'
+  )
+  const first = data.first_name?.trim() || google?.given_name?.trim() || null
+  const last  = data.last_name?.trim()  || google?.family_name?.trim() || null
+  const full  = [first, last].filter(Boolean).join(' ') || null
+  return { first, last, full }
 }
 
 function getUsername(data: any): string {
   if (data.username) return data.username
 
-  const googleAccount = data.external_accounts?.find(
+  const google = data.external_accounts?.find(
     (a: any) => a.provider === 'google'
   )
-  if (googleAccount?.given_name) {
-    const base   = googleAccount.given_name.toLowerCase().replace(/\s+/g, '')
-    const suffix = data.id.slice(-6)
-    return `${base}_${suffix}`
-  }
+  const base = google?.given_name
+    ? `${google.given_name}${google.family_name ? '_' + google.family_name : ''}`
+        .toLowerCase()
+        .replace(/\s+/g, '')
+        .replace(/[^a-z0-9_]/g, '')
+    : 'user'
 
-  const firstName = data.first_name?.toLowerCase().replace(/\s+/g, '') ?? ''
-  const lastName  = data.last_name?.toLowerCase().replace(/\s+/g, '')  ?? ''
-  const suffix    = data.id.slice(-6)
-
-  if (firstName && lastName) return `${firstName}_${lastName}_${suffix}`
-  if (firstName)             return `${firstName}_${suffix}`
-  return `user_${suffix}`
+  return `${base}_${data.id.slice(-6)}`
 }
 
-function getFullName(data: any): string | null {
-    // If we have first_name and last_name separately
-    if (data.first_name || data.last_name) {
-        return [data.first_name, data.last_name].filter(Boolean).join(' ') || null;
-    }
-    
-    // Fallback for Google OAuth
-    const googleAccount = data.external_accounts?.find(
-        (a: any) => a.provider === 'google'
-    );
-    if (googleAccount?.name) return googleAccount.name;
-    
-    return null;
+function getEmail(data: any): string {
+  return data.email_addresses?.[0]?.email_address ?? `${data.id}@placeholder.kejalink`
 }
 
-// WEBHOOK HANDLER
+// ─── WEBHOOK HANDLER ────────────────────────────────────────────────────────
+
 export async function GET() {
-  return new Response('Webhook route is reachable', { status: 200 })
+  return new Response('KéjaLink webhook is reachable', { status: 200 })
 }
 
 export async function POST(req: Request) {
@@ -88,60 +83,115 @@ export async function POST(req: Request) {
       'svix-signature': svix_signature,
     }) as WebhookEvent
   } catch (err) {
-    console.error('Webhook signature verification failed:', err)
+    console.error('Webhook verification failed:', err)
     return new Response('Invalid webhook signature', { status: 400 })
   }
 
-  // USER CREATED OR UPDATED (using upsert)
-  if (evt.type === 'user.created' || evt.type === 'user.updated') {
-    const d = evt.data
+  // ─── USER CREATED ──────────────────────────────────────────────────────────
+  if (evt.type === 'user.created') {
+    const d        = evt.data
+    const role     = 'user'
+    const username = getUsername(d)
+    const email    = getEmail(d)
+    const { first, last, full } = getName(d)
 
-    const email = d.email_addresses?.[0]?.email_address || `${d.id}@temp.user`;
-  
-  // For test events, generate a temporary username if missing
-    const username = getUsername(d) || `user_${d.id.slice(-8)}`;
-    
+    try {
+      const client = await clerkClient()
+      await client.users.updateUserMetadata(d.id, {
+        publicMetadata: {
+          role,
+          is_banned:         false,
+          is_active:         true,
+          onboarding_status: 'pending',
+        },
+      })
+    } catch {
+      console.warn(`⚠️  Clerk metadata update skipped for ${d.id} — likely a test event`)
+    }
+
     const { error } = await supabase.from('profiles').upsert({
-      id: d.id,
-      email: email,
-      username: username,
-      first_name: d.first_name || null,  // Add this
-      last_name: d.last_name || null,    // Add this
-      full_name:  getFullName(d),
-      avatar_url: getAvatar(d),
-      phone_number: null,
-      updated_at: new Date().toISOString(),
-    }, {
-      onConflict: 'id'
-    })
+      id:                d.id,
+      email,
+      username,
+      first_name:        first,
+      last_name:         last,
+      full_name:         full,
+      avatar_url:        getAvatar(d),
+      phone_number:      null,
+      role,
+      onboarding_status: 'pending',
+      is_active:         true,
+      is_banned:         false,
+      updated_at:        new Date().toISOString(),
+    }, { onConflict: 'id' })
 
     if (error) {
-      console.error('Error upserting profile:', {
-        code: error.code,
-        message: error.message,
-        details: error.details,
-        hint: error.hint
-      })
+      console.error('❌ Error creating profile:', error)
       return new Response(`Supabase error: ${error.message}`, { status: 500 })
     }
 
-    console.log(`Profile upserted for ${d.id} (event: ${evt.type})`)
+    console.log(`✅ Profile created — ${username} (${d.id}) role: ${role}`)
   }
 
-  // USER DELETED
-  if (evt.type === 'user.deleted') {
-    const { id } = evt.data
-
-    if (!id) return new Response('Missing user id', { status: 400 })
-
-    const { error } = await supabase.from('profiles').delete().eq('id', id)
-
-    if (error) {
-      console.error('Error deleting profile:', error)
-      return new Response('Error deleting profile', { status: 500 })
+  // ─── USER UPDATED ──────────────────────────────────────────────────────────
+  if (evt.type === 'user.updated') {
+    const d   = evt.data
+    const meta = (d.public_metadata ?? {}) as {
+      role?:              string
+      is_banned?:         boolean
+      is_active?:         boolean
+      onboarding_status?: string
     }
 
-    console.log(`Profile deleted for ${id}`)
+    // Preserve all existing metadata values — never overwrite with defaults
+    const role              = meta.role              ?? 'user'
+    const is_banned         = meta.is_banned         ?? false
+    const is_active         = meta.is_active         ?? true
+    const onboarding_status = meta.onboarding_status ?? 'pending'
+
+    const username = getUsername(d)
+    const email    = getEmail(d)
+    const { first, last, full } = getName(d)
+
+    const { error } = await supabase.from('profiles').upsert({
+      id:                d.id,
+      email,
+      username,
+      first_name:        first,
+      last_name:         last,
+      full_name:         full,
+      avatar_url:        getAvatar(d),
+      role,
+      onboarding_status,
+      is_active,
+      is_banned,
+      updated_at:        new Date().toISOString(),
+    }, { onConflict: 'id' })
+
+    if (error) {
+      console.error('❌ Error updating profile:', error)
+      return new Response(`Supabase error: ${error.message}`, { status: 500 })
+    }
+
+    console.log(`✅ Profile updated — ${username} (${d.id}) role: ${role}`)
+  }
+
+  // ─── USER DELETED ──────────────────────────────────────────────────────────
+  if (evt.type === 'user.deleted') {
+    const { id } = evt.data
+    if (!id) return new Response('Missing user id', { status: 400 })
+
+    const { error } = await supabase
+      .from('profiles')
+      .update({ is_active: false, updated_at: new Date().toISOString() })
+      .eq('id', id)
+
+    if (error) {
+      console.error('❌ Error deactivating profile:', error)
+      return new Response('Error deactivating profile', { status: 500 })
+    }
+
+    console.log(`✅ Profile deactivated — ${id}`)
   }
 
   return new Response('OK', { status: 200 })

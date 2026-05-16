@@ -13,7 +13,7 @@ export type AppConstantsProps = {
 }
 
 export const APP_CONSTANTS: AppConstantsProps = {
-  name: "Hello World",
+  name: "Keja Link",
   description: "The platform built for teams who move fast. Manage, collaborate, and ship, all in one place.",
   logoMark: Star,
   landingPageMenu: LANDING_PAGE_MENU,

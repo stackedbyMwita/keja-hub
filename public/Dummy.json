@@ -1,0 +1,214 @@
+{
+  "units": [
+    {
+      "id": "unit_001",
+      "type": "bedsitter",
+      "name": "Cozy Bedsitter",
+      "property_name": "Milimani Apartments",
+      "price": 6500,
+      "county": "Kakamega",
+      "location": "Milimani Estate",
+      "description": "A bright, well-ventilated bedsitter on the second floor. Includes a shared kitchen and 24-hour security. Walking distance to Kakamega Town CBD.",
+      "amenities": ["Water included", "Security", "Parking", "Close to town"],
+      "available": true,
+      "cover_image": "/units/unit1.jpeg",
+      "images": ["/units/unit1.jpeg", "/units/unit1b.jpeg", "/units/unit1c.jpeg"],
+      "contact": {
+        "landlord_name": "James Omondi",
+        "phone": "254712345678",
+        "email": "james.omondi@gmail.com",
+        "full_address": "Milimani Estate, House No. 4B, Kakamega",
+        "maps_url": "https://maps.google.com/?q=-0.2827,34.7519"
+      }
+    },
+    {
+      "id": "unit_002",
+      "type": "1br",
+      "name": "1 Bedroom Apartment",
+      "property_name": "Sunset Court",
+      "price": 12000,
+      "county": "Kakamega",
+      "location": "Bukhungu",
+      "description": "Spacious one-bedroom apartment with a private bathroom, modern kitchen fittings, and a balcony overlooking the estate compound. Quiet neighbourhood.",
+      "amenities": ["Water included", "Electricity", "Balcony", "Gated compound"],
+      "available": true,
+      "cover_image": "/units/unit2.jpeg",
+      "images": ["/units/unit2.jpeg", "/units/unit2b.jpeg", "/units/unit2c.jpeg"],
+      "contact": {
+        "landlord_name": "Beatrice Awino",
+        "phone": "254723456789",
+        "email": "b.awino@gmail.com",
+        "full_address": "Sunset Court, Flat 2A, Bukhungu, Kakamega",
+        "maps_url": "https://maps.google.com/?q=-0.2915,34.7612"
+      }
+    },
+    {
+      "id": "unit_003",
+      "type": "2br",
+      "name": "2 Bedroom Flat",
+      "property_name": "Kakamega Green Flats",
+      "price": 18000,
+      "county": "Kakamega",
+      "location": "Sheywe",
+      "description": "Modern two-bedroom flat with tiled floors, fitted kitchen, and ample natural light. Located in a serene estate with a children's play area.",
+      "amenities": ["Water", "Security", "Parking", "Play area", "Tiled floors"],
+      "available": true,
+      "cover_image": "/units/unit3.jpeg",
+      "images": ["/units/unit3.jpeg", "/units/unit3b.jpeg", "/units/unit3c.jpeg"],
+      "contact": {
+        "landlord_name": "Peter Wafula",
+        "phone": "254734567890",
+        "email": "peter.wafula@gmail.com",
+        "full_address": "Kakamega Green Flats, Block C, Sheywe, Kakamega",
+        "maps_url": "https://maps.google.com/?q=-0.2756,34.7489"
+      }
+    },
+    {
+      "id": "unit_004",
+      "type": "studio",
+      "name": "Modern Studio",
+      "property_name": "Executive Suites Kakamega",
+      "price": 9500,
+      "county": "Kakamega",
+      "location": "Amalemba",
+      "description": "A compact and modern studio apartment ideal for a working professional. En-suite bathroom, fitted wardrobe, and a kitchenette. High-speed internet available.",
+      "amenities": ["WiFi ready", "En-suite", "Security", "Backup water"],
+      "available": true,
+      "cover_image": "/units/unit4.jpeg",
+      "images": ["/units/unit4.jpeg", "/units/unit4b.jpeg", "/units/unit4c.jpeg"],
+      "contact": {
+        "landlord_name": "Grace Nekesa",
+        "phone": "254745678901",
+        "email": "grace.nekesa@gmail.com",
+        "full_address": "Executive Suites, Room 101, Amalemba, Kakamega",
+        "maps_url": "https://maps.google.com/?q=-0.2843,34.7601"
+      }
+    },
+    {
+      "id": "unit_005",
+      "type": "bedsitter",
+      "name": "Budget Bedsitter",
+      "property_name": "Lurambi Court",
+      "price": 5000,
+      "county": "Kakamega",
+      "location": "Lurambi",
+      "description": "Affordable bedsitter in a clean, quiet compound. Shared bathrooms well maintained. Ideal for students at Masinde Muliro University nearby.",
+      "amenities": ["Water included", "Close to university", "Security"],
+      "available": true,
+      "cover_image": "/units/unit5.jpeg",
+      "images": ["/units/unit5.jpeg", "/units/unit5b.jpeg", "/units/unit5c.jpeg"],
+      "contact": {
+        "landlord_name": "Samuel Barasa",
+        "phone": "254756789012",
+        "email": "sam.barasa@gmail.com",
+        "full_address": "Lurambi Court, Unit 7, Lurambi, Kakamega",
+        "maps_url": "https://maps.google.com/?q=-0.2691,34.7443"
+      }
+    },
+    {
+      "id": "unit_006",
+      "type": "1br",
+      "name": "1 Bedroom Bungalow",
+      "property_name": "Shianda Gardens",
+      "price": 14000,
+      "county": "Kakamega",
+      "location": "Shianda",
+      "description": "A charming standalone one-bedroom bungalow with a private garden, outdoor kitchen space, and ample parking. Perfect for a small family.",
+      "amenities": ["Private garden", "Parking", "Water tank", "Security lights"],
+      "available": true,
+      "cover_image": "/units/unit6.jpeg",
+      "images": ["/units/unit6.jpeg", "/units/unit6b.jpeg", "/units/unit6c.jpeg"],
+      "contact": {
+        "landlord_name": "Mary Adhiambo",
+        "phone": "254767890123",
+        "email": "mary.adhiambo@gmail.com",
+        "full_address": "Shianda Gardens, Bungalow 3, Shianda, Kakamega",
+        "maps_url": "https://maps.google.com/?q=-0.3012,34.7388"
+      }
+    },
+    {
+      "id": "unit_007",
+      "type": "2br",
+      "name": "2 Bedroom Maisonette",
+      "property_name": "Mahiakalo Heights",
+      "price": 22000,
+      "county": "Kakamega",
+      "location": "Mahiakalo",
+      "description": "A well-finished two-bedroom maisonette with separate living and dining areas, master en-suite, and a private compound. Best for families seeking comfort.",
+      "amenities": ["En-suite master", "Dining room", "Private compound", "Borehole water"],
+      "available": true,
+      "cover_image": "/units/unit7.jpeg",
+      "images": ["/units/unit7.jpeg", "/units/unit7b.jpeg", "/units/unit7c.jpeg"],
+      "contact": {
+        "landlord_name": "David Ingosi",
+        "phone": "254778901234",
+        "email": "david.ingosi@gmail.com",
+        "full_address": "Mahiakalo Heights, Maisonette 5, Mahiakalo, Kakamega",
+        "maps_url": "https://maps.google.com/?q=-0.2634,34.7712"
+      }
+    },
+    {
+      "id": "unit_008",
+      "type": "studio",
+      "name": "Studio Apartment",
+      "property_name": "CBD Residences",
+      "price": 8500,
+      "county": "Kakamega",
+      "location": "Kakamega CBD",
+      "description": "Right in the heart of Kakamega town. This studio is ideal for anyone who wants to be close to everything — markets, banks, and transport hubs.",
+      "amenities": ["Town centre", "Water", "24hr security", "CCTV"],
+      "available": true,
+      "cover_image": "/units/unit8.jpeg",
+      "images": ["/units/unit8.jpeg", "/units/unit8b.jpeg", "/units/unit8c.jpeg"],
+      "contact": {
+        "landlord_name": "Rose Khakasa",
+        "phone": "254789012345",
+        "email": "rose.khakasa@gmail.com",
+        "full_address": "CBD Residences, Floor 3, Kakamega CBD, Kakamega",
+        "maps_url": "https://maps.google.com/?q=-0.2831,34.7517"
+      }
+    },
+    {
+      "id": "unit_009",
+      "type": "bedsitter",
+      "name": "Furnished Bedsitter",
+      "property_name": "Harmony Homes",
+      "price": 8000,
+      "county": "Kakamega",
+      "location": "Hospital Area",
+      "description": "A fully furnished bedsitter with bed, sofa, and cooking gas included. Walking distance to Kakamega County General Hospital. Ideal for medical staff.",
+      "amenities": ["Furnished", "Gas included", "Water", "Close to hospital"],
+      "available": true,
+      "cover_image": "/units/unit9.jpeg",
+      "images": ["/units/unit9.jpeg", "/units/unit9b.jpeg", "/units/unit9c.jpeg"],
+      "contact": {
+        "landlord_name": "John Simiyu",
+        "phone": "254790123456",
+        "email": "john.simiyu@gmail.com",
+        "full_address": "Harmony Homes, Unit 2, Hospital Area, Kakamega",
+        "maps_url": "https://maps.google.com/?q=-0.2878,34.7534"
+      }
+    },
+    {
+      "id": "unit_010",
+      "type": "2br",
+      "name": "2 Bedroom Apartment",
+      "property_name": "Westlands Kakamega",
+      "price": 20000,
+      "county": "Kakamega",
+      "location": "Westlands",
+      "description": "Newly built two-bedroom apartment with modern finishes, walk-in closets, and a shared rooftop terrace. Generator backup for common areas.",
+      "amenities": ["Rooftop terrace", "Generator", "Parking", "Modern finishes"],
+      "available": true,
+      "cover_image": "/units/unit10.jpeg",
+      "images": ["/units/unit10.jpeg", "/units/unit10b.jpeg", "/units/unit10c.jpeg"],
+      "contact": {
+        "landlord_name": "Alice Mukhwana",
+        "phone": "254701234567",
+        "email": "alice.mukhwana@gmail.com",
+        "full_address": "Westlands Kakamega, Apt 8B, Westlands, Kakamega",
+        "maps_url": "https://maps.google.com/?q=-0.2763,34.7658"
+      }
+    }
+  ]
+}

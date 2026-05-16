@@ -1,14 +1,11 @@
-import { FooterExtensive } from "./_components/footer/footer-extensive";
-import Navbar from "./_components/navbar/Navbar";
-
-export default function LandingLayout({ children }: { children: React.ReactNode }) {
+export default function LandingLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar/>
-      <main className="flex-1">
-        {children}
-      </main>
-      <FooterExtensive />
+    <div className="min-h-screen bg-background">
+      {children}
     </div>
   )
 }

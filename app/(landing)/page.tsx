@@ -1,113 +1,110 @@
 'use client'
 
+import { useState, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@clerk/nextjs'
+import { Navbar } from './_components/Navbar'
+import { Hero } from './_components/Hero'
+import { Filters, UnitType, PriceRange } from './_components/Filters'
+import { AuthModal } from '../(auth)/AuthModal' 
 import MaxWidthWrapper from '@/components/layout/MaxWidthWrapper'
-import { PostCard } from '@/components/posts/PostCard'
-import { Button } from '@/components/ui/button'
-import { usePosts } from '@/hooks/usePosts'
-import { useUser } from '@clerk/nextjs'
-import { ArrowRight, Loader2, Shield, Users, Zap } from 'lucide-react'
-import Link from 'next/link'
-
-function PublicFeed() {
-  const { data: posts, isLoading } = usePosts()
-
-  if (isLoading) return (
-    <div className="flex justify-center py-12">
-      <Loader2 className="animate-spin text-muted-foreground" />
-    </div>
-  )
-
-  return (
-    <div className="space-y-3">
-      {posts?.slice(0, 5).map(post => (
-        <PostCard key={post.id} post={post} />
-      ))}
-    </div>
-  )
-}
+import data from '@/public/Dummy.json'
+import { ListingsGrid } from './_components/ListingsGrid'
+import { FooterMinimal } from './_components/footer/footer-minimal'
 
 export default function LandingPage() {
-  const { user } = useUser()
+  const router = useRouter()
+  const { isSignedIn } = useAuth()
+
+  // ── Filter state ────────────────────────────────────────────────────────
+  const [searchQuery, setSearchQuery] = useState('')
+  const [activeType, setActiveType] = useState<UnitType>('all')
+  const [activePriceRange, setActivePriceRange] = useState<PriceRange>('all')
+
+  // ── Auth modal state ─────────────────────────────────────────────────────
+  const [authModalOpen, setAuthModalOpen] = useState(false)
+  const [pendingUnitId, setPendingUnitId] = useState<string | null>(null)
+
+  // ── Filter logic ─────────────────────────────────────────────────────────
+  const filteredUnits = useMemo(() => {
+    return data.units.filter((unit) => {
+      // Search — matches property name or location
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase()
+        const matchesSearch =
+          unit.property_name.toLowerCase().includes(q) ||
+          unit.location.toLowerCase().includes(q) ||
+          unit.name.toLowerCase().includes(q)
+        if (!matchesSearch) return false
+      }
+
+      // Unit type
+      if (activeType !== 'all' && unit.type !== activeType) return false
+
+      // Price range
+      if (activePriceRange !== 'all') {
+        const [min, max] = activePriceRange === '25000+'
+          ? [25000, Infinity]
+          : activePriceRange.split('-').map(Number)
+        if (unit.price < min || unit.price > max) return false
+      }
+
+      return true
+    })
+  }, [searchQuery, activeType, activePriceRange])
+
+  // ── Unit click handler ───────────────────────────────────────────────────
+  function handleUnitClick(unitId: string) {
+    if (!isSignedIn) {
+      // Store the unit they wanted, open auth modal
+      setPendingUnitId(unitId)
+      setAuthModalOpen(true)
+      return
+    }
+    router.push(`/unit/${unitId}`)
+  }
+
+  function handleAuthClose() {
+    setAuthModalOpen(false)
+    setPendingUnitId(null)
+  }
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      {/* Navbar */}
+      <Navbar
+        onSignInClick={() => setAuthModalOpen(true)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
 
-      {/* hero */}
-      <MaxWidthWrapper className="max-w-4xl">
-        <div className="py-20 text-center space-y-6">
-          <h1 className="font-bold tracking-tight">
-            The platform built for
-            <span className="text-primary"> teams who move fast</span>
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-xl mx-auto leading-relaxed">
-            Manage, collaborate, and ship — all in one place. Join thousands of teams already using Hello World.
-          </p>
-          <div className="flex items-center justify-center gap-3 flex-wrap">
-            {user ? (
-              <Link href="/dashboard">
-                <Button size="lg">
-                  Go to dashboard <ArrowRight size={16} className="ml-2" />
-                </Button>
-              </Link>
-            ) : (
-              <>
-                <Link href="/sign-up">
-                  <Button size="lg">
-                    Get started free <ArrowRight size={16} className="ml-2" />
-                  </Button>
-                </Link>
-                <Link href="/sign-in">
-                  <Button size="lg" variant="outline">Sign in</Button>
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
+      {/* Hero */}
+      <Hero />
+
+      {/* Filters */}
+      <Filters
+        activeType={activeType}
+        activePriceRange={activePriceRange}
+        onTypeChange={setActiveType}
+        onPriceChange={setActivePriceRange}
+        resultCount={filteredUnits.length}
+      />
+
+      {/* Listings */}
+      <MaxWidthWrapper>
+        <ListingsGrid
+          units={filteredUnits}
+          onUnitClick={handleUnitClick}
+        />
       </MaxWidthWrapper>
 
-      {/* features */}
-      <div id="features" className="border-y border-border bg-muted/20">
-        <MaxWidthWrapper className="max-w-4xl">
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { icon: Zap, title: 'Ship faster', desc: 'Built-in tools that remove friction and help your team deliver.' },
-              { icon: Shield, title: 'Secure by default', desc: 'Row-level security and role-based access out of the box.' },
-              { icon: Users, title: 'Built for teams', desc: 'Real-time collaboration features designed for modern teams.' },
-            ].map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="space-y-3">
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Icon size={18} className="text-primary" />
-                </div>
-                <h3 className="font-semibold text-base">{title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </MaxWidthWrapper>
-      </div>
-
-      {/* public feed preview */}
-      <div id="customers" className="py-4">
-        <MaxWidthWrapper className="max-w-2xl">
-          <div className="text-center mb-8">
-            <h2 className="font-bold mb-2">What people are saying</h2>
-            <p className="text-sm text-muted-foreground">
-              Join the conversation. {!user && <Link href="/sign-up" className="text-primary hover:underline">Sign up</Link>} to post and interact.
-            </p>
-          </div>
-          <PublicFeed />
-          {!user && (
-            <div className="mt-6 text-center">
-              <Link href="/sign-up">
-                <Button variant="outline">
-                  See more — join for free <ArrowRight size={14} className="ml-2" />
-                </Button>
-              </Link>
-            </div>
-          )}
-        </MaxWidthWrapper>
-      </div>
-
-    </div>
+      {/* Auth modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={handleAuthClose}
+        redirectUrl={pendingUnitId ? `/unit/${pendingUnitId}` : undefined}
+      />
+      <FooterMinimal />
+    </>
   )
 }

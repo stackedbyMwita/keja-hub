@@ -1,29 +1,48 @@
-'use client'
+import Image from 'next/image'
+import { AppLogo } from '@/components/logo/Logo'
+import { Suspense } from 'react'
+import { AuthFooter } from './_components/auth-footer'
 
-import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper"
-import { AppLogo } from "@/components/logo/Logo"
-import { Suspense } from "react"
-import { AuthFooter } from "./_components/auth-footer"
-
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
-
+export default function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
     <div className="min-h-screen grid md:grid-cols-2">
-      
-      {/* Left panel */}
-      <MaxWidthWrapper className="hidden md:flex flex-col justify-center px-12 bg-muted/40 border border-border rounded-lg m-4 md:m-8 lg:m-20 mr-0 items-center">
-        <div className="max-w-lg px-12 flex flex-col gap-8">
-          <AppLogo/>
-          <p className="text-muted-foreground leading-relaxed">
-            The platform built for teams who move fast. Manage, collaborate, and ship — all in one place.
+
+      {/* ── Left panel — hero image ── */}
+      <div className="hidden md:block relative m-4 lg:m-6 rounded-2xl overflow-hidden">
+        <Image
+          src="/hero.png"
+          alt="Beautiful Kenyan property"
+          fill
+          priority
+          className="object-cover"
+        />
+        {/* Subtle dark gradient so logo is legible */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-black/20" />
+
+        {/* Logo + tagline pinned to bottom-left */}
+        <div className="absolute bottom-8 left-8 right-8">
+          <AppLogo className="text-white mb-3" />
+          <p className="text-white/80 text-sm leading-relaxed max-w-xs">
+            Verified homes, real landlords. Find your next place with confidence.
           </p>
         </div>
-      </MaxWidthWrapper>
+      </div>
 
-      {/* Right panel */}
-      <div className="flex items-center flex-col gap-8 justify-center p-8">
-        <AppLogo/>
-        {children}
+      {/* ── Right panel — auth form ── */}
+      <div className="flex flex-col items-center justify-center gap-6 p-8 bg-background">
+        {/* Logo visible on mobile only */}
+        <div className="md:hidden">
+          <AppLogo />
+        </div>
+
+        <div className="w-full max-w-sm">
+          {children}
+        </div>
+
         <Suspense>
           <AuthFooter />
         </Suspense>

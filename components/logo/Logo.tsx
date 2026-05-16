@@ -37,7 +37,7 @@ export function AppLogo({
   const hasTwoWords = words.length === 2
 
   return (
-    <Link href="/">
+
       <div className={cn('flex items-center gap-2', className)}>
         <div
           className={cn(
@@ -60,6 +60,5 @@ export function AppLogo({
           </span>
         )}
       </div>
-    </Link>
   )
 }
