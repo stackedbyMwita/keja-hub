@@ -1,4 +1,4 @@
-import { LucideIcon, Star } from 'lucide-react'
+import { Home, LucideIcon, Star } from 'lucide-react'
 import { FOOTER_COLUMNS, FOOTER_SOCIALS, FooterColumnProps, FooterSocialProps, LANDING_PAGE_MENU, LandingPageMenuProps } from "./menus"
 
 export type AppConstantsProps = {
@@ -13,9 +13,9 @@ export type AppConstantsProps = {
 }
 
 export const APP_CONSTANTS: AppConstantsProps = {
-  name: "Keja Link",
+  name: "Keja Hub",
   description: "The platform built for teams who move fast. Manage, collaborate, and ship, all in one place.",
-  logoMark: Star,
+  logoMark: Home,
   landingPageMenu: LANDING_PAGE_MENU,
   logo: "/logo.svg",
   supportEmail: "support@helloworld.com",

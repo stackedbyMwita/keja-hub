@@ -1,9 +1,10 @@
 import MaxWidthWrapper from '@/components/layout/MaxWidthWrapper'
+import Image from 'next/image'
 
 export function Hero() {
   return (
     <section className="pt-16 pb-8 border-b border-border">
-      <MaxWidthWrapper className="py-0">
+      <MaxWidthWrapper className="py-0 flex  items-center justify-between">
         <div className="flex flex-col gap-4 max-w-2xl">
           <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary uppercase tracking-widest">
             <span className="inline-block w-4 h-px bg-primary" />
@@ -16,7 +17,7 @@ export function Hero() {
           </h1>
 
           <p className="text-base text-muted-foreground max-w-md leading-relaxed">
-            Every listing on KéjaLink is physically verified by our team. 
+            Every listing on KejaHub is physically verified by our team. 
             No fraud, no ghost houses — just real homes at honest prices.
           </p>
 
@@ -37,6 +38,14 @@ export function Hero() {
               <p className="text-xs text-muted-foreground mt-0.5">Fraud-free</p>
             </div>
           </div>
+        </div>
+        <div>
+          <Image
+            src='/hero1.jpeg'
+            alt="Beautiful Kenyan property"
+            width={200}
+            height={200}
+          />
         </div>
       </MaxWidthWrapper>
     </section>

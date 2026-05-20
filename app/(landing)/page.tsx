@@ -4,13 +4,14 @@ import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@clerk/nextjs'
 import { Navbar } from './_components/Navbar'
-import { Hero } from './_components/Hero'
+import { Hero } from './_components/Hero2'
 import { Filters, UnitType, PriceRange } from './_components/Filters'
 import { AuthModal } from '../(auth)/AuthModal' 
 import MaxWidthWrapper from '@/components/layout/MaxWidthWrapper'
 import data from '@/public/Dummy.json'
 import { ListingsGrid } from './_components/ListingsGrid'
 import { FooterMinimal } from './_components/footer/footer-minimal'
+import { Filters2 } from './_components/Filters2'
 
 export default function LandingPage() {
   const router = useRouter()
@@ -82,7 +83,14 @@ export default function LandingPage() {
       <Hero />
 
       {/* Filters */}
-      <Filters
+      {/* <Filters
+        activeType={activeType}
+        activePriceRange={activePriceRange}
+        onTypeChange={setActiveType}
+        onPriceChange={setActivePriceRange}
+        resultCount={filteredUnits.length}
+      /> */}
+      <Filters2
         activeType={activeType}
         activePriceRange={activePriceRange}
         onTypeChange={setActiveType}

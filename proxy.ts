@@ -6,12 +6,16 @@ import { type NextRequest, NextResponse } from 'next/server'
 
 const isPublicRoute = createRouteMatcher([
   '/',
+  '/sign-in(.*)',
+  '/sign-up(.*)',
+  '/onboarding-details',
   '/banned',
   '/sso-callback',
   '/api/webhooks/clerk',
+  '/api/onboarding',
+  '/api/landlord/(.*)',
+  '/api/moderator/(.*)',
 ])
-
-const isOnboardingRoute = createRouteMatcher(['/onboarding'])
 
 const isLandlordDashboard   = createRouteMatcher(['/dashboard/landlord(.*)'])
 const isModeratorDashboard  = createRouteMatcher(['/dashboard/moderator(.*)'])
@@ -23,32 +27,30 @@ const isSuperadminDashboard = createRouteMatcher(['/dashboard/superadmin(.*)'])
 export default clerkMiddleware(async (auth, req: NextRequest) => {
   const url = req.nextUrl
 
-  // ── 1. Public routes — skip auth checks, still update Supabase session ──
+  // ── 1. Public routes — pass through ─────────────────────────────────────
   if (isPublicRoute(req)) {
     return await updateSession(req)
   }
 
-  // ── 2. Not signed in — redirect to landing ──────────────────────────────
+  // ── 2. Not signed in — redirect to sign-in with returnUrl ───────────────
   const { userId, sessionClaims } = await auth()
 
   if (!userId) {
-    const redirectUrl = new URL('/', req.url)
-    redirectUrl.searchParams.set('redirectUrl', url.pathname)
-    return NextResponse.redirect(redirectUrl)
+    const signInUrl = new URL('/sign-in', req.url)
+    signInUrl.searchParams.set('redirectUrl', url.pathname)
+    return NextResponse.redirect(signInUrl)
   }
 
-  // ── 3. Read metadata from session token (zero DB calls) ─────────────────
+  // ── 3. Read metadata from session token ─────────────────────────────────
   const meta = (sessionClaims?.publicMetadata ?? {}) as {
     role?: string
     is_banned?: boolean
     is_active?: boolean
-    onboarding_status?: string
   }
 
-  const role              = meta.role              ?? 'user'
-  const is_banned         = meta.is_banned         ?? false
-  const is_active         = meta.is_active         ?? true
-  const onboarding_status = meta.onboarding_status ?? 'pending'
+  const role      = meta.role      ?? 'user'
+  const is_banned = meta.is_banned ?? false
+  const is_active = meta.is_active ?? true
 
   // ── 4. Banned or deactivated ─────────────────────────────────────────────
   if (is_banned || !is_active) {
@@ -58,15 +60,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return await updateSession(req)
   }
 
-  // ── 5. Onboarding hard block ─────────────────────────────────────────────
-  if (onboarding_status === 'pending') {
-    if (isOnboardingRoute(req)) {
-      return await updateSession(req)
-    }
-    return NextResponse.redirect(new URL('/onboarding', req.url))
-  }
-
-  // ── 6. Role-based dashboard protection ──────────────────────────────────
+  // ── 5. Role-based dashboard protection ──────────────────────────────────
   if (isSuperadminDashboard(req) && role !== 'superadmin') {
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
@@ -83,7 +77,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
 
-  // ── 7. /dashboard root — redirect to role-specific dashboard ────────────
+  // ── 6. /dashboard root — redirect to role-specific dashboard ────────────
   if (url.pathname === '/dashboard') {
     const destinations: Record<string, string> = {
       superadmin: '/dashboard/superadmin',
@@ -95,7 +89,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.redirect(new URL(destinations[role] ?? '/', req.url))
   }
 
-  // ── 8. All good — update Supabase session and proceed ───────────────────
+  // ── 7. All clear ─────────────────────────────────────────────────────────
   return await updateSession(req)
 })
 

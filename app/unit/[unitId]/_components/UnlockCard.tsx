@@ -32,7 +32,7 @@ const TYPE_LABELS: Record<string, string> = {
 }
 
 // MVP unlock price — will be real Mpesa amount later
-const UNLOCK_PRICE = 50
+const UNLOCK_PRICE = 0
 
 export function UnlockCard({
   price,
@@ -128,7 +128,7 @@ export function UnlockCard({
         <div className="flex items-center gap-2 pt-2 border-t border-border">
           <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
           <p className="text-xs text-muted-foreground">
-            Verified by a KéjaLink moderator
+            Verified by a KejaHub moderator
           </p>
         </div>
       </div>

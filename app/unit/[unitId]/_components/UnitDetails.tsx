@@ -93,7 +93,7 @@ export function UnitDetails({ unit }: UnitDetailsProps) {
         <div>
           <p className="text-sm font-medium text-foreground">Verified listing</p>
           <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-            A KéjaLink moderator has physically visited this property, confirmed its legitimacy, and uploaded these images.
+            A KejaHub moderator has physically visited this property, confirmed its legitimacy, and uploaded these images.
           </p>
         </div>
       </div>

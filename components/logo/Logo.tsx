@@ -1,7 +1,6 @@
 "use client"
 
 import { cn } from '@/lib/utils'
-import Link from 'next/link'
 import { useLogo } from '../providers/logo-provider'
 
 interface LogoProps {
@@ -41,7 +40,7 @@ export function AppLogo({
       <div className={cn('flex items-center gap-2', className)}>
         <div
           className={cn(
-            'flex items-center justify-center rounded-lg border font-semibold text-primary-foreground',
+            'flex items-center justify-center rounded-lg  font-semibold text-primary bg-primary/10',
             sizes.mark
           )}
         >

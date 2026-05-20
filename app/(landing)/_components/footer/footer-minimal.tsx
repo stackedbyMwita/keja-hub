@@ -6,6 +6,8 @@ import { Grain } from "./grain-texture/grain"
 import MaxWidthWrapper from "@/components/layout/MaxWidthWrapper"
 import { WordMark } from "./WordMark"
 
+import ThemeToggle from '@/components/theme/ThemeToggle'
+
 export function FooterMinimal() {
   const cols = ["Product", "Company", "Legal"]
     .map(heading => FOOTER_COLUMNS.find(c => c.heading === heading))
@@ -47,7 +49,9 @@ export function FooterMinimal() {
           <p className="text-xs text-muted-foreground/50">
             © 2025 {APP_CONSTANTS.name}. All rights reserved.
           </p>
+           
           <div className="flex gap-4">
+            <ThemeToggle />
             {FOOTER_SOCIALS.slice(0, 3).map(s => (
               <Link
                 key={s.id}

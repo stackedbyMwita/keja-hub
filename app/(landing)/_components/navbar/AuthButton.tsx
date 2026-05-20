@@ -10,7 +10,7 @@ import {
 import { Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import { ChevronsUpDown } from 'lucide-react'
+import { ChevronsUpDown, LogIn } from 'lucide-react'
 
 type AuthButtonProps = {
   variant?: 'default' | 'expanded'
@@ -19,12 +19,10 @@ type AuthButtonProps = {
 function SignedOutDefault() {
   return (
     <div className="flex items-center gap-2">
-      <SignInButton forceRedirectUrl="/sign-in">
-        <Button variant="ghost">Sign in</Button>
-      </SignInButton>
+
 
       <SignUpButton forceRedirectUrl="/sign-up">
-        <Button>Sign up</Button>
+        <Button>Sign up <LogIn /></Button>
       </SignUpButton>
     </div>
   )

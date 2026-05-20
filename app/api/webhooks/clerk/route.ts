@@ -52,7 +52,7 @@ function getEmail(data: any): string {
 // ─── WEBHOOK HANDLER ────────────────────────────────────────────────────────
 
 export async function GET() {
-  return new Response('KéjaLink webhook is reachable', { status: 200 })
+  return new Response('KejaHub webhook is reachable', { status: 200 })
 }
 
 export async function POST(req: Request) {
@@ -78,7 +78,7 @@ export async function POST(req: Request) {
 
   try {
     evt = wh.verify(JSON.stringify(payload), {
-      'svix-id':        svix_id,
+      'svix-id': svix_id,
       'svix-timestamp': svix_timestamp,
       'svix-signature': svix_signature,
     }) as WebhookEvent

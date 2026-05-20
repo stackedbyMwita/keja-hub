@@ -18,9 +18,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps) {
   const { unitId } = await params
   const unit = data.units.find((u) => u.id === unitId)
-  if (!unit) return { title: 'Unit not found — KéjaLink' }
+  if (!unit) return { title: 'Unit not found — KejaHub' }
   return {
-    title: `${unit.property_name} — ${unit.location} | KéjaLink`,
+    title: `${unit.property_name} — ${unit.location} | KejaHub`,
     description: unit.description,
   }
 }

@@ -5,6 +5,9 @@ import { useAuth } from '@clerk/nextjs'
 import { AppLogo } from '@/components/logo/Logo'
 import MaxWidthWrapper from '@/components/layout/MaxWidthWrapper'
 import { Search } from 'lucide-react'
+import { AuthButton } from './navbar/AuthButton'
+import { Suspense } from 'react'
+import ThemeToggle from '@/components/theme/ThemeToggle'
 
 interface NavbarProps {
   onSignInClick: () => void
@@ -16,7 +19,7 @@ export function Navbar({ onSignInClick, searchQuery, onSearchChange }: NavbarPro
   const { isSignedIn } = useAuth()
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-background">
       <MaxWidthWrapper className="py-0">
         <div className="flex h-16 items-center gap-4">
 
@@ -49,23 +52,21 @@ export function Navbar({ onSignInClick, searchQuery, onSearchChange }: NavbarPro
             >
               Become a Landlord
             </Link>
+            <Link
+              href="/dashboard"
+              className="hidden bg-primary sm:inline-flex items-center h-9 px-4 rounded-full text-sm font-medium text-foreground border border-border hover:bg-muted transition-colors"
+            >
+              Dashboard
+            </Link>
 
-            {isSignedIn ? (
-              <Link
-                href="/dashboard"
-                className="inline-flex items-center h-9 px-4 rounded-full text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-              >
-                Dashboard
-              </Link>
-            ) : (
-              <button
-                onClick={onSignInClick}
-                className="inline-flex items-center h-9 px-4 rounded-full text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-              >
-                Sign In
-              </button>
-            )}
-            
+            <div className='hidden lg:block'>
+              <ThemeToggle/>
+            </div>
+  
+            <Suspense fallback={<div className="h-9 w-24 rounded-md bg-muted animate-pulse" />}>
+              <AuthButton variant="default" />
+            </Suspense>
+    
           </div>
 
         </div>
