@@ -25,7 +25,7 @@ export default async function ModeratorActivityPage() {
   const totalRejected = logs?.filter(l => l.action.includes('rejected')).length ?? 0
 
   return (
-    <div className="p-4 md:p-6 flex flex-col gap-6">
+    <div className="p-4 md:p-6 flex flex-col gap-6 max-w-7xl mx-auto">
 
       {/* Header */}
       <div>

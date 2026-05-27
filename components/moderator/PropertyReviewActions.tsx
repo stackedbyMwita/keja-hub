@@ -161,7 +161,7 @@ export function PropertyReviewActions({ propertyId }: PropertyReviewActionsProps
 
       {/* Scoring note */}
       <p className="text-xs text-muted-foreground text-center">
-        💡 After approval, you can score this property from the activity log to improve its ranking.
+        After approval, you can score this property from the activity log to improve its ranking.
       </p>
 
     </div>

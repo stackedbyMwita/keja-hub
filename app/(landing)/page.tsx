@@ -1,17 +1,17 @@
 'use client'
 
-import { useState, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
-import { useAuth } from '@clerk/nextjs'
-import { Navbar } from './_components/Navbar'
-import { Hero } from './_components/Hero2'
-import { Filters, UnitType, PriceRange } from './_components/Filters'
-import { AuthModal } from '../(auth)/AuthModal' 
-import MaxWidthWrapper from '@/components/layout/MaxWidthWrapper'
+import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
 import data from '@/public/Dummy.json'
-import { ListingsGrid } from './_components/ListingsGrid'
-import { FooterMinimal } from './_components/footer/footer-minimal'
-import { Filters2 } from './_components/Filters2'
+import { useAuth } from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
+import { useMemo, useState } from 'react'
+import { AuthModal } from '../(auth)/AuthModal'
+import { PriceRange, UnitType } from '@/components/HeroComponents/Filters'
+import { FiltersGemini } from '@/components/HeroComponents/FiltersGemini'
+import { Navbar } from '@/components/LandlordComponents/navbar/Navbar'
+import { HeroGemini } from '@/components/HeroComponents/HeroGemini'
+import { ListingsGridGemini } from '@/components/HeroComponents/ListingsGridGemini'
+import { FooterMinimal } from '@/components/LandlordComponents/footer/footer-minimal'
 
 export default function LandingPage() {
   const router = useRouter()
@@ -80,7 +80,7 @@ export default function LandingPage() {
       />
 
       {/* Hero */}
-      <Hero />
+      <HeroGemini />
 
       {/* Filters */}
       {/* <Filters
@@ -90,21 +90,35 @@ export default function LandingPage() {
         onPriceChange={setActivePriceRange}
         resultCount={filteredUnits.length}
       /> */}
-      <Filters2
+      <FiltersGemini
         activeType={activeType}
         activePriceRange={activePriceRange}
         onTypeChange={setActiveType}
         onPriceChange={setActivePriceRange}
         resultCount={filteredUnits.length}
       />
+      
+      {/* <Filters2
+        activeType={activeType}
+        activePriceRange={activePriceRange}
+        onTypeChange={setActiveType}
+        onPriceChange={setActivePriceRange}
+        resultCount={filteredUnits.length}
+      /> */}
 
       {/* Listings */}
       <MaxWidthWrapper>
-        <ListingsGrid
+        <ListingsGridGemini
           units={filteredUnits}
           onUnitClick={handleUnitClick}
         />
       </MaxWidthWrapper>
+      {/* <MaxWidthWrapper>
+        <ListingsGrid
+          units={filteredUnits}
+          onUnitClick={handleUnitClick}
+        />
+      </MaxWidthWrapper> */}
 
       {/* Auth modal */}
       <AuthModal

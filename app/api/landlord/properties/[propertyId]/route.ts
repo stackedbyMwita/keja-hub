@@ -23,7 +23,7 @@ export async function GET(_: Request, { params }: Params) {
         *,
         unit_types (
           *,
-          unit_images ( id, cloudflare_url, is_cover, created_at )
+          unit_images ( id, image_url, is_cover, created_at )
         )
       `)
       .eq('id', propertyId)

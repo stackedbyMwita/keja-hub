@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from '@/lib/utils'
-import { useLogo } from '../providers/logo-provider'
+import { useLogo } from '../HeroComponents/providers/logo-provider'
 
 interface LogoProps {
   name?: string

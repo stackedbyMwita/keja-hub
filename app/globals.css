@@ -55,7 +55,7 @@
     --chart-5: 0 72% 51%;
 
     /* Sidebar */
-    --sidebar: 0 0% 100%;
+    --sidebar: 210 30% 95%;
     --sidebar-foreground: 222 47% 14%;
 
     --sidebar-primary: 221 83% 53%;
@@ -305,4 +305,27 @@
   .animate-floating {
     animation: floating 6s ease-in-out infinite;
   }
+}
+
+
+/* Styling to beautify small images */
+.thumbnail-image {
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Subtle shadow */
+  transition: transform 0.3s ease; /* Smooth interaction effect */
+}
+
+
+/* Ensuring image resolution consistency */
+.unit-page-image {
+  max-width: 100%; /* Keeps within container width */
+  height: auto; /* Maintains aspect ratio */
+  /* Ensures resolution for viewing is preserved without stretching */
+  object-fit: cover; /* Optional: crops to fill container efficiently */
+}
+
+/* Removing motion/animations from unit pages */
+.unit-page * {
+  animation: none !important; /* Disables animations */
+  transition: none !important; /* Disables transitions for all properties */
 }

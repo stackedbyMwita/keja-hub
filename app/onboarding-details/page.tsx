@@ -1,8 +1,8 @@
-import { Suspense } from 'react'
-import { DetailsForm } from './_components/DetailsForm'
+import { AppLogo } from '@/components/logo/Logo'
+import { DetailsForm } from '@/components/OnboardingDetailsComponents/DetailsForm'
 import Image from 'next/image'
 import Link from 'next/link'
-import { AppLogo } from '@/components/logo/Logo'
+import { Suspense } from 'react'
 
 export const metadata = {
   title: 'Complete your profile — KejaHub',

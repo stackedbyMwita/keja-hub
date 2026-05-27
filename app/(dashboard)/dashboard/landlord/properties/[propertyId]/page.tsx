@@ -1,3 +1,8 @@
+import { UnitTypeCard } from '@/components/HeroComponents/UnitTypeCard'
+import { AddUnitSheetTriggerClient } from '@/components/LandlordComponents/properties/AddUnitSheetTrigger'
+import { PropertyHeader } from '@/components/LandlordComponents/properties/PropertyHeader'
+import { StatusBanner } from '@/components/LandlordComponents/properties/StatusBanner'
+import { SubmitForReview } from '@/components/LandlordComponents/properties/SubmitForReview'
 import { Separator } from '@/components/ui/separator'
 import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
@@ -5,11 +10,7 @@ import { ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { connection } from 'next/server'
-import { PropertyHeader } from '@/components/landlord/properties/PropertyHeader'
-import { StatusBanner } from '@/components/landlord/properties/StatusBanner'
-import { UnitTypeCard } from '@/components/landlord/UnitTypeCard'
-import { SubmitForReview } from '@/components/landlord/properties/SubmitForReview'
-import { AddUnitSheetTriggerClient } from '@/components/landlord/properties/AddUnitSheetTrigger'
+
 
 function AddUnitSheetTrigger({
   propertyId, existingTypes,
@@ -42,7 +43,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
       *,
       unit_types (
         *,
-        unit_images ( id, cloudflare_url, is_cover )
+        unit_images ( id, image_url, is_cover )
       )
     `)
     .eq('id', propertyId)

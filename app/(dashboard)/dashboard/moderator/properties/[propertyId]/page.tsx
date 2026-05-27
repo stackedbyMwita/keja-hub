@@ -1,13 +1,22 @@
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
-import { connection } from 'next/server'
-import { notFound } from 'next/navigation'
+import {
+  ArrowRight,
+  Building2,
+  CheckCircle2,
+  Clock,
+  Home,
+  Images,
+  Inbox,
+  MapPin,
+  XCircle,
+} from 'lucide-react'
 import Link from 'next/link'
-import { ChevronLeft, MapPin, Phone, Building2, Home } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { Card, CardContent } from '@/components/ui/card'
-import { PropertyReviewActions } from '@/components/moderator/PropertyReviewActions'
+import { connection } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
@@ -19,183 +28,245 @@ const supabase = createClient(
 const TYPE_LABELS: Record<string, string> = {
   single_room: 'Single Room', double_room: 'Double Room',
   bedsitter: 'Bedsitter', studio: 'Studio',
-  '1br': '1 Bedroom', '2br': '2 Bedrooms', '3br': '3 Bedrooms',
-  '4br_plus': '4+ Bedrooms', commercial: 'Shop/Commercial',
+  '1br': '1 Bed', '2br': '2 Bed', '3br': '3 Bed',
+  '4br_plus': '4+ Bed', commercial: 'Commercial',
 }
 
-interface PageProps { params: Promise<{ propertyId: string }> }
+const STATUS_CONFIG = {
+  pending_review: { label: 'Pending',  variant: 'outline',     icon: Clock        },
+  approved:       { label: 'Approved', variant: 'default',     icon: CheckCircle2 },
+  rejected:       { label: 'Rejected', variant: 'destructive', icon: XCircle      },
+} as const
 
-export default async function ModeratorPropertyReviewPage({ params }: PageProps) {
+function timeAgo(date: string): string {
+  const diff  = Date.now() - new Date(date).getTime()
+  const hours = Math.floor(diff / 3600000)
+  if (hours < 1)  return 'Just now'
+  if (hours < 24) return `${hours}h ago`
+  return `${Math.floor(hours / 24)}d ago`
+}
+
+export default async function ModeratorPropertiesPage() {
   await connection()
-  const { propertyId } = await params
+  const { userId } = await auth()
 
-  const { data: property, error } = await supabase
+  // Fetch ALL properties this moderator has interacted with
+  // pending = not yet assigned to anyone OR submitted
+  // approved/rejected = reviewed by this moderator
+  const { data: allProperties } = await supabase
     .from('properties')
     .select(`
-      *,
-      profiles!landlord_id (
-        full_name, phone_number, email, avatar_url
-      ),
-      unit_types (
-        id, type, price, total_count, description, amenities
-      )
+      id, name, county, location, status,
+      submitted_at, approved_at, created_at,
+      approved_by,
+      profiles!landlord_id ( full_name, phone_number ),
+      unit_types ( id, type, price, total_count ),
+      unit_images ( id )
     `)
-    .eq('id', propertyId)
-    .single()
+    .or(`status.eq.pending_review,approved_by.eq.${userId}`)
+    .order('submitted_at', { ascending: false, nullsFirst: false })
 
-  if (error || !property) notFound()
-
-  const landlord = (property as any).profiles
-  const units    = (property as any).unit_types ?? []
+  const props    = allProperties ?? []
+  const pending  = props.filter(p => p.status === 'pending_review')
+  const reviewed = props.filter(p => p.approved_by === userId)
+  const approved = reviewed.filter(p => p.status === 'approved')
+  const rejected = reviewed.filter(p => p.status === 'rejected')
 
   return (
-    <div className="p-4 md:p-6 max-w-2xl mx-auto flex flex-col gap-6">
-
-      {/* Back */}
-      <Link
-        href="/dashboard/moderator/properties"
-        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group w-fit"
-      >
-        <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
-        Property queue
-      </Link>
+    <div className="p-4 md:p-6 flex flex-col gap-6">
 
       {/* Header */}
-      <div className="flex items-start justify-between gap-4 flex-wrap">
-        <div className="flex items-start gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-            <Building2 className="h-5 w-5 text-primary" />
-          </div>
-          <div>
-            <h1 className="text-xl font-semibold text-foreground">{property.name}</h1>
-            <div className="flex items-center gap-1.5 text-sm text-muted-foreground mt-0.5">
-              <MapPin className="h-3.5 w-3.5 shrink-0" />
-              {property.location}, {property.county}
-            </div>
-          </div>
-        </div>
-        <Badge variant="outline" className="shrink-0">Pending Review</Badge>
+      <div>
+        <h1 className="text-xl font-semibold text-foreground">Property Reviews</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">
+          {pending.length} pending · {approved.length} approved · {rejected.length} rejected
+        </p>
       </div>
 
-      <Separator />
-
-      {/* Landlord details */}
-      <Section title="Landlord details">
-        {landlord ? (
-          <Card>
-            <CardContent className="p-4 flex flex-col gap-2">
-              <Row label="Name"  value={landlord.full_name ?? '—'} />
-              <Row label="Email" value={landlord.email ?? '—'} />
-              <Row label="Phone" value={landlord.phone_number ?? '—'} />
-            </CardContent>
-          </Card>
-        ) : (
-          <p className="text-sm text-muted-foreground">Landlord details unavailable</p>
-        )}
-      </Section>
-
-      <Separator />
-
-      {/* Property details */}
-      <Section title="Property details">
-        <Card>
-          <CardContent className="p-4 flex flex-col gap-2">
-            <Row label="County"   value={property.county} />
-            <Row label="Location" value={property.location} />
-            {property.address && <Row label="Address" value={property.address} />}
-            {property.description && (
-              <div className="pt-1">
-                <p className="text-xs text-muted-foreground mb-1">Description</p>
-                <p className="text-sm text-foreground leading-relaxed">{property.description}</p>
-              </div>
+      {/* Tabs */}
+      <Tabs defaultValue="pending">
+        <TabsList className="w-full sm:w-auto">
+          <TabsTrigger value="pending" className="flex-1 sm:flex-none gap-2">
+            Pending
+            {pending.length > 0 && (
+              <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-primary text-primary-foreground text-xs font-bold">
+                {pending.length}
+              </span>
             )}
-          </CardContent>
-        </Card>
-      </Section>
+          </TabsTrigger>
+          <TabsTrigger value="approved" className="flex-1 sm:flex-none">
+            Approved ({approved.length})
+          </TabsTrigger>
+          <TabsTrigger value="rejected" className="flex-1 sm:flex-none">
+            Rejected ({rejected.length})
+          </TabsTrigger>
+        </TabsList>
 
-      <Separator />
+        {/* ── Pending tab ─────────────────────────────────────────────── */}
+        <TabsContent value="pending" className="mt-4">
+          <PropertyList
+            properties={pending}
+            emptyMessage="No properties pending review"
+            emptyDescription="All submissions have been reviewed. Check back later."
+            showImageButton={false}
+            currentModeratorId={userId!}
+          />
+        </TabsContent>
 
-      {/* Unit types */}
-      <Section title={`Unit types (${units.length})`}>
-        <div className="flex flex-col gap-2">
-          {units.map((unit: any) => (
-            <Card key={unit.id}>
-              <CardContent className="p-4 flex flex-col gap-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Home className="h-4 w-4 text-primary" />
-                    <p className="text-sm font-semibold text-foreground">
-                      {TYPE_LABELS[unit.type] ?? unit.type}
-                    </p>
-                  </div>
-                  <p className="text-sm font-semibold text-foreground">
-                    KES {unit.price.toLocaleString()}<span className="text-xs font-normal text-muted-foreground">/mo</span>
-                  </p>
-                </div>
+        {/* ── Approved tab ─────────────────────────────────────────────── */}
+        <TabsContent value="approved" className="mt-4">
+          <PropertyList
+            properties={approved}
+            emptyMessage="No approved properties yet"
+            emptyDescription="Properties you approve will appear here."
+            showImageButton={true}
+            currentModeratorId={userId!}
+          />
+        </TabsContent>
 
-                <p className="text-xs text-muted-foreground">
-                  {unit.total_count} unit{unit.total_count !== 1 ? 's' : ''}
-                </p>
+        {/* ── Rejected tab ─────────────────────────────────────────────── */}
+        <TabsContent value="rejected" className="mt-4">
+          <PropertyList
+            properties={rejected}
+            emptyMessage="No rejected properties"
+            emptyDescription="Properties you reject will appear here."
+            showImageButton={false}
+            currentModeratorId={userId!}
+          />
+        </TabsContent>
 
-                {unit.description && (
-                  <p className="text-xs text-muted-foreground leading-relaxed">{unit.description}</p>
-                )}
-
-                {unit.amenities?.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {unit.amenities.map((a: string) => (
-                      <span key={a} className="px-2 py-0.5 rounded-full bg-muted text-xs text-muted-foreground">
-                        {a}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </Section>
-
-      <Separator />
-
-      {/* Review actions */}
-      {property.status === 'pending_review' && (
-        <PropertyReviewActions propertyId={propertyId} />
-      )}
-
-      {property.status !== 'pending_review' && (
-        <div className="p-4 rounded-xl bg-muted/50 border border-border">
-          <p className="text-sm font-medium text-foreground capitalize">
-            Property already {property.status.replace('_', ' ')}
-          </p>
-          {property.rejection_reason && (
-            <p className="text-xs text-muted-foreground mt-1">
-              Reason: {property.rejection_reason}
-            </p>
-          )}
-        </div>
-      )}
-
+      </Tabs>
     </div>
   )
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+// ── Reusable property list ───────────────────────────────────────────────────
+
+function PropertyList({
+  properties,
+  emptyMessage,
+  emptyDescription,
+  showImageButton,
+  currentModeratorId,
+}: {
+  properties:          any[]
+  emptyMessage:        string
+  emptyDescription:    string
+  showImageButton:     boolean
+  currentModeratorId:  string
+}) {
+  if (properties.length === 0) {
+    return (
+      <Card className="border-dashed">
+        <div className="flex flex-col items-center justify-center py-14 gap-3">
+          <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
+            <Inbox className="h-6 w-6 text-muted-foreground" />
+          </div>
+          <p className="text-sm font-medium text-foreground">{emptyMessage}</p>
+          <p className="text-xs text-muted-foreground text-center max-w-xs">{emptyDescription}</p>
+        </div>
+      </Card>
+    )
+  }
+
   return (
     <div className="flex flex-col gap-3">
-      <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
-        {title}
-      </h2>
-      {children}
-    </div>
-  )
-}
+      {properties.map((property: any) => {
+        const units      = property.unit_types ?? []
+        const totalUnits = units.reduce((a: number, u: any) => a + u.total_count, 0)
+        const unitTypes  = units.map((u: any) => TYPE_LABELS[u.type] ?? u.type)
+        const landlord   = property.profiles
+        const imageCount = property.unit_images?.length ?? 0
+        const config     = STATUS_CONFIG[property.status as keyof typeof STATUS_CONFIG]
+          ?? STATUS_CONFIG.pending_review
+        const Icon       = config.icon
 
-function Row({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex items-start justify-between gap-4 text-sm">
-      <span className="text-muted-foreground shrink-0">{label}</span>
-      <span className="text-foreground font-medium text-right">{value}</span>
+        return (
+          <Card key={property.id} className="hover:shadow-sm transition-shadow">
+            <CardContent className="p-4 md:p-5">
+              <div className="flex items-start gap-3">
+
+                {/* Icon */}
+                <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                  <Building2 className="h-4 w-4 text-primary" />
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+                  <div className="flex items-start justify-between gap-2 flex-wrap">
+                    <p className="text-sm font-semibold text-foreground truncate">
+                      {property.name}
+                    </p>
+                    <Badge variant={config.variant as any} className="flex items-center gap-1 shrink-0 text-xs">
+                      <Icon className="h-3 w-3" />
+                      {config.label}
+                    </Badge>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <MapPin className="h-3 w-3 shrink-0" />
+                    {property.location}, {property.county}
+                  </div>
+
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                      <Home className="h-3 w-3" />
+                      {totalUnits} units · {unitTypes.slice(0, 2).join(', ')}
+                      {unitTypes.length > 2 && ` +${unitTypes.length - 2}`}
+                    </span>
+                    {showImageButton && (
+                      <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Images className="h-3 w-3" />
+                        {imageCount} image{imageCount !== 1 ? 's' : ''}
+                      </span>
+                    )}
+                    {landlord && (
+                      <span className="text-xs text-muted-foreground">
+                        by <span className="font-medium text-foreground">{landlord.full_name}</span>
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <Clock className="h-3 w-3" />
+                    {property.status === 'pending_review'
+                      ? `Submitted ${timeAgo(property.submitted_at ?? property.created_at)}`
+                      : `Reviewed ${timeAgo(property.approved_at ?? property.submitted_at ?? property.created_at)}`
+                    }
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border flex-wrap">
+                <Button asChild size="sm" variant="outline" className="gap-1.5 h-8 text-xs flex-1 sm:flex-none">
+                  <Link href={`/dashboard/moderator/properties/${property.id}`}>
+                    {property.status === 'pending_review' ? 'Review' : 'View details'}
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
+                </Button>
+
+                {/* Image management — only for approved properties reviewed by this moderator */}
+                {showImageButton && property.approved_by === currentModeratorId && (
+                  <Button asChild size="sm" className="gap-1.5 h-8 text-xs flex-1 sm:flex-none">
+                    <Link href={`/dashboard/moderator/properties/${property.id}/images`}>
+                      <Images className="h-3 w-3" />
+                      Manage images
+                      {imageCount === 0 && (
+                        <span className="ml-1 px-1.5 py-0.5 rounded-full bg-amber-500 text-white text-xs font-bold leading-none">
+                          0
+                        </span>
+                      )}
+                    </Link>
+                  </Button>
+                )}
+              </div>
+
+            </CardContent>
+          </Card>
+        )
+      })}
     </div>
   )
 }

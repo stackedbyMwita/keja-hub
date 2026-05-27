@@ -23,19 +23,18 @@ export async function POST(req: Request) {
       location,
       number_of_properties,
       number_of_units,
-      property_names,
       notes,
     } = body
 
-    // ── Validate required fields ──────────────────────────────────────────
-    if (!full_name?.trim())      return NextResponse.json({ error: 'Full name is required' }, { status: 400 })
-    if (!phone_number?.trim())   return NextResponse.json({ error: 'Phone number is required' }, { status: 400 })
-    if (!county?.trim())         return NextResponse.json({ error: 'County is required' }, { status: 400 })
-    if (!location?.trim())       return NextResponse.json({ error: 'Location is required' }, { status: 400 })
-    if (!number_of_properties)   return NextResponse.json({ error: 'Number of properties is required' }, { status: 400 })
-    if (!number_of_units)        return NextResponse.json({ error: 'Number of units is required' }, { status: 400 })
+    // ── Validate ──────────────────────────────────────────────────────────
+    if (!full_name?.trim())    return NextResponse.json({ error: 'Full name is required' }, { status: 400 })
+    if (!phone_number?.trim()) return NextResponse.json({ error: 'Phone number is required' }, { status: 400 })
+    if (!county?.trim())       return NextResponse.json({ error: 'County is required' }, { status: 400 })
+    if (!location?.trim())     return NextResponse.json({ error: 'Location is required' }, { status: 400 })
+    if (!number_of_properties) return NextResponse.json({ error: 'Number of properties is required' }, { status: 400 })
+    if (!number_of_units)      return NextResponse.json({ error: 'Number of units is required' }, { status: 400 })
 
-    // ── Must have a rejected application to reapply ───────────────────────
+    // ── Must have rejected application ────────────────────────────────────
     const { data: existing } = await supabase
       .from('landlord_profiles')
       .select('id, status')
@@ -47,10 +46,13 @@ export async function POST(req: Request) {
     }
 
     if (existing.status !== 'rejected') {
-      return NextResponse.json({ error: 'Only rejected applications can be resubmitted' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Only rejected applications can be resubmitted' },
+        { status: 400 }
+      )
     }
 
-    // ── Update existing application back to pending ───────────────────────
+    // ── Update back to pending ────────────────────────────────────────────
     const { error } = await supabase
       .from('landlord_profiles')
       .update({
@@ -61,7 +63,6 @@ export async function POST(req: Request) {
         location:             location.trim(),
         number_of_properties: Number(number_of_properties),
         number_of_units:      Number(number_of_units),
-        property_names:       property_names?.filter(Boolean) ?? [],
         notes:                notes?.trim() || null,
         status:               'pending',
         rejection_reason:     null,
@@ -73,7 +74,10 @@ export async function POST(req: Request) {
 
     if (error) {
       console.error('❌ Landlord reapply error:', error)
-      return NextResponse.json({ error: 'Failed to resubmit application. Please try again.' }, { status: 500 })
+      return NextResponse.json(
+        { error: 'Failed to resubmit application. Please try again.' },
+        { status: 500 }
+      )
     }
 
     console.log(`✅ Landlord reapplication submitted — ${userId}`)
@@ -81,6 +85,9 @@ export async function POST(req: Request) {
 
   } catch (err) {
     console.error('❌ Landlord reapply error:', err)
-    return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Something went wrong. Please try again.' },
+      { status: 500 }
+    )
   }
 }

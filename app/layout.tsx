@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Providers from '@/components/providers/providers';
 import { EB_Garamond, Geist_Mono, Outfit, Space_Grotesk, Geist } from "next/font/google";
 import "./globals.css";
 import { APP_CONSTANTS } from "@/constants";
+import Providers from "@/components/HeroComponents/providers/providers";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
