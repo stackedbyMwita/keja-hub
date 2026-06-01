@@ -1,10 +1,15 @@
+import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
 import { connection } from 'next/server'
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Building2, MapPin, Clock, ArrowRight, Inbox, Home } from 'lucide-react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  Building2, MapPin, Clock, ArrowRight,
+  Inbox, Home, CheckCircle2, XCircle, Images,
+} from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,6 +25,12 @@ const TYPE_LABELS: Record<string, string> = {
   '4br_plus': '4+ Bed', commercial: 'Commercial',
 }
 
+const STATUS_CONFIG = {
+  pending_review: { label: 'Pending',  variant: 'outline',     icon: Clock        },
+  approved:       { label: 'Approved', variant: 'default',     icon: CheckCircle2 },
+  rejected:       { label: 'Rejected', variant: 'destructive', icon: XCircle      },
+} as const
+
 function timeAgo(date: string): string {
   const diff  = Date.now() - new Date(date).getTime()
   const hours = Math.floor(diff / 3600000)
@@ -30,113 +41,238 @@ function timeAgo(date: string): string {
 
 export default async function ModeratorPropertiesPage() {
   await connection()
+  const { userId } = await auth()
 
-  const { data: properties } = await supabase
+  // Fetch ALL properties this moderator has interacted with
+  const { data: pendingProps } = await supabase
     .from('properties')
     .select(`
-      id, name, county, location, status, submitted_at,
+      id, name, county, location, status,
+      submitted_at, approved_at, created_at, approved_by,
       profiles!landlord_id ( full_name, phone_number ),
-      unit_types ( id, type, price, total_count )
+      unit_types ( id, type, price, total_count ),
+      unit_images ( id )
     `)
     .eq('status', 'pending_review')
-    .order('submitted_at', { ascending: true })
+    .order('submitted_at', { ascending: false, nullsFirst: false })
 
-  const props = properties ?? []
+  const { data: myProps } = await supabase
+    .from('properties')
+    .select(`
+      id, name, county, location, status,
+      submitted_at, approved_at, created_at, approved_by,
+      profiles!landlord_id ( full_name, phone_number ),
+      unit_types ( id, type, price, total_count ),
+      unit_images ( id )
+    `)
+    .eq('approved_by', userId!)
+    .in('status', ['approved', 'rejected'])
+    .order('approved_at', { ascending: false, nullsFirst: false })
+
+  const pending  = pendingProps  ?? []
+  const reviewed = myProps       ?? []
+  const approved = reviewed.filter(p => p.status === 'approved')
+  const rejected = reviewed.filter(p => p.status === 'rejected')
 
   return (
-    <div className="p-4 md:p-6 flex flex-col gap-6 max-w-7xl mx-auto">
-
-      {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div>
-          <h1 className="text-xl font-semibold text-foreground">Property Reviews</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            {props.length} propert{props.length !== 1 ? 'ies' : 'y'} pending review
-          </p>
-        </div>
-        <Badge variant="secondary" className="tabular-nums">
-          {props.length} pending
-        </Badge>
+    <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-8 max-w-7xl mx-auto w-full">
+      
+      {/* ── Header (Fully separated from Tabs) ──────────────────────── */}
+      <div className="flex flex-col gap-2 border-b border-border/50 pb-5">
+        <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground tracking-tight">
+          Property Reviews
+        </h1>
+        <p className="text-sm font-medium text-muted-foreground">
+          {pending.length} pending · {approved.length} approved · {rejected.length} rejected
+        </p>
       </div>
 
-      {/* Empty state */}
-      {props.length === 0 && (
-        <Card className="border-dashed">
-          <CardContent className="flex flex-col items-center justify-center py-16 gap-3">
-            <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
-              <Inbox className="h-6 w-6 text-muted-foreground" />
-            </div>
-            <p className="text-sm font-medium text-foreground">No properties to review</p>
-            <p className="text-xs text-muted-foreground text-center max-w-xs">
-              All property submissions have been reviewed. Check back later.
-            </p>
-          </CardContent>
-        </Card>
-      )}
+      {/* ── Tabs (Standard Top-Down Layout) ─────────────────────────── */}
+      <Tabs defaultValue="pending" className="w-full">
+        
+        {/* Wrapper to allow horizontal scrolling on small screens without breaking layout */}
+        <div className="mb-6 overflow-x-auto pb-2">
+          <TabsList className="inline-flex w-full sm:w-auto bg-muted/50 p-1">
+            <TabsTrigger value="pending" className="gap-2 px-4 py-1.5">
+              Pending
+              {pending.length > 0 && (
+                <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-primary text-primary-foreground text-xs font-bold">
+                  {pending.length}
+                </span>
+              )}
+            </TabsTrigger>
+            <TabsTrigger value="approved" className="px-4 py-1.5">
+              Approved ({approved.length})
+            </TabsTrigger>
+            <TabsTrigger value="rejected" className="px-4 py-1.5">
+              Rejected ({rejected.length})
+            </TabsTrigger>
+          </TabsList>
+        </div>
 
-      {/* Property cards */}
-      <div className="flex flex-col gap-3">
-        {props.map((property: any) => {
-          const units      = property.unit_types ?? []
-          const totalUnits = units.reduce((a: number, u: any) => a + u.total_count, 0)
-          const unitTypes  = units.map((u: any) => TYPE_LABELS[u.type] ?? u.type)
-          const landlord   = property.profiles
+        {/* ── Tab Contents ─────────────────────────────────────────────── */}
+        <TabsContent value="pending" className="m-0 focus-visible:outline-none focus-visible:ring-0">
+          <PropertyList
+            properties={pending}
+            emptyMessage="No properties pending review"
+            emptyDescription="All submissions have been reviewed. Check back later."
+            showImageButton={false}
+            currentModeratorId={userId!}
+          />
+        </TabsContent>
 
-          return (
-            <Card key={property.id} className="hover:shadow-sm transition-shadow">
-              <CardContent className="p-4 md:p-5">
-                <div className="flex items-start justify-between gap-4">
+        <TabsContent value="approved" className="m-0 focus-visible:outline-none focus-visible:ring-0">
+          <PropertyList
+            properties={approved}
+            emptyMessage="No approved properties yet"
+            emptyDescription="Properties you approve will appear here."
+            showImageButton={true}
+            currentModeratorId={userId!}
+          />
+        </TabsContent>
 
-                  {/* Left */}
-                  <div className="flex items-start gap-3 min-w-0 flex-1">
-                    <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
-                      <Building2 className="h-4 w-4 text-primary" />
-                    </div>
-                    <div className="flex flex-col gap-1.5 min-w-0">
-                      <p className="text-sm font-semibold text-foreground truncate">
-                        {property.name}
-                      </p>
+        <TabsContent value="rejected" className="m-0 focus-visible:outline-none focus-visible:ring-0">
+          <PropertyList
+            properties={rejected}
+            emptyMessage="No rejected properties"
+            emptyDescription="Properties you reject will appear here."
+            showImageButton={false}
+            currentModeratorId={userId!}
+          />
+        </TabsContent>
 
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <MapPin className="h-3 w-3 shrink-0" />
-                        {property.location}, {property.county}
-                      </div>
+      </Tabs>
+    </div>
+  )
+}
 
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <Home className="h-3 w-3 shrink-0" />
-                        {totalUnits} units · {unitTypes.slice(0, 3).join(', ')}
-                        {unitTypes.length > 3 && ` +${unitTypes.length - 3} more`}
-                      </div>
+// ── Reusable property list ───────────────────────────────────────────────────
 
-                      {landlord && (
-                        <p className="text-xs text-muted-foreground">
-                          by <span className="font-medium text-foreground">{landlord.full_name}</span>
-                          {' '}· {landlord.phone_number}
-                        </p>
-                      )}
+function PropertyList({
+  properties,
+  emptyMessage,
+  emptyDescription,
+  showImageButton,
+  currentModeratorId,
+}: {
+  properties:          any[]
+  emptyMessage:        string
+  emptyDescription:    string
+  showImageButton:     boolean
+  currentModeratorId:  string
+}) {
+  if (properties.length === 0) {
+    return (
+      <Card className="border-dashed border-border/60 bg-transparent shadow-none w-full">
+        <div className="flex flex-col items-center justify-center py-16 gap-3">
+          <div className="w-14 h-14 rounded-2xl bg-muted/50 border border-border/50 flex items-center justify-center">
+            <Inbox className="h-6 w-6 text-muted-foreground/70" />
+          </div>
+          <p className="text-base font-semibold text-foreground mt-2">{emptyMessage}</p>
+          <p className="text-sm text-muted-foreground text-center max-w-xs">{emptyDescription}</p>
+        </div>
+      </Card>
+    )
+  }
 
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <Clock className="h-3 w-3" />
-                        Submitted {timeAgo(property.submitted_at ?? property.created_at)}
-                      </div>
-                    </div>
+  return (
+    <div className="flex flex-col gap-4">
+      {properties.map((property: any) => {
+        const units      = property.unit_types ?? []
+        const totalUnits = units.reduce((a: number, u: any) => a + u.total_count, 0)
+        const unitTypes  = units.map((u: any) => TYPE_LABELS[u.type] ?? u.type)
+        const landlord   = property.profiles
+        const imageCount = property.unit_images?.length ?? 0
+        const config     = STATUS_CONFIG[property.status as keyof typeof STATUS_CONFIG]
+          ?? STATUS_CONFIG.pending_review
+        const Icon       = config.icon
+
+        return (
+          <Card key={property.id} className="hover:shadow-md transition-all duration-200 border-border/60 rounded-2xl overflow-hidden w-full">
+            <CardContent className="p-5 md:p-6 bg-card">
+              <div className="flex items-start gap-4">
+
+                {/* Icon */}
+                <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                  <Building2 className="h-5 w-5 text-primary" />
+                </div>
+
+                {/* Content */}
+                <div className="flex-1 min-w-0 flex flex-col gap-2">
+                  <div className="flex items-start justify-between gap-3 flex-wrap">
+                    <p className="text-base font-bold text-foreground truncate">
+                      {property.name}
+                    </p>
+                    <Badge variant={config.variant as any} className="flex items-center gap-1.5 shrink-0 text-xs px-2.5 py-0.5 shadow-sm">
+                      <Icon className="h-3.5 w-3.5" />
+                      {config.label}
+                    </Badge>
                   </div>
 
-                  {/* Action */}
-                  <Button asChild size="sm" className="shrink-0">
-                    <Link href={`/dashboard/moderator/properties/${property.id}`}>
-                      Review
-                      <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
+                  <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
+                    <MapPin className="h-4 w-4 shrink-0 text-muted-foreground/70" />
+                    {property.location}, {property.county}
+                  </div>
+
+                  <div className="flex items-center gap-4 flex-wrap mt-1">
+                    <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                      <Home className="h-3.5 w-3.5 text-muted-foreground/70" />
+                      {totalUnits} units · {unitTypes.slice(0, 2).join(', ')}
+                      {unitTypes.length > 2 && ` +${unitTypes.length - 2}`}
+                    </span>
+                    {showImageButton && (
+                      <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                        <Images className="h-3.5 w-3.5 text-muted-foreground/70" />
+                        {imageCount} image{imageCount !== 1 ? 's' : ''}
+                      </span>
+                    )}
+                    {landlord && (
+                      <span className="text-xs font-medium text-muted-foreground">
+                        by <span className="font-semibold text-foreground">{landlord.full_name}</span>
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground mt-1">
+                    <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
+                    {property.status === 'pending_review'
+                      ? `Submitted ${timeAgo(property.submitted_at ?? property.created_at)}`
+                      : `Reviewed ${timeAgo(property.approved_at ?? property.submitted_at ?? property.created_at)}`
+                    }
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex items-center gap-3 mt-5 pt-4 border-t border-border/50 flex-wrap">
+                <Button asChild size="sm" variant="outline" className="gap-2 h-9 text-xs font-semibold flex-1 sm:flex-none rounded-lg hover:bg-muted/50 transition-colors">
+                  <Link href={`/dashboard/moderator/properties/${property.id}`}>
+                    {property.status === 'pending_review' ? 'Review Application' : 'View Details'}
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </Button>
+
+                {/* Image management */}
+                {showImageButton && property.approved_by === currentModeratorId && (
+                  <Button asChild size="sm" className="gap-2 h-9 text-xs font-semibold flex-1 sm:flex-none rounded-lg shadow-sm">
+                    <Link href={`/dashboard/moderator/properties/${property.id}/images`}>
+                      <Images className="h-3.5 w-3.5" />
+                      Manage Images
+                      {imageCount === 0 && (
+                        <span className="ml-1.5 px-2 py-0.5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold leading-none shadow-sm">
+                          0
+                        </span>
+                      )}
                     </Link>
                   </Button>
+                )}
+              </div>
 
-                </div>
-              </CardContent>
-            </Card>
-          )
-        })}
-      </div>
-
+            </CardContent>
+          </Card>
+        )
+      })}
     </div>
   )
 }
