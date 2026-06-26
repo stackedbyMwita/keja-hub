@@ -1,5 +1,5 @@
+import { ArrowRight, Building2, CheckCircle2, Clock, MapPin, XCircle } from 'lucide-react'
 import Link from 'next/link'
-import { Building2, MapPin, ArrowRight, CheckCircle2, Clock, XCircle } from 'lucide-react'
 
 // You can move these types to a shared types file later
 export type PropertyStatus = 'Approved' | 'Pending' | 'Rejected'
@@ -71,7 +71,7 @@ export function PropertyList({
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-foreground">{prop.name}</h3>
+                  <p className="font-semibold text-foreground">{prop.name}</p>
                   <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <MapPin className="h-3.5 w-3.5" />

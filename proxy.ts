@@ -9,6 +9,8 @@ const isPublicRoute = createRouteMatcher([
   '/sign-in(.*)',
   '/sign-up(.*)',
   '/onboarding-details',
+  // Removed /become-a-landlord from here
+  '/become-a-landlord',
   '/banned',
   '/sso-callback',
   '/api/webhooks/clerk',
@@ -26,6 +28,7 @@ const isSuperadminDashboard = createRouteMatcher(['/dashboard/superadmin(.*)'])
 
 export default clerkMiddleware(async (auth, req: NextRequest) => {
   const url = req.nextUrl
+  console.log('🛡️ Middleware:', url.pathname)
 
   // ── 1. Public routes — pass through ─────────────────────────────────────
   if (isPublicRoute(req)) {

@@ -176,7 +176,7 @@ export function UnitTypeCard({
               size="sm"
               onClick={toggleActivation}
               disabled={activating}
-              className="w-full"
+              className="w-full rounded-full"
             >
               {activating
                 ? <><Loader2 className="h-3.5 w-3.5 mr-2 animate-spin" />Processing...</>

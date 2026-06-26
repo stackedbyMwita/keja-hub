@@ -21,14 +21,9 @@ const supabase = createClient(
 )
 
 export default async function BecomeALandlordPage() {
-  // Tell Next.js this page is intentionally dynamic
   await connection()
 
   const { userId, sessionClaims } = await auth()
-
-  if (!userId) {
-    redirect('/sign-in?redirectUrl=/become-a-landlord')
-  }
 
   const meta = (sessionClaims?.publicMetadata ?? {}) as { role?: string }
   const role = meta.role ?? 'user'
