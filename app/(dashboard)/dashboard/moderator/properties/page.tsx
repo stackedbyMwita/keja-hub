@@ -88,11 +88,11 @@ export default async function ModeratorPropertiesPage() {
       </div>
 
       {/* ── Tabs (Standard Top-Down Layout) ─────────────────────────── */}
-      <Tabs defaultValue="pending" className="w-full">
+      <Tabs defaultValue="pending" className="w-full flex flex-col">
         
         {/* Wrapper to allow horizontal scrolling on small screens without breaking layout */}
         <div className="mb-6 overflow-x-auto pb-2">
-          <TabsList className="inline-flex w-full sm:w-auto bg-muted/50 p-1">
+          <TabsList className="inline-flex bg-muted/50 p-1 w-full sm:w-max self-start">
             <TabsTrigger value="pending" className="gap-2 px-4 py-1.5">
               Pending
               {pending.length > 0 && (

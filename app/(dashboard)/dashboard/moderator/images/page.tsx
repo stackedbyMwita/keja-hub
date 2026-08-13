@@ -120,8 +120,8 @@ export default async function ModeratorImagesHubPage() {
       </div>
 
       {/* Filter tabs */}
-      <Tabs defaultValue="all">
-        <TabsList>
+      <Tabs defaultValue="all" className='flex flex-col w-full'>
+        <TabsList className='w-full sm:w-max self-start'>
           <TabsTrigger value="all">
             All ({totalProperties})
           </TabsTrigger>
