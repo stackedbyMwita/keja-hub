@@ -12,7 +12,7 @@ import { LandlordForm } from '@/components/BecomeALandlordComponents/LandlordFor
 export const dynamic = 'force-dynamic'
 
 export const metadata = {
-  title: 'Become a Landlord — KejaHub',
+  title: 'Become a Landlord — KejaLink',
 }
 
 const supabase = createClient(
@@ -106,7 +106,7 @@ export default async function BecomeALandlordPage() {
               
               <h1 className="font-heading text-5xl md:text-6xl text-foreground leading-[1.05] tracking-tight">
                 List your property<br />
-                <span className="text-muted-foreground">on KejaHub.</span>
+                <span className="text-muted-foreground">on KejaLink.</span>
               </h1>
               
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-xl mt-2">

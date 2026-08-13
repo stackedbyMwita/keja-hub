@@ -181,7 +181,7 @@ export default function ModeratorOverviewPage() {
           Good work, moderator.
         </h1>
         <p className="text-base text-muted-foreground">
-          Here&apos;s a quick overview of what&apos;s happening on KejaHub today.
+          Here&apos;s a quick overview of what&apos;s happening on KejaLink today.
         </p>
       </div>
 

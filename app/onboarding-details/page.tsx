@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 
 export const metadata = {
-  title: 'Complete your profile — KejaHub',
+  title: 'Complete your profile — KejaLink',
 }
 
 export default function OnboardingDetailsPage() {

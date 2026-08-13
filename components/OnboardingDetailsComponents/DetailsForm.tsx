@@ -131,7 +131,7 @@ export function DetailsForm() {
         {/* How did you hear */}
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-medium text-foreground">
-            How did you hear about KejaHub?{' '}
+            How did you hear about KejaLink?{' '}
             <span className="text-muted-foreground font-normal">(optional)</span>
           </label>
           <div className="relative">
@@ -170,7 +170,7 @@ export function DetailsForm() {
             </div>
           </div>
           <span className="text-xs text-muted-foreground leading-relaxed">
-            I agree to KejaHub&apos;s{' '}
+            I agree to KejaLink&apos;s{' '}
             <Link
               href="/terms"
               target="_blank"

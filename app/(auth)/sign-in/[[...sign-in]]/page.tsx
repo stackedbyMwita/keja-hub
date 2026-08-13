@@ -2,7 +2,7 @@ import { SignIn } from '@clerk/nextjs'
 import { Suspense } from 'react'
 
 export const metadata = {
-  title: 'Sign in — KejaHub',
+  title: 'Sign in — KejaLink',
 }
 
 export default function SignInPage() {

@@ -30,9 +30,8 @@ interface NavItem {
 
 const MODERATOR_NAV: NavItem[] = [
   { label: 'Overview',         href: '/dashboard/moderator',            icon: LayoutDashboard, exact: true },
-  { label: 'Landlord Queue',   href: '/dashboard/moderator/queue',      icon: ClipboardList,   divider: true },
-  { label: 'Property Reviews', href: '/dashboard/moderator/properties', icon: Building2 },
-  { label: 'Image Management', href: '/dashboard/moderator/images',     icon: ImageIcon },
+  { label: 'Landlord Management',   href: '/dashboard/moderator/landlord',      icon: ClipboardList,   divider: true },
+  { label: 'Property Management', href: '/dashboard/moderator/properties', icon: Building2 },
   { label: 'My Activity',      href: '/dashboard/moderator/activity',   icon: ActivitySquare,  divider: true },
 ]
 

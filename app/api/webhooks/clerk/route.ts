@@ -52,7 +52,7 @@ function getEmail(data: any): string {
 // ─── WEBHOOK HANDLER ────────────────────────────────────────────────────────
 
 export async function GET() {
-  return new Response('KejaHub webhook is reachable', { status: 200 })
+  return new Response('KejaLink webhook is reachable', { status: 200 })
 }
 
 export async function POST(req: Request) {

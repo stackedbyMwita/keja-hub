@@ -64,7 +64,7 @@ export default async function LandlordOverviewPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Welcome back 👋</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Here&apos;s a summary of your properties on KejaHub.
+            Here&apos;s a summary of your properties on KejaLink.
           </p>
         </div>
         <Button asChild>
@@ -117,7 +117,7 @@ export default async function LandlordOverviewPage() {
             <div>
               <p className="text-lg font-semibold text-foreground">No properties yet</p>
               <p className="text-sm text-muted-foreground mt-1.5 max-w-sm mx-auto">
-                Add your first property to start listing on KejaHub. Our team will verify it within 1–3 days.
+                Add your first property to start listing on KejaLink. Our team will verify it within 1–3 days.
               </p>
             </div>
             <Button asChild className="mt-2">

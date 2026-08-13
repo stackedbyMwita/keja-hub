@@ -44,26 +44,25 @@ export default async function ModeratorPropertiesPage() {
   const { userId } = await auth()
 
   // Fetch ALL properties this moderator has interacted with
-  const { data: pendingProps } = await supabase
+  const { data: pendingProps, error: pendingError } = await supabase
     .from('properties')
     .select(`
       id, name, county, location, status,
       submitted_at, approved_at, created_at, approved_by,
-      profiles!landlord_id ( full_name, phone_number ),
-      unit_types ( id, type, price, total_count ),
-      unit_images ( id )
+      profiles!landlord_id ( full_name, phone_number )
     `)
     .eq('status', 'pending_review')
     .order('submitted_at', { ascending: false, nullsFirst: false })
+
+   console.log("Penidng error", pendingError) 
+   console.log("Penidng Properties", pendingProps) 
 
   const { data: myProps } = await supabase
     .from('properties')
     .select(`
       id, name, county, location, status,
       submitted_at, approved_at, created_at, approved_by,
-      profiles!landlord_id ( full_name, phone_number ),
-      unit_types ( id, type, price, total_count ),
-      unit_images ( id )
+      profiles!landlord_id ( full_name, phone_number )
     `)
     .eq('approved_by', userId!)
     .in('status', ['approved', 'rejected'])
@@ -73,6 +72,8 @@ export default async function ModeratorPropertiesPage() {
   const reviewed = myProps       ?? []
   const approved = reviewed.filter(p => p.status === 'approved')
   const rejected = reviewed.filter(p => p.status === 'rejected')
+
+  console.log(pending)
 
   return (
     <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-8 max-w-7xl mx-auto w-full">
@@ -189,87 +190,64 @@ function PropertyList({
 
         return (
           <Card key={property.id} className="hover:shadow-md transition-all duration-200 border-border/60 rounded-2xl overflow-hidden w-full">
-            <CardContent className="p-5 md:p-6 bg-card">
-              <div className="flex items-start gap-4">
+            <Link href={`/dashboard/moderator/properties/${property.id}`}>
+              <CardContent className="p-5 md:p-6 bg-card">
+                <div className="flex items-start gap-4">
 
-                {/* Icon */}
-                <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 mt-0.5">
-                  <Building2 className="h-5 w-5 text-primary" />
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 min-w-0 flex flex-col gap-2">
-                  <div className="flex items-start justify-between gap-3 flex-wrap">
-                    <p className="text-base font-bold text-foreground truncate">
-                      {property.name}
-                    </p>
-                    <Badge variant={config.variant as any} className="flex items-center gap-1.5 shrink-0 text-xs px-2.5 py-0.5 shadow-sm">
-                      <Icon className="h-3.5 w-3.5" />
-                      {config.label}
-                    </Badge>
+                  {/* Icon */}
+                  <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                    <Building2 className="h-5 w-5 text-primary" />
                   </div>
 
-                  <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
-                    <MapPin className="h-4 w-4 shrink-0 text-muted-foreground/70" />
-                    {property.location}, {property.county}
-                  </div>
+                  {/* Content */}
+                  <div className="flex-1 min-w-0 flex flex-col gap-2">
+                    <div className="flex items-start justify-between gap-3 flex-wrap">
+                      <p className="text-base font-bold text-foreground truncate">
+                        {property.name}
+                      </p>
+                      <Badge variant={config.variant as any} className="flex items-center gap-1.5 shrink-0 text-xs px-2.5 py-0.5 shadow-sm">
+                        <Icon className="h-3.5 w-3.5" />
+                        {config.label}
+                      </Badge>
+                    </div>
 
-                  <div className="flex items-center gap-4 flex-wrap mt-1">
-                    <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                      <Home className="h-3.5 w-3.5 text-muted-foreground/70" />
-                      {totalUnits} units · {unitTypes.slice(0, 2).join(', ')}
-                      {unitTypes.length > 2 && ` +${unitTypes.length - 2}`}
-                    </span>
-                    {showImageButton && (
+                    <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">
+                      <MapPin className="h-4 w-4 shrink-0 text-muted-foreground/70" />
+                      {property.location}, {property.county}
+                    </div>
+
+                    <div className="flex items-center gap-4 flex-wrap mt-1">
                       <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                        <Images className="h-3.5 w-3.5 text-muted-foreground/70" />
-                        {imageCount} image{imageCount !== 1 ? 's' : ''}
+                        <Home className="h-3.5 w-3.5 text-muted-foreground/70" />
+                        {totalUnits} units · {unitTypes.slice(0, 2).join(', ')}
+                        {unitTypes.length > 2 && ` +${unitTypes.length - 2}`}
                       </span>
-                    )}
-                    {landlord && (
-                      <span className="text-xs font-medium text-muted-foreground">
-                        by <span className="font-semibold text-foreground">{landlord.full_name}</span>
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground mt-1">
-                    <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
-                    {property.status === 'pending_review'
-                      ? `Submitted ${timeAgo(property.submitted_at ?? property.created_at)}`
-                      : `Reviewed ${timeAgo(property.approved_at ?? property.submitted_at ?? property.created_at)}`
-                    }
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Action buttons */}
-              <div className="flex items-center gap-3 mt-5 pt-4 border-t border-border/50 flex-wrap">
-                <Button asChild size="sm" variant="outline" className="gap-2 h-9 text-xs font-semibold flex-1 sm:flex-none rounded-lg hover:bg-muted/50 transition-colors">
-                  <Link href={`/dashboard/moderator/properties/${property.id}`}>
-                    {property.status === 'pending_review' ? 'Review Application' : 'View Details'}
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                </Button>
-
-                {/* Image management */}
-                {showImageButton && property.approved_by === currentModeratorId && (
-                  <Button asChild size="sm" className="gap-2 h-9 text-xs font-semibold flex-1 sm:flex-none rounded-lg shadow-sm">
-                    <Link href={`/dashboard/moderator/properties/${property.id}/images`}>
-                      <Images className="h-3.5 w-3.5" />
-                      Manage Images
-                      {imageCount === 0 && (
-                        <span className="ml-1.5 px-2 py-0.5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold leading-none shadow-sm">
-                          0
+                      {showImageButton && (
+                        <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                          <Images className="h-3.5 w-3.5 text-muted-foreground/70" />
+                          {imageCount} image{imageCount !== 1 ? 's' : ''}
                         </span>
                       )}
-                    </Link>
-                  </Button>
-                )}
-              </div>
+                      {landlord && (
+                        <span className="text-xs font-medium text-muted-foreground">
+                          by <span className="font-semibold text-foreground">{landlord.full_name}</span>
+                        </span>
+                      )}
+                    </div>
 
-            </CardContent>
+                    <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground mt-1">
+                      <Clock className="h-3.5 w-3.5 text-muted-foreground/70" />
+                      {property.status === 'pending_review'
+                        ? `Submitted ${timeAgo(property.submitted_at ?? property.created_at)}`
+                        : `Reviewed ${timeAgo(property.approved_at ?? property.submitted_at ?? property.created_at)}`
+                      }
+                    </div>
+                  </div>
+
+                </div>
+
+              </CardContent>
+            </Link>
           </Card>
         )
       })}

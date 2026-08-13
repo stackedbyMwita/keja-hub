@@ -115,7 +115,7 @@ export function UnitDetails({ unit }: UnitDetailsProps) {
         <div className="pt-0.5">
           <p className="text-base font-bold text-foreground">Physically Verified Listing</p>
           <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
-            A KejaHub moderator has physically visited this property, confirmed its legitimacy, and uploaded these exact images.
+            A KejaLink moderator has physically visited this property, confirmed its legitimacy, and uploaded these exact images.
           </p>
         </div>
       </motion.div>

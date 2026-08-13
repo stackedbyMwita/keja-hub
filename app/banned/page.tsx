@@ -17,7 +17,7 @@ export default function BannedPage() {
             Account suspended
           </h1>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Your account has been suspended due to a violation of KejaHub&apos;s
+            Your account has been suspended due to a violation of KejaLink&apos;s
             terms of service. If you believe this is a mistake, please contact
             our support team.
           </p>
@@ -28,7 +28,7 @@ export default function BannedPage() {
           href="mailto:support@kejalink.co.ke"
           className="text-sm text-primary font-medium hover:underline underline-offset-4"
         >
-          support@kejahub.co.ke
+          support@kejalink.co.ke
         </a>
 
         {/* Sign out */}

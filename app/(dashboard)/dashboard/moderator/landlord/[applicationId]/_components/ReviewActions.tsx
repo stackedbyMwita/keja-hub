@@ -113,7 +113,7 @@ export function ReviewActions({ applicationId }: ReviewActionsProps) {
               <AlertDialogTitle>Approve this application?</AlertDialogTitle>
               <AlertDialogDescription>
                 This will activate the landlord&apos;s account immediately.
-                They will be able to list properties on KejaHub. This action
+                They will be able to list properties on KejaLink. This action
                 cannot be undone without admin intervention.
               </AlertDialogDescription>
             </AlertDialogHeader>

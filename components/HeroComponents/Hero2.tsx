@@ -36,7 +36,7 @@ export function Hero() {
 
           {/* Subtext */}
           <p className="text-base text-muted-foreground max-w-md leading-relaxed animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300 ease-out [animation-fill-mode:both]">
-            Every listing on KejaHub is physically verified by our team.
+            Every listing on KejaLink is physically verified by our team.
             No fraud, no ghost houses — just real homes at honest prices.
           </p>
 

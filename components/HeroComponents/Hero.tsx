@@ -17,7 +17,7 @@ export function Hero() {
           </h1>
 
           <p className="text-base text-muted-foreground max-w-md leading-relaxed">
-            Every listing on KejaHub is physically verified by our team. 
+            Every listing on KejaLink is physically verified by our team. 
             No fraud, no ghost houses — just real homes at honest prices.
           </p>
 

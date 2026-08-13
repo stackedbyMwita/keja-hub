@@ -142,7 +142,7 @@ export function UnlockCard({
             <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
           </div>
           <p className="text-xs font-semibold text-foreground">
-            Verified by a KejaHub moderator
+            Verified by a KejaLink moderator
           </p>
         </div>
       </motion.div>
