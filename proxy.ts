@@ -2,14 +2,12 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { updateSession } from '@/lib/supabase/proxy'
 import { type NextRequest, NextResponse } from 'next/server'
 
-// ── Route matchers ────────────────────────────────────────────────────────────
-
+// Route matchers
 const isPublicRoute = createRouteMatcher([
   '/',
   '/sign-in(.*)',
   '/sign-up(.*)',
   '/onboarding-details',
-  // Removed /become-a-landlord from here
   '/become-a-landlord',
   '/banned',
   '/sso-callback',
@@ -24,18 +22,17 @@ const isModeratorDashboard  = createRouteMatcher(['/dashboard/moderator(.*)'])
 const isAdminDashboard      = createRouteMatcher(['/dashboard/admin(.*)'])
 const isSuperadminDashboard = createRouteMatcher(['/dashboard/superadmin(.*)'])
 
-// ── Middleware ────────────────────────────────────────────────────────────────
-
+// Middleware
 export default clerkMiddleware(async (auth, req: NextRequest) => {
   const url = req.nextUrl
   console.log('🛡️ Middleware:', url.pathname)
 
-  // ── 1. Public routes — pass through ─────────────────────────────────────
+  // 1. Public routes
   if (isPublicRoute(req)) {
     return await updateSession(req)
   }
 
-  // ── 2. Not signed in — redirect to sign-in with returnUrl ───────────────
+  // 2. Not signed in
   const { userId, sessionClaims } = await auth()
 
   if (!userId) {
@@ -44,7 +41,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.redirect(signInUrl)
   }
 
-  // ── 3. Read metadata from session token ─────────────────────────────────
+  // 3. Read metadata from session token
   const meta = (sessionClaims?.publicMetadata ?? {}) as {
     role?: string
     is_banned?: boolean
@@ -55,7 +52,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
   const is_banned = meta.is_banned ?? false
   const is_active = meta.is_active ?? true
 
-  // ── 4. Banned or deactivated ─────────────────────────────────────────────
+  // 4. Banned or deactivated
   if (is_banned || !is_active) {
     if (!url.pathname.startsWith('/banned')) {
       return NextResponse.redirect(new URL('/banned', req.url))
@@ -63,7 +60,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return await updateSession(req)
   }
 
-  // ── 5. Role-based dashboard protection ──────────────────────────────────
+  // 5. Role-based dashboard protection
   if (isSuperadminDashboard(req) && role !== 'superadmin') {
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
@@ -80,7 +77,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
 
-  // ── 6. /dashboard root — redirect to role-specific dashboard ────────────
+  // 6. /dashboard root — redirect to role-specific dashboard
   if (url.pathname === '/dashboard') {
     const destinations: Record<string, string> = {
       superadmin: '/dashboard/superadmin',
@@ -92,7 +89,7 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.redirect(new URL(destinations[role] ?? '/', req.url))
   }
 
-  // ── 7. All clear ─────────────────────────────────────────────────────────
+  // 7. All clear
   return await updateSession(req)
 })
 

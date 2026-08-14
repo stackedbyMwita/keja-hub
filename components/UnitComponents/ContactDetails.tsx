@@ -15,7 +15,6 @@ interface ContactDetailsProps {
 }
 
 export function ContactDetails({ contact }: ContactDetailsProps) {
-  // Format phone for display: 254712345678 → +254 712 345 678
   const formattedPhone = contact.phone.replace(
     /^254(\d{3})(\d{3})(\d{3})$/,
     '+254 $1 $2 $3'

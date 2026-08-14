@@ -15,7 +15,7 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState(0)
 
-  // ── Lightbox keyboard navigation ──────────────────────────────────────────
+  // Lightbox keyboard navigation
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (!lightboxOpen) return
