@@ -49,7 +49,7 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
         
         {/* Main image */}
         <div
-          className="relative w-full aspect-[16/9] lg:aspect-[21/9] rounded-3xl overflow-hidden bg-muted cursor-zoom-in ring-1 ring-border/50 shadow-sm group"
+          className="relative w-full aspect-[16/9] lg:aspect-[16/9] rounded-3xl overflow-hidden bg-muted ring-1 ring-border/50 shadow-sm group"
           onClick={() => openLightbox(activeIndex)}
         >
           <Image
@@ -58,7 +58,7 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
             fill
             priority
             quality={100} 
-            className="unit-page-image group-hover:scale-105 transition-transform duration-500"
+            className="unit-page-image"
             sizes="(max-width: 1024px) 100vw, 80vw"
           />
 

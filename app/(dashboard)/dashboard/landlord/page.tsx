@@ -21,21 +21,21 @@ export default async function LandlordOverviewPage() {
   await connection()
   const { userId } = await auth()
 
-  // 1. Fetch Data
+  // 1. Fetch data
   const { data: properties } = await supabase
     .from('properties')
     .select(`*, unit_types(id, type, total_count, available_count, status)`)
     .eq('landlord_id', userId!)
     .order('created_at', { ascending: false })
 
-  // 2. Calculate Aggregates
+  // 2. Calculate aggregates
   const props          = properties ?? []
   const totalProps     = props.length
   const totalUnits     = props.reduce((a, p) => a + (p.unit_types?.reduce((b: number, u: any) => b + u.total_count, 0) ?? 0), 0)
   const availableUnits = props.reduce((a, p) => a + (p.unit_types?.filter((u: any) => u.status === 'active').reduce((b: number, u: any) => b + u.available_count, 0) ?? 0), 0)
   const approvedProps  = props.filter(p => p.status === 'approved').length
 
-  // 3. Format Data for the PropertyList UI Component
+  // 3. Format data for the PropertyList Component
   const formattedProperties = props.slice(0, 5).map(p => {
     const units  = p.unit_types ?? []
     const tUnits = units.reduce((a: number, u: any) => a + u.total_count, 0)

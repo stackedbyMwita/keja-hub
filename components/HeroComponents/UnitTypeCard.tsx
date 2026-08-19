@@ -117,7 +117,7 @@ export function UnitTypeCard({
             </div>
 
             <div className="flex items-center gap-1.5 shrink-0">
-              <Badge variant={isActive ? 'default' : 'secondary'} className="text-xs">
+              <Badge variant={isActive ? 'default' : 'secondary'} className="text-xs rounded-full">
                 {isActive ? 'Active' : 'Draft'}
               </Badge>
 

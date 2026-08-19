@@ -39,7 +39,7 @@ export default async function LandlordPropertiesPage() {
   const props = properties ?? []
 
   return (
-    <DashboardPageWrapper className="max-w-4xl">
+    <DashboardPageWrapper>
 
       {/* Header Section */}
       <div className="flex items-center justify-between flex-wrap gap-4">
@@ -114,7 +114,7 @@ export default async function LandlordPropertiesPage() {
                         <h3 className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
                           {property.name}
                         </h3>
-                        <Badge variant={config.variant as any} className="flex items-center gap-1 shrink-0 text-xs shadow-none">
+                        <Badge variant={config.variant as any} className="flex rounded-full items-center gap-1 shrink-0 text-xs shadow-none">
                           <Icon className="h-3.5 w-3.5" />
                           {config.label}
                         </Badge>

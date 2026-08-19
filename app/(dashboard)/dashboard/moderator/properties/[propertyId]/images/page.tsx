@@ -13,6 +13,7 @@ import { Separator } from '@/components/ui/separator'
 import { ImagePreviewGrid } from './_components/ImagePreviewGrid'
 import { ImageUploadZone } from './_components/ImageUploadZone'
 import { UploadConfirmButton } from './_components/UploadConfirmButton'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 
 const TYPE_LABELS: Record<string, string> = {
   single_room: 'Single Room', double_room: 'Double Room',
@@ -95,7 +96,7 @@ export default function ModeratorImagesPage() {
 
   if (error) {
     return (
-      <div className="p-4 md:p-6 max-w-2xl mx-auto">
+      <DashboardPageWrapper>
         <div className="flex items-start gap-3 p-4 rounded-xl bg-destructive/5 border border-destructive/20">
           <AlertCircle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
           <div>
@@ -109,12 +110,12 @@ export default function ModeratorImagesPage() {
             </Link>
           </div>
         </div>
-      </div>
+      </DashboardPageWrapper>
     )
   }
 
   return (
-    <div className="p-4 md:p-6 max-w-2xl mx-auto flex flex-col gap-6 pb-28">
+    <DashboardPageWrapper>
 
       {/* Back */}
       <Link
@@ -143,7 +144,7 @@ export default function ModeratorImagesPage() {
             )}
           </div>
         </div>
-        <Badge variant="secondary">
+        <Badge variant="secondary" className='rounded-full'>
           {totalImages} image{totalImages !== 1 ? 's' : ''} uploaded
         </Badge>
       </div>
@@ -181,11 +182,11 @@ export default function ModeratorImagesPage() {
                   <span className="text-xs text-muted-foreground">
                     KES {unit.price.toLocaleString()}/mo · {unit.total_count} units
                   </span>
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-xs rounded-full">
                     {unit.unit_images.length} image{unit.unit_images.length !== 1 ? 's' : ''}
                   </Badge>
                   {pendingForUnit.length > 0 && (
-                    <Badge className="text-xs bg-amber-500 text-white hover:bg-amber-500">
+                    <Badge className="text-xs rounded-full bg-amber-500 text-white hover:bg-amber-500">
                       +{pendingForUnit.length} pending
                     </Badge>
                   )}
@@ -226,6 +227,6 @@ export default function ModeratorImagesPage() {
         onSuccess={handleUploadSuccess}
       />
 
-    </div>
+    </DashboardPageWrapper>
   )
 }

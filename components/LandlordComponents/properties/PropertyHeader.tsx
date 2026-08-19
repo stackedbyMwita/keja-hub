@@ -69,7 +69,7 @@ export function PropertyHeader({
         <div className="flex flex-col gap-1.5 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <h1 className="text-xl font-semibold text-foreground">{name}</h1>
-            <Badge variant={STATUS_VARIANTS[status] ?? 'secondary'}>
+            <Badge variant={STATUS_VARIANTS[status] ?? 'secondary'} className='rounded-full'>
               {STATUS_LABELS[status] ?? status}
             </Badge>
           </div>
@@ -88,7 +88,7 @@ export function PropertyHeader({
             <Button
               variant="outline" size="sm"
               onClick={() => setEditOpen(true)}
-              className="gap-1.5"
+              className="gap-1.5 rounded-full"
             >
               <Pencil className="h-3.5 w-3.5" />
               Edit

@@ -9,8 +9,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
 
-// ─── HELPERS ────────────────────────────────────────────────────────────────
-
+// HELPERS
 function getAvatar(data: any): string {
   const google = data.external_accounts?.find(
     (a: any) => a.provider === 'google'
@@ -49,7 +48,7 @@ function getEmail(data: any): string {
   return data.email_addresses?.[0]?.email_address ?? `${data.id}@placeholder.kejalink`
 }
 
-// ─── WEBHOOK HANDLER ────────────────────────────────────────────────────────
+// WEBHOOK HANDLER
 
 export async function GET() {
   return new Response('KejaLink webhook is reachable', { status: 200 })
@@ -87,7 +86,7 @@ export async function POST(req: Request) {
     return new Response('Invalid webhook signature', { status: 400 })
   }
 
-  // ─── USER CREATED ──────────────────────────────────────────────────────────
+  // USER CREATED
   if (evt.type === 'user.created') {
     const d        = evt.data
     const role     = 'user'
@@ -133,7 +132,7 @@ export async function POST(req: Request) {
     console.log(`✅ Profile created — ${username} (${d.id}) role: ${role}`)
   }
 
-  // ─── USER UPDATED ──────────────────────────────────────────────────────────
+  // USER UPDATED
   if (evt.type === 'user.updated') {
     const d   = evt.data
     const meta = (d.public_metadata ?? {}) as {

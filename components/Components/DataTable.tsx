@@ -60,7 +60,7 @@ export function PropertyList({
           const StatusIcon = statusStyle.icon
 
           return (
-            <div 
+            <Link href={`http://localhost:3000/dashboard/landlord/properties/${prop.id}`}
               key={prop.id} 
               className="flex flex-col gap-4 px-6 py-4 transition-colors hover:bg-muted/40 sm:flex-row sm:items-center sm:justify-between"
             >
@@ -94,7 +94,7 @@ export function PropertyList({
                   {prop.status}
                 </span>
               </div>
-            </div>
+            </Link>
           )
         })}
         
