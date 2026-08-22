@@ -19,11 +19,9 @@ type AuthButtonProps = {
 function SignedOutDefault() {
   return (
     <div className="flex items-center gap-2">
-
-
-      <SignUpButton forceRedirectUrl="/sign-up">
-        <Button>Sign up <LogIn /></Button>
-      </SignUpButton>
+      <SignInButton forceRedirectUrl="/sign-in">
+        <Button>Sign in <LogIn /></Button>
+      </SignInButton>
     </div>
   )
 }

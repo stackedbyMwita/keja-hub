@@ -1,6 +1,6 @@
 # KéjaLink — Project Documentation
 
-> Verified house listings platform for Kenya. Every listing is physically verified by a moderator before going live.
+> Verified house listings platform for Comrades. Every listing is physically verified by a moderator before going live.
 
 ---
 

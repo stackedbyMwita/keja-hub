@@ -5,7 +5,6 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
 
-// ── Shape matching your existing dummy.json structure ─────────────────────────
 export interface ListingUnit {
   id:            string
   type:          string
@@ -31,8 +30,8 @@ export interface ListingUnit {
 const TYPE_DISPLAY_NAMES: Record<string, string> = {
   single_room: 'Single Room',
   double_room: 'Double Room',
-  bedsitter:   'Bedsitter',
-  studio:      'Studio',
+  bedsitter: 'Bedsitter',
+  studio: 'Studio',
   '1br':       '1 Bedroom Apartment',
   '2br':       '2 Bedroom Apartment',
   '3br':       '3 Bedroom Apartment',
@@ -41,9 +40,7 @@ const TYPE_DISPLAY_NAMES: Record<string, string> = {
 }
 
 /**
- * Fetches listings from the public_listings view and maps them
- * to match the existing dummy.json shape — zero changes needed
- * in ListingsGridGemini, FiltersGemini, or the unit detail page.
+ * Fetches listings from the public_listings.
  */
 export async function fetchListings(): Promise<ListingUnit[]> {
   const { data, error } = await supabase

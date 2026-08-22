@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { CheckCircle2, XCircle, FileText } from 'lucide-react'
+import { redirect } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 
@@ -13,6 +14,7 @@ const supabase = createClient(
 
 export default async function ModeratorActivityPage() {
   const { userId } = await auth()
+  if (!userId) redirect('/sign-in')
 
   const { data: logs } = await supabase
     .from('activity_logs')
