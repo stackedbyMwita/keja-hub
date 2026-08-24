@@ -52,10 +52,11 @@ const ADMIN_NAV: NavItem[] = [
 ]
 
 const SUPERADMIN_NAV: NavItem[] = [
-  ...ADMIN_NAV.map(item => ({
-    ...item,
-    href: item.href.replace('/dashboard/admin', '/dashboard/superadmin')
-  })),
+  // ...ADMIN_NAV.map(item => ({
+  //   ...item,
+  //   href: item.href.replace('/dashboard/admin', '/dashboard/superadmin')
+  // })),
+  { label: 'Overview',      href: '/dashboard/admin',            icon: LayoutDashboard, exact: true },
   { label: 'Admins', href: '/dashboard/superadmin/admins', icon: UserCog, divider: true },
   { label: 'System', href: '/dashboard/superadmin/system', icon: Settings },
 ]
