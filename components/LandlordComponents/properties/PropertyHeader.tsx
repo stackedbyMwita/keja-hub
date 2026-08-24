@@ -98,7 +98,7 @@ export function PropertyHeader({
           {canDelete && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-1.5 text-destructive hover:text-destructive border-destructive/30 hover:border-destructive/60">
+                <Button variant="outline" size="sm" className="rounded-full gap-1.5 text-destructive hover:text-destructive border-destructive/30 hover:border-destructive/60">
                   <Trash2 className="h-3.5 w-3.5" />
                   Delete
                 </Button>

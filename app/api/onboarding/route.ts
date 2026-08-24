@@ -15,18 +15,14 @@ function normalizePhone(raw: string): string | null {
   return null
 }
 
-// Poll until the profile row exists (webhook may be slightly behind)
-async function waitForProfile(userId: string, maxAttempts = 5): Promise<boolean> {
+async function waitForProfile(userId: string, maxAttempts = 3): Promise<boolean> {
   for (let i = 0; i < maxAttempts; i++) {
     const { data } = await supabase
       .from('profiles')
       .select('id')
       .eq('id', userId)
       .single()
-
     if (data?.id) return true
-
-    // Wait 1s between attempts
     await new Promise(r => setTimeout(r, 1000))
   }
   return false
@@ -35,19 +31,13 @@ async function waitForProfile(userId: string, maxAttempts = 5): Promise<boolean>
 export async function POST(req: Request) {
   try {
     const { userId } = await auth()
-
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
     const body = await req.json()
     const { phone_number, heard_from } = body
 
     if (!phone_number) {
-      return NextResponse.json(
-        { error: 'Phone number is required' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Phone number is required' }, { status: 400 })
     }
 
     const normalized = normalizePhone(phone_number)
@@ -58,7 +48,7 @@ export async function POST(req: Request) {
       )
     }
 
-    // Check phone not already taken by another account
+    // Check phone not already taken
     const { data: existing } = await supabase
       .from('profiles')
       .select('id')
@@ -73,18 +63,51 @@ export async function POST(req: Request) {
       )
     }
 
-    // Wait for webhook to create the profile row (max 5 seconds)
-    const profileExists = await waitForProfile(userId)
+    // Check if profile exists — wait up to 3 seconds for webhook
+    const profileExists = await waitForProfile(userId, 3)
 
     if (!profileExists) {
-      console.error(`❌ Profile row never created for ${userId} after 5 attempts`)
-      return NextResponse.json(
-        { error: 'Account setup is taking longer than expected. Please try again.' },
-        { status: 503 }
-      )
+      // ── Webhook never fired (ngrok down, dev environment etc.)
+      // Create the profile ourselves directly from Clerk data ──────────────
+      console.warn(`⚠️ Profile not found for ${userId} — creating it directly`)
+
+      const client   = await clerkClient()
+      const clerkUser = await client.users.getUser(userId)
+
+      const email     = clerkUser.emailAddresses?.[0]?.emailAddress ?? `${userId}@placeholder.kejalink`
+      const firstName = clerkUser.firstName ?? null
+      const lastName  = clerkUser.lastName  ?? null
+      const fullName  = [firstName, lastName].filter(Boolean).join(' ') || null
+      const google    = clerkUser.externalAccounts?.find((a: any) => a.provider === 'google')
+      const avatar    = google?.imageUrl ?? `https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`
+      const username  = clerkUser.username ?? `user_${userId.slice(-6)}`
+
+      const { error: createError } = await supabase.from('profiles').upsert({
+        id:                userId,
+        email,
+        username,
+        first_name:        firstName,
+        last_name:         lastName,
+        full_name:         fullName,
+        avatar_url:        avatar,
+        phone_number:      null,
+        role:              'user',
+        onboarding_status: 'complete',
+        is_active:         true,
+        is_banned:         false,
+        updated_at:        new Date().toISOString(),
+      }, { onConflict: 'id' })
+
+      if (createError) {
+        console.error('❌ Failed to create profile as fallback:', createError)
+        return NextResponse.json(
+          { error: 'Account setup failed. Please try again.' },
+          { status: 500 }
+        )
+      }
     }
 
-    // Now safely update — row is guaranteed to exist
+    // Update phone + onboarding status
     const { error: dbError } = await supabase
       .from('profiles')
       .update({
@@ -103,14 +126,17 @@ export async function POST(req: Request) {
       )
     }
 
-    // Update Clerk metadata — merge, never overwrite existing fields
-    const client = await clerkClient()
-    const user = await client.users.getUser(userId)
-    const existingMeta = (user.publicMetadata ?? {}) as Record<string, unknown>
+    // Update Clerk metadata
+    const client      = await clerkClient()
+    const clerkUser   = await client.users.getUser(userId)
+    const existingMeta = (clerkUser.publicMetadata ?? {}) as Record<string, unknown>
 
     await client.users.updateUserMetadata(userId, {
       publicMetadata: {
         ...existingMeta,
+        role:              existingMeta.role ?? 'user',
+        is_banned:         existingMeta.is_banned ?? false,
+        is_active:         existingMeta.is_active ?? true,
         onboarding_status: 'complete',
       },
     })

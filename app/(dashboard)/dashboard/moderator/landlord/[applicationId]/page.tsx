@@ -38,7 +38,7 @@ export default async function ReviewPage({ params }: PageProps) {
 
       {/* Back */}
       <Link
-        href="/dashboard/moderator/queue"
+        href="/dashboard/moderator/landlord"
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group w-fit"
       >
         <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
@@ -55,7 +55,7 @@ export default async function ReviewPage({ params }: PageProps) {
             })}
           </p>
         </div>
-        <Badge variant={app.status === 'pending' ? 'secondary' : 'outline'} className="capitalize shrink-0">
+        <Badge variant={app.status === 'pending' ? 'secondary' : 'outline'} className="capitalize shrink-0 rounded-full">
           {app.status}
         </Badge>
       </div>

@@ -1,3 +1,4 @@
+// app/api/webhooks/clerk/route.ts
 import { WebhookEvent } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
 import { headers } from 'next/headers'
@@ -101,7 +102,7 @@ export async function POST(req: Request) {
           role,
           is_banned:         false,
           is_active:         true,
-          onboarding_status: 'pending',
+          onboarding_status: 'complete',
         },
       })
     } catch {
@@ -118,7 +119,7 @@ export async function POST(req: Request) {
       avatar_url:        getAvatar(d),
       phone_number:      null,
       role,
-      onboarding_status: 'pending',
+      onboarding_status: 'complete',
       is_active:         true,
       is_banned:         false,
       updated_at:        new Date().toISOString(),
@@ -146,7 +147,7 @@ export async function POST(req: Request) {
     const role              = meta.role              ?? 'user'
     const is_banned         = meta.is_banned         ?? false
     const is_active         = meta.is_active         ?? true
-    const onboarding_status = meta.onboarding_status ?? 'pending'
+    const onboarding_status = meta.onboarding_status ?? 'complete'
 
     const username = getUsername(d)
     const email    = getEmail(d)

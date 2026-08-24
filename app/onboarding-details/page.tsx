@@ -1,3 +1,4 @@
+// app/onboarding-details/page.tsx
 import { AppLogo } from '@/components/logo/Logo'
 import { DetailsForm } from '@/components/OnboardingDetailsComponents/DetailsForm'
 import Image from 'next/image'

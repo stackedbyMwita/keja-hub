@@ -42,7 +42,7 @@ export function ReviewActions({ applicationId }: ReviewActionsProps) {
       const data = await res.json()
       if (!res.ok) { toast.error(data.error ?? 'Failed to approve'); return }
       toast.success('Application approved — landlord account activated!')
-      router.push('/dashboard/moderator/queue')
+      router.push('/dashboard/moderator/landlord')
       router.refresh()
     } catch {
       toast.error('Network error. Please try again.')
@@ -63,7 +63,7 @@ export function ReviewActions({ applicationId }: ReviewActionsProps) {
       const data = await res.json()
       if (!res.ok) { toast.error(data.error ?? 'Failed to reject'); return }
       toast.success('Application rejected — landlord has been notified.')
-      router.push('/dashboard/moderator/queue')
+      router.push('/dashboard/moderator/landlord')
       router.refresh()
     } catch {
       toast.error('Network error. Please try again.')

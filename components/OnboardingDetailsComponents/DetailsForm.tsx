@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useUser } from '@clerk/nextjs'
 import { Phone, Loader2, ChevronDown, CheckCircle2 } from 'lucide-react'
@@ -20,15 +20,24 @@ export function DetailsForm() {
   const router       = useRouter()
   const searchParams = useSearchParams()
   const redirectUrl  = searchParams.get('redirectUrl') ?? '/'
-  const { user }     = useUser()
+  const { user, isLoaded } = useUser()
 
-  const [phone, setPhone]         = useState('')
-  const [heardFrom, setHeardFrom] = useState('')
-  const [agreed, setAgreed]       = useState(false)
-  const [loading, setLoading]     = useState(false)
-  const [error, setError]         = useState<string | null>(null)
-  const [phoneError, setPhoneError] = useState<string | null>(null)
-  const [termsError, setTermsError] = useState<string | null>(null)
+  const [phone, setPhone]             = useState('')
+  const [heardFrom, setHeardFrom]     = useState('')
+  const [agreed, setAgreed]           = useState(false)
+  const [loading, setLoading]         = useState(false)
+  const [error, setError]             = useState<string | null>(null)
+  const [phoneError, setPhoneError]   = useState<string | null>(null)
+  const [termsError, setTermsError]   = useState<string | null>(null)
+
+  // ── Guard: if already onboarded, skip this page ──────────────────────────
+  useEffect(() => {
+    if (!isLoaded) return
+    const meta = user?.publicMetadata as any
+    if (meta?.onboarding_status === 'complete') {
+      router.replace(redirectUrl)
+    }
+  }, [isLoaded, user, redirectUrl, router])
 
   function validate(): boolean {
     let valid = true
@@ -71,7 +80,10 @@ export function DetailsForm() {
         return
       }
 
-      // Redirect to where they wanted to go
+      // ── Force Clerk to reload the session token so middleware
+      // reads the updated onboarding_status on the very next request ────────
+      await user?.reload()
+
       router.push(redirectUrl)
 
     } catch {
@@ -79,6 +91,15 @@ export function DetailsForm() {
     } finally {
       setLoading(false)
     }
+  }
+
+  // Show loading while Clerk loads
+  if (!isLoaded) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    )
   }
 
   const firstName = user?.firstName ?? 'there'
@@ -164,30 +185,19 @@ export function DetailsForm() {
               agreed ? 'bg-foreground border-foreground' : 'bg-background border-border',
               termsError && 'border-destructive'
             )}>
-              {agreed && (
-                <CheckCircle2 className="h-3 w-3 text-background" />
-              )}
+              {agreed && <CheckCircle2 className="h-3 w-3 text-background" />}
             </div>
           </div>
           <span className="text-xs text-muted-foreground leading-relaxed">
             I agree to KejaLink&apos;s{' '}
-            <Link
-              href="/terms"
-              target="_blank"
-              className="text-foreground font-medium underline underline-offset-2 hover:text-primary transition-colors"
-            >
+            <Link href="/terms" target="_blank" className="text-foreground font-medium underline underline-offset-2 hover:text-primary transition-colors">
               Terms of Service
             </Link>
             {' '}and{' '}
-            <Link
-              href="/privacy"
-              target="_blank"
-              className="text-foreground font-medium underline underline-offset-2 hover:text-primary transition-colors"
-            >
+            <Link href="/privacy" target="_blank" className="text-foreground font-medium underline underline-offset-2 hover:text-primary transition-colors">
               Privacy Policy
             </Link>
-            . I understand my phone number will be used for account security
-            and contact unlock features.
+            . I understand my phone number will be used for account security and contact unlock features.
           </span>
         </label>
         {termsError && <p className="text-xs text-destructive -mt-2">{termsError}</p>}

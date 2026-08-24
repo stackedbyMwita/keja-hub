@@ -205,7 +205,7 @@ function PropertyList({
                       <p className="text-base font-bold text-foreground truncate">
                         {property.name}
                       </p>
-                      <Badge variant={config.variant as any} className="flex items-center gap-1.5 shrink-0 text-xs px-2.5 py-0.5 shadow-sm">
+                      <Badge variant={config.variant as any} className="flex items-center gap-1.5 shrink-0 text-xs px-2 py-1 shadow-sm rounded-full">
                         <Icon className="h-3.5 w-3.5" />
                         {config.label}
                       </Badge>

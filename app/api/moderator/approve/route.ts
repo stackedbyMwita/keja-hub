@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     // Fetch application to get the landlord's user_id
     const { data: app, error: fetchError } = await supabase
       .from('landlord_profiles')
-      .select('id, user_id, status, full_name')
+      .select('id, user_id, phone_number, status, full_name')
       .eq('id', applicationId)
       .single()
 
@@ -26,6 +26,7 @@ export async function POST(req: Request) {
     if (app.status !== 'pending') return NextResponse.json({ error: 'Application is no longer pending' }, { status: 409 })
 
     const landlordUserId = app.user_id
+    const landlordPhone = app.phone_number
 
     // ── Step 1: Update landlord_profiles ─────────────────────────────────
     const { error: profileError } = await supabase
@@ -44,9 +45,18 @@ export async function POST(req: Request) {
     }
 
     // ── Step 2: Update profiles.role to landlord ──────────────────────────
+    const profileUpdateData: any = {
+      role: 'landlord',
+      updated_at: new Date().toISOString()
+    }
+
+    // Only update phone if it exists in the landlord_profiles record
+    if (landlordPhone) {
+      profileUpdateData.phone_number = landlordPhone
+    }
     const { error: roleError } = await supabase
       .from('profiles')
-      .update({ role: 'landlord', updated_at: new Date().toISOString() })
+      .update(profileUpdateData)
       .eq('id', landlordUserId)
 
     if (roleError) {
@@ -72,6 +82,7 @@ export async function POST(req: Request) {
       metadata: {
         landlord_user_id: landlordUserId,
         landlord_name:    app.full_name,
+        landlord_phone: landlordPhone || null,
         notes:            notes ?? null,
       },
     })

@@ -1,5 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
@@ -39,9 +42,7 @@ const TYPE_DISPLAY_NAMES: Record<string, string> = {
   commercial:  'Shop/Commercial Space',
 }
 
-/**
- * Fetches listings from the public_listings.
- */
+// Fetches listings from the public_listings
 export async function fetchListings(): Promise<ListingUnit[]> {
   const { data, error } = await supabase
     .from('public_listings')
@@ -64,12 +65,10 @@ export async function fetchListings(): Promise<ListingUnit[]> {
     `)
     .order('total_score', { ascending: false, nullsFirst: false })
 
-  if (error) {
-    console.error('❌ fetchListings error:', error)
+  if (error || !data || data.length === 0) {
+    if (error) console.error('fetchListings DB error:', error.message || error)
     return []
   }
-
-  if (!data) return []
 
   // Fetch landlord contact details for each property in one batch
   const propertyIds = [...new Set(data.map((d: any) => d.property_id))]

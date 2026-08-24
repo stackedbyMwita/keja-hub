@@ -1,3 +1,4 @@
+// middleware.ts was changed  to proxy.ts
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { updateSession } from '@/lib/supabase/proxy'
 import { type NextRequest, NextResponse } from 'next/server'

@@ -108,7 +108,7 @@ export default async function ModeratorActivityPage() {
                         </p>
                         <Badge
                           variant={isApproved ? 'secondary' : 'destructive'}
-                          className="text-xs capitalize"
+                          className="text-xs capitalize rounded-full"
                         >
                           {isApproved ? 'Approved' : 'Rejected'}
                         </Badge>

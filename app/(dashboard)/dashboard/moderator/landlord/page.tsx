@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { MapPin, Phone, Building2, Clock, ArrowRight, Inbox } from 'lucide-react'
+import { MapPin, Phone, Building2, Clock, ArrowRight, Inbox, User } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -39,7 +39,7 @@ export default async function ModeratorQueuePage() {
             {applications?.length ?? 0} application{applications?.length !== 1 ? 's' : ''} pending review
           </p>
         </div>
-        <Badge variant="secondary" className="tabular-nums">
+        <Badge variant="secondary" className="tabular-nums rounded-full">
           {applications?.length ?? 0} pending
         </Badge>
       </div>
@@ -51,7 +51,7 @@ export default async function ModeratorQueuePage() {
             <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
               <Inbox className="h-6 w-6 text-muted-foreground" />
             </div>
-            <p className="text-sm font-medium text-foreground">Queue is empty</p>
+            <p className="text-sm font-medium text-foreground">Landlord application queue is empty</p>
             <p className="text-xs text-muted-foreground text-center max-w-xs">
               All landlord applications have been reviewed. Check back later.
             </p>
@@ -63,53 +63,62 @@ export default async function ModeratorQueuePage() {
       <div className="flex flex-col gap-3">
         {applications?.map((app) => (
           <Card key={app.id} className="hover:shadow-sm transition-shadow">
-            <CardContent className="p-4 md:p-5">
-              <div className="flex items-start justify-between gap-4">
+            <CardContent className="p-4 md:p-6">
+  <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    {/* Left Section */}
+    <div className="flex items-start gap-4 flex-1 min-w-0">
+      {/* Avatar */}
+      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
+        <User className="h-6 w-6 text-primary" />
+      </div>
 
-                {/* Left — info */}
-                <div className="flex flex-col gap-2 min-w-0 flex-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-sm font-semibold text-foreground">
-                      {app.full_name}
-                    </p>
-                    {app.assigned_moderator_id && (
-                      <Badge variant="outline" className="text-xs">
-                        Claimed
-                      </Badge>
-                    )}
-                  </div>
+      {/* Info Section */}
+      <div className="flex flex-col gap-1.5 min-w-0 flex-1">
+        {/* Name & Badge */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <h3 className="text-sm font-semibold text-foreground truncate">
+            {app.full_name}
+          </h3>
+          {app.assigned_moderator_id && (
+            <Badge variant="secondary" className="text-xs rounded-full bg-emerald-50 text-emerald-700 border-emerald-200">
+              ✓ Claimed
+            </Badge>
+          )}
+        </div>
 
-                  <div className="flex flex-wrap gap-x-4 gap-y-1.5">
-                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <MapPin className="h-3 w-3 flex-shrink-0" />
-                      {app.location}, {app.county}
-                    </span>
-                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <Phone className="h-3 w-3 flex-shrink-0" />
-                      {app.phone_number}
-                    </span>
-                    <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <Building2 className="h-3 w-3 flex-shrink-0" />
-                      {app.number_of_properties} {app.number_of_properties === 1 ? 'property' : 'properties'} · {app.number_of_units} units
-                    </span>
-                  </div>
+        {/* Details Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1.5">
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <MapPin className="h-3.5 w-3.5 flex-shrink-0 text-muted-foreground/70" />
+            {app.location}, {app.county}
+          </span>
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Phone className="h-3.5 w-3.5 flex-shrink-0 text-muted-foreground/70" />
+            0{app.phone_number}
+          </span>
+          <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <Building2 className="h-3.5 w-3.5 flex-shrink-0 text-muted-foreground/70" />
+            {app.number_of_properties} {app.number_of_properties === 1 ? 'property' : 'properties'} · {app.number_of_units} units
+          </span>
+        </div>
 
-                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <Clock className="h-3 w-3" />
-                    Submitted {timeAgo(app.created_at)}
-                  </div>
-                </div>
+        {/* Timestamp */}
+        <div className="flex items-center gap-1.5 text-xs text-muted-foreground/70 mt-0.5">
+          <Clock className="h-3 w-3" />
+          <span>Submitted {timeAgo(app.created_at)}</span>
+        </div>
+      </div>
+    </div>
 
-                {/* Right — action */}
-                <Button asChild size="sm" className="shrink-0">
-                  <Link href={`/dashboard/moderator/queue/${app.id}`}>
-                    Review
-                    <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
-                  </Link>
-                </Button>
-
-              </div>
-            </CardContent>
+    {/* Right - Action Button */}
+    <Button asChild size="sm" className="shrink-0 rounded-full px-6">
+      <Link href={`/dashboard/moderator/landlord/${app.id}`}>
+        Review
+        <ArrowRight className="h-3.5 w-3.5 ml-2" />
+      </Link>
+    </Button>
+  </div>
+</CardContent>
           </Card>
         ))}
       </div>

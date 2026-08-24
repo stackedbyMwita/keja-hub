@@ -15,7 +15,7 @@ export function AddUnitSheetTriggerClient({ propertyId, existingTypes }: Props) 
 
   return (
     <>
-      <Button variant="outline" size="sm" onClick={() => setOpen(true)} className="gap-1.5 shrink-0">
+      <Button variant="outline" size="sm" onClick={() => setOpen(true)} className="rounded-full gap-1.5 shrink-0">
         <PlusCircle className="h-3.5 w-3.5" />
         Add unit type
       </Button>

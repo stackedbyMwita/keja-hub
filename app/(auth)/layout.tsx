@@ -11,7 +11,7 @@ export default function AuthLayout({
     <div className="min-h-screen grid md:grid-cols-2">
 
       {/* ── Left panel — hero image ────────────────────────────────────── */}
-      <div className="hidden md:block relative m-4 lg:m-6 rounded-2xl overflow-hidden sticky top-4 lg:top-6 h-[calc(100vh-2rem)] lg:h-[calc(100vh-3rem)]">
+      <div className="hidden md:block relative m-4 lg:m-6 rounded-2xl overflow-hidden top-4 lg:top-6 h-[calc(100vh-2rem)] lg:h-[calc(100vh-3rem)]">
         <Image
           src="/hero2.jpeg"
           alt="Beautiful Kenyan property"

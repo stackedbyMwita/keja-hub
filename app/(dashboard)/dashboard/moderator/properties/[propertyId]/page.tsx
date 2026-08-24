@@ -113,7 +113,7 @@ export default async function ModeratorPropertyDetailPage({ params }: PageProps)
               </div>
             </div>
           </div>
-          <Badge variant={config.variant as any} className="flex items-center gap-1.5 shrink-0">
+          <Badge variant={config.variant as any} className="flex items-center gap-1.5 shrink-0 rounded-full">
             <Icon className="h-3 w-3" />
             {config.label}
           </Badge>

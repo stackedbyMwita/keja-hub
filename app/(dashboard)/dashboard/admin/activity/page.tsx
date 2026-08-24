@@ -126,7 +126,7 @@ export default function AdminActivityPage() {
                       {log.metadata?.landlord_name && (
                         <span className="text-sm text-muted-foreground">— {log.metadata.landlord_name}</span>
                       )}
-                      <Badge variant="outline" className="text-xs capitalize ml-auto shrink-0">
+                      <Badge variant="outline" className="text-xs capitalize ml-auto shrink-0 rounded-full">
                         {actor?.role ?? 'system'}
                       </Badge>
                     </div>
