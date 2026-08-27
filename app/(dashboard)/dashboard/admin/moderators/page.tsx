@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { timeAgo } from '@/lib/date'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   ActivitySquare,
@@ -33,15 +34,6 @@ async function fetchModerators() {
   const res = await fetch('/api/admin/moderators')
   if (!res.ok) throw new Error('Failed to fetch moderators')
   return (await res.json()).data
-}
-
-function timeAgo(date: string | null): string {
-  if (!date) return 'Never'
-  const diff  = Date.now() - new Date(date).getTime()
-  const hours = Math.floor(diff / 3600000)
-  if (hours < 1)  return 'Just now'
-  if (hours < 24) return `${hours}h ago`
-  return `${Math.floor(hours / 24)}d ago`
 }
 
 export default function AdminModeratorsPage() {

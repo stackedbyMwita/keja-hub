@@ -10,6 +10,7 @@ import {
   Building2, MapPin, Clock, ArrowRight,
   Inbox, Home, CheckCircle2, XCircle, Images,
 } from 'lucide-react'
+import { timeAgo } from '@/lib/date'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,14 +31,6 @@ const STATUS_CONFIG = {
   approved:       { label: 'Approved', variant: 'default',     icon: CheckCircle2 },
   rejected:       { label: 'Rejected', variant: 'destructive', icon: XCircle      },
 } as const
-
-function timeAgo(date: string): string {
-  const diff  = Date.now() - new Date(date).getTime()
-  const hours = Math.floor(diff / 3600000)
-  if (hours < 1)  return 'Just now'
-  if (hours < 24) return `${hours}h ago`
-  return `${Math.floor(hours / 24)}d ago`
-}
 
 export default async function ModeratorPropertiesPage() {
   await connection()

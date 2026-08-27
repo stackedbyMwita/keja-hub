@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Users, Search, Loader2, Ban, CheckCircle2 } from 'lucide-react'
 import { useDebounce } from 'use-debounce'
+import { KenyaPhoneBadge } from '@/components/KenyaPhoneBadge'
 
 async function fetchUsers(search: string) {
   const params = search ? `?search=${encodeURIComponent(search)}` : ''
@@ -96,8 +97,9 @@ export default function AdminUsersPage() {
                   <div className="flex items-center justify-between gap-3 flex-wrap">
                     <div className="min-w-0">
                       <p className="text-sm font-semibold text-foreground truncate">{user.full_name ?? 'No name'}</p>
-                      <p className="text-xs text-muted-foreground">{user.email} · {user.phone_number ?? 'No phone'}</p>
+                      <p className="text-xs text-muted-foreground">{user.email}</p>
                     </div>
+                    {user.phone_number ? <KenyaPhoneBadge phone={user.phone_number} /> : 'No phone'}
                     <div className="flex items-center gap-2 shrink-0">
                       {user.is_banned && <Badge variant="destructive" className="text-xs">Banned</Badge>}
                       {!user.is_active && !user.is_banned && <Badge variant="secondary" className="text-xs">Inactive</Badge>}

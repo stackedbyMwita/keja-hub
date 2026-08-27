@@ -12,20 +12,13 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { Crown, UserPlus, Loader2, XCircle, CheckCircle2, ArrowDownCircle } from 'lucide-react'
+import { KenyaPhoneBadge } from '@/components/KenyaPhoneBadge'
+import { timeAgo } from '@/lib/date'
 
 async function fetchAdmins() {
   const res = await fetch('/api/superadmin/admins')
   if (!res.ok) throw new Error('Failed to fetch')
   return (await res.json()).data
-}
-
-function timeAgo(date: string | null): string {
-  if (!date) return 'Never'
-  const diff = Date.now() - new Date(date).getTime()
-  const hours = Math.floor(diff / 3600000)
-  if (hours < 1) return 'Just now'
-  if (hours < 24) return `${hours}h ago`
-  return `${Math.floor(hours / 24)}d ago`
 }
 
 export default function SuperadminAdminsPage() {
@@ -152,6 +145,7 @@ export default function SuperadminAdminsPage() {
                     <div>
                       <p className="text-base font-bold text-foreground">{admin.full_name ?? 'No name'}</p>
                       <p className="text-sm text-muted-foreground">{admin.email}</p>
+                      <KenyaPhoneBadge phone={admin.phone_number} />
                     </div>
                     <Badge variant={admin.is_active ? 'default' : 'secondary'} className="shrink-0">
                       {admin.is_active ? 'Active' : 'Deactivated'}

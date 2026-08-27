@@ -20,7 +20,7 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps) {
   const { unitId } = await params
   const unit = await fetchUnitById(unitId)
-  if (!unit) return { title: 'Unit not found — KéjaLink' }
+  if (!unit) return { title: 'Unit not found!' }
   return {
     title: `${unit.property_name} — ${unit.location} | KéjaLink`,
     description: unit.description,
@@ -31,6 +31,8 @@ export default async function UnitPage({ params }: PageProps) {
   await connection()
   const { unitId } = await params
   const unit = await fetchUnitById(unitId)
+
+  console.log(unit)
 
   if (!unit) notFound()
 

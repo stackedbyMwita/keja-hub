@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { MapPin, Phone, Building2, Clock, ArrowRight, Inbox, User } from 'lucide-react'
+import { timeAgo } from '@/lib/date'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,15 +12,6 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
-
-function timeAgo(date: string): string {
-  const diff  = Date.now() - new Date(date).getTime()
-  const hours = Math.floor(diff / 3600000)
-  if (hours < 1)   return 'Just now'
-  if (hours < 24)  return `${hours}h ago`
-  const days = Math.floor(hours / 24)
-  return `${days}d ago`
-}
 
 export default async function ModeratorQueuePage() {
   const { data: applications } = await supabase

@@ -52,14 +52,7 @@ export async function fetchUnitById(unitId: string): Promise<ListingUnit | null>
   // Fetch landlord contact
   const { data: landlordProfile } = await supabase
     .from('profiles')
-    .select('full_name, email')
-    .eq('id', property.landlord_id)
-    .single()
-
-  // Fetch landlord contact
-  const { data: landlordMainProfile } = await supabase
-    .from('landlord_profiles')
-    .select('phone_number')
+    .select('full_name, email, phone_number')
     .eq('id', property.landlord_id)
     .single()
 
@@ -82,7 +75,7 @@ export async function fetchUnitById(unitId: string): Promise<ListingUnit | null>
     images:        images.length > 0 ? images : ['/placeholder-unit.jpg'],
     contact: {
       landlord_name: landlordProfile?.full_name    ?? 'KéjaLink Landlord',
-      phone:         landlordMainProfile?.phone_number ?? '',
+      phone:         landlordProfile?.phone_number ?? '',
       email:         landlordProfile?.email        ?? '',
       full_address:  property.address ?? property.location,
       maps_url:      `https://maps.google.com/?q=${encodeURIComponent(property.location + ', ' + property.county)}`,

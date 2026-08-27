@@ -1,9 +1,7 @@
 import { SignUp } from '@clerk/nextjs'
 import { Suspense } from 'react'
 
-export const metadata = {
-  title: 'Create an Account — KejaLink',
-}
+export const metadata = { title: 'Create an Account — KejaLink' }
 
 export default function SignUpPage() {
   return (

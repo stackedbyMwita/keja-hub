@@ -1,9 +1,15 @@
-// middleware.ts was changed  to proxy.ts
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { updateSession } from '@/lib/supabase/proxy'
 import { type NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@supabase/supabase-js'
 
-// Route matchers
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+)
+
+// ── Route matchers ────────────────────────────────────────────────────────────
+
 const isPublicRoute = createRouteMatcher([
   '/',
   '/sign-in(.*)',
@@ -11,11 +17,23 @@ const isPublicRoute = createRouteMatcher([
   '/onboarding-details',
   '/become-a-landlord',
   '/banned',
+  '/maintenance',
   '/sso-callback',
   '/api/webhooks/clerk',
   '/api/onboarding',
+  '/api/system-config',
+  '/api/listings',
   '/api/landlord/(.*)',
   '/api/moderator/(.*)',
+])
+
+const isMaintenanceExempt = createRouteMatcher([
+  '/maintenance',
+  '/sign-in(.*)',
+  '/sign-up(.*)',
+  '/api/webhooks/clerk',
+  '/api/system-config',
+  '/dashboard/superadmin(.*)',
 ])
 
 const isLandlordDashboard   = createRouteMatcher(['/dashboard/landlord(.*)'])
@@ -23,17 +41,52 @@ const isModeratorDashboard  = createRouteMatcher(['/dashboard/moderator(.*)'])
 const isAdminDashboard      = createRouteMatcher(['/dashboard/admin(.*)'])
 const isSuperadminDashboard = createRouteMatcher(['/dashboard/superadmin(.*)'])
 
-// Middleware
+// Cache system config to avoid a DB call on every request
+let configCache: { maintenance_mode: boolean; updated: number } | null = null
+const CACHE_TTL = 30_000 // 30 seconds
+
+async function isMaintenanceMode(): Promise<boolean> {
+  const now = Date.now()
+  if (configCache && now - configCache.updated < CACHE_TTL) {
+    return configCache.maintenance_mode
+  }
+  try {
+    const { data } = await supabase
+      .from('system_config')
+      .select('maintenance_mode')
+      .eq('id', 1)
+      .single()
+    configCache = { maintenance_mode: data?.maintenance_mode ?? false, updated: now }
+    return configCache.maintenance_mode
+  } catch {
+    return false
+  }
+}
+
+// ── Middleware ────────────────────────────────────────────────────────────────
+
 export default clerkMiddleware(async (auth, req: NextRequest) => {
   const url = req.nextUrl
-  console.log('🛡️ Middleware:', url.pathname)
 
-  // 1. Public routes
+  // ── Maintenance mode check (before everything else) ──────────────────────
+  if (!isMaintenanceExempt(req)) {
+    const maintenance = await isMaintenanceMode()
+    if (maintenance) {
+      const { userId, sessionClaims } = await auth()
+      const role = (sessionClaims?.publicMetadata as any)?.role ?? 'user'
+      // Superadmins bypass maintenance mode
+      if (!userId || role !== 'superadmin') {
+        return NextResponse.redirect(new URL('/maintenance', req.url))
+      }
+    }
+  }
+
+  // ── Public routes — pass through ─────────────────────────────────────────
   if (isPublicRoute(req)) {
     return await updateSession(req)
   }
 
-  // 2. Not signed in
+  // ── Not signed in ─────────────────────────────────────────────────────────
   const { userId, sessionClaims } = await auth()
 
   if (!userId) {
@@ -42,18 +95,16 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.redirect(signInUrl)
   }
 
-  // 3. Read metadata from session token
+  // ── Read metadata ─────────────────────────────────────────────────────────
   const meta = (sessionClaims?.publicMetadata ?? {}) as {
-    role?: string
-    is_banned?: boolean
-    is_active?: boolean
+    role?: string; is_banned?: boolean; is_active?: boolean
   }
 
   const role      = meta.role      ?? 'user'
   const is_banned = meta.is_banned ?? false
   const is_active = meta.is_active ?? true
 
-  // 4. Banned or deactivated
+  // ── Banned or deactivated ─────────────────────────────────────────────────
   if (is_banned || !is_active) {
     if (!url.pathname.startsWith('/banned')) {
       return NextResponse.redirect(new URL('/banned', req.url))
@@ -61,24 +112,21 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return await updateSession(req)
   }
 
-  // 5. Role-based dashboard protection
+  // ── Role-based dashboard protection ──────────────────────────────────────
   if (isSuperadminDashboard(req) && role !== 'superadmin') {
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
-
   if (isAdminDashboard(req) && !['admin', 'superadmin'].includes(role)) {
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
-
   if (isModeratorDashboard(req) && !['moderator', 'admin', 'superadmin'].includes(role)) {
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
-
   if (isLandlordDashboard(req) && role !== 'landlord') {
     return NextResponse.redirect(new URL('/dashboard', req.url))
   }
 
-  // 6. /dashboard root — redirect to role-specific dashboard
+  // ── /dashboard root ───────────────────────────────────────────────────────
   if (url.pathname === '/dashboard') {
     const destinations: Record<string, string> = {
       superadmin: '/dashboard/superadmin',
@@ -90,7 +138,6 @@ export default clerkMiddleware(async (auth, req: NextRequest) => {
     return NextResponse.redirect(new URL(destinations[role] ?? '/', req.url))
   }
 
-  // 7. All clear
   return await updateSession(req)
 })
 

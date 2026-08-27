@@ -1,4 +1,3 @@
-//AuthModal
 'use client'
 
 import { X } from 'lucide-react'
@@ -17,13 +16,8 @@ export function AuthModal({ isOpen, onClose, redirectUrl }: AuthModalProps) {
 
   return (
     <>
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
-        onClick={onClose}
-      />
+      <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" onClick={onClose}/>
 
-      {/* Modal */}
       <div className="fixed left-1/2 top-1/2 z-50 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-background border border-border shadow-xl p-8">
 
         {/* Close */}
@@ -34,7 +28,6 @@ export function AuthModal({ isOpen, onClose, redirectUrl }: AuthModalProps) {
           <X className="h-4 w-4" />
         </button>
 
-        {/* Content */}
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-1.5">
             <h2 className="font-heading text-2xl text-foreground">

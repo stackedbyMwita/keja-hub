@@ -24,6 +24,7 @@ import {
   ShieldAlert, ShieldCheck, Star, Clock,
   CheckCircle2, XCircle, AlertCircle,
 } from 'lucide-react'
+import { timeAgo } from '@/lib/date'
 
 const STATUS_CONFIG: Record<string, { label: string; variant: any; icon: any }> = {
   draft:          { label: 'Draft',      variant: 'secondary',   icon: AlertCircle  },
@@ -93,17 +94,48 @@ export default function AdminPropertiesPage() {
             className="pl-9"
           />
         </div>
+       
         <Select value={status} onValueChange={setStatus}>
-          <SelectTrigger className="w-[160px]">
+          <SelectTrigger className="w-[180px] h-9 text-xs font-medium bg-background hover:bg-accent/50 transition-colors border-input shadow-xs">
             <SelectValue placeholder="Filter by status" />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All statuses</SelectItem>
-            <SelectItem value="draft">Draft</SelectItem>
-            <SelectItem value="pending_review">Pending review</SelectItem>
-            <SelectItem value="approved">Approved</SelectItem>
-            <SelectItem value="rejected">Rejected</SelectItem>
-            <SelectItem value="suspended">Suspended</SelectItem>
+          <SelectContent align="end" className="text-xs">
+            <SelectItem value="all">
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40 shrink-0" />
+                <span>All statuses</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="draft">
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-zinc-400 shrink-0" />
+                <span>Draft</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="pending_review">
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0" />
+                <span>Pending review</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="approved">
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0" />
+                <span>Approved</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="rejected">
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-rose-500 shrink-0" />
+                <span>Rejected</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="suspended">
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-zinc-700 dark:bg-zinc-300 shrink-0" />
+                <span>Suspended</span>
+              </div>
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -143,7 +175,7 @@ export default function AdminPropertiesPage() {
                           {property.location}, {property.county}
                         </div>
                       </div>
-                      <Badge variant={config.variant} className="flex items-center gap-1.5 shrink-0 text-xs">
+                      <Badge variant={config.variant} className="flex items-center gap-1.5 shrink-0 text-xs rounded-full">
                         <Icon className="h-3 w-3" />
                         {config.label}
                       </Badge>
@@ -172,7 +204,7 @@ export default function AdminPropertiesPage() {
                       <div>
                         <p className="text-xs text-muted-foreground">Created</p>
                         <p className="text-sm font-semibold text-foreground mt-0.5">
-                          {new Date(property.created_at).toLocaleDateString('en-KE', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          {timeAgo(property.created_at)}
                         </p>
                       </div>
                     </div>
@@ -207,7 +239,7 @@ export default function AdminPropertiesPage() {
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
                               <AlertDialogAction
                                 onClick={() => suspendMutation.mutate({ id: property.id, suspend: true, reason })}
-                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                className="bg-destructive text-destructive-foreground rounded-full hover:bg-destructive/90"
                               >
                                 Suspend
                               </AlertDialogAction>
@@ -219,7 +251,7 @@ export default function AdminPropertiesPage() {
                       {isSuspended && (
                         <Button
                           size="sm" variant="outline"
-                          className="gap-1.5 h-8 text-xs"
+                          className="gap-1.5 h-8 text-xs rounded-full"
                           onClick={() => suspendMutation.mutate({ id: property.id, suspend: false })}
                           disabled={suspendMutation.isPending}
                         >
