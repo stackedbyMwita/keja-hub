@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { MapPin } from 'lucide-react'
+import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
 
 interface Unit {
   id: string
@@ -18,13 +19,6 @@ interface Unit {
 interface ListingCardProps {
   unit: Unit
   onClick: (id: string) => void
-}
-
-const TYPE_LABELS: Record<string, string> = {
-  bedsitter: 'Bedsitter',
-  studio: 'Studio',
-  '1br': '1 Bedroom',
-  '2br': '2 Bedroom',
 }
 
 export function ListingCard({ unit, onClick }: ListingCardProps) {
@@ -46,7 +40,7 @@ export function ListingCard({ unit, onClick }: ListingCardProps) {
         {/* Unit type badge */}
         <div className="absolute top-3 left-3">
           <span className="inline-flex items-center h-6 px-2.5 rounded-full text-xs font-medium bg-background/90 backdrop-blur-sm text-foreground border border-border/50">
-            {TYPE_LABELS[unit.type] ?? unit.type}
+            {getPropertyTypeLabel(unit.type)}
           </span>
         </div>
       </div>

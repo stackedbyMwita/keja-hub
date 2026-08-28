@@ -9,6 +9,7 @@ import {
   Inbox, Home, CheckCircle2, XCircle, Images,
   Search, XCircle as XCircleIcon
 } from 'lucide-react'
+import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
 
 // These constants need to be accessible here
 const TYPE_LABELS: Record<string, string> = {
@@ -187,7 +188,7 @@ export function PropertyList({
           {sorted.map((property: any) => {
             const units = property.unit_types ?? []
             const totalUnits = units.reduce((a: number, u: any) => a + u.total_count, 0)
-            const unitTypes = units.map((u: any) => TYPE_LABELS[u.type] ?? u.type)
+            const unitTypes = units.map((u: any) => getPropertyTypeLabel(u.type, { short: true }))
             const landlord = property.profiles
             const imageCount = property.unit_images?.length ?? 0
             const config = STATUS_CONFIG[property.status as keyof typeof STATUS_CONFIG]

@@ -66,7 +66,7 @@ export function HeroGemini() {
           >
             Find your next<br />
             <span className="text-muted-foreground">home in </span>
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-primary/50 drop-shadow-sm">
+            <span className="text-primary">
               Kakamega
             </span>.
           </motion.h1>

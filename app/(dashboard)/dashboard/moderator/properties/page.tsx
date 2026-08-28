@@ -13,6 +13,7 @@ import {
 import { timeAgo } from '@/lib/date'
 import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
 
 export const dynamic = 'force-dynamic'
 
@@ -20,13 +21,6 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
-
-const TYPE_LABELS: Record<string, string> = {
-  single_room: 'Single Room', double_room: 'Double Room',
-  bedsitter: 'Bedsitter', studio: 'Studio',
-  '1br': '1 Bed', '2br': '2 Bed', '3br': '3 Bed',
-  '4br_plus': '4+ Bed', commercial: 'Commercial',
-}
 
 const STATUS_CONFIG = {
   pending_review: { label: 'Pending',  variant: 'outline',     icon: Clock        },
@@ -176,7 +170,7 @@ function PropertyList({
       {properties.map((property: any) => {
         const units      = property.unit_types ?? []
         const totalUnits = units.reduce((a: number, u: any) => a + u.total_count, 0)
-        const unitTypes  = units.map((u: any) => TYPE_LABELS[u.type] ?? u.type)
+        const unitTypes  = units.map((u: any) => getPropertyTypeLabel(u.type, { short: true }))
         const landlord   = property.profiles
         const imageCount = property.unit_images?.length ?? 0
         const config     = STATUS_CONFIG[property.status as keyof typeof STATUS_CONFIG]
