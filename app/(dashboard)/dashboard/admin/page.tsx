@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Users, Building2, ShieldCheck, Unlock, Clock, AlertTriangle, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 
 export const dynamic = 'force-dynamic'
 
@@ -68,7 +69,7 @@ export default async function AdminOverviewPage() {
   }
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-8 max-w-7xl mx-auto">
+    <DashboardPageWrapper>
 
       {/* Header */}
       <div className="border-b border-border/50 pb-5">
@@ -157,6 +158,6 @@ export default async function AdminOverviewPage() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </DashboardPageWrapper>
   )
 }

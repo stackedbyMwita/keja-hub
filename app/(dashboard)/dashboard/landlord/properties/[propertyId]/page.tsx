@@ -52,7 +52,7 @@ export default async function PropertyDetailPage({ params }: PageProps) {
   const existingTypes = units.map((u: any) => u.type)
 
   return (
-    <DashboardPageWrapper className="max-w-3xl">
+    <DashboardPageWrapper>
 
       {/* Back Navigation */}
       <Link

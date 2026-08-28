@@ -14,6 +14,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Crown, UserPlus, Loader2, XCircle, CheckCircle2, ArrowDownCircle } from 'lucide-react'
 import { KenyaPhoneBadge } from '@/components/KenyaPhoneBadge'
 import { timeAgo } from '@/lib/date'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 
 async function fetchAdmins() {
   const res = await fetch('/api/superadmin/admins')
@@ -73,9 +74,8 @@ export default function SuperadminAdminsPage() {
   })
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-8 max-w-4xl mx-auto">
-
-      <div className="flex items-center justify-between flex-wrap gap-4 border-b border-border/50 pb-5">
+    <DashboardPageWrapper>
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <Crown className="h-5 w-5 text-amber-500" />
@@ -241,6 +241,6 @@ export default function SuperadminAdminsPage() {
           </Card>
         )}
       </div>
-    </div>
+    </DashboardPageWrapper>
   )
 }

@@ -1,5 +1,6 @@
 'use client'
 
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel,
   AlertDialogContent, AlertDialogDescription,
@@ -84,7 +85,7 @@ export default function AdminModeratorsPage() {
   })
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-8 max-w-5xl mx-auto">
+    <DashboardPageWrapper>
 
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4 border-b border-border/50 pb-5">
@@ -241,6 +242,6 @@ export default function AdminModeratorsPage() {
           </Card>
         )}
       </div>
-    </div>
+    </DashboardPageWrapper>
   )
 }

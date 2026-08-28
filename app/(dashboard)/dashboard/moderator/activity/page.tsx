@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 
 export const dynamic = 'force-dynamic'
 
@@ -111,7 +112,7 @@ export default async function ModeratorActivityPage() {
   const totalImages     = entries.filter(l => l.action === 'uploaded_unit_image').length
 
   return (
-    <MaxWidthWrapper>
+    <DashboardPageWrapper>
       <div className="p-4 md:p-6 flex flex-col gap-6">
 
       {/* Header */}
@@ -215,6 +216,6 @@ export default async function ModeratorActivityPage() {
       </Card>
 
     </div>
-    </MaxWidthWrapper>
+    </DashboardPageWrapper>
   )
 }

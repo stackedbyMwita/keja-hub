@@ -6,6 +6,7 @@ import { ChevronLeft } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 import { ReviewActions } from './_components/ReviewActions'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 
 export const dynamic = 'force-dynamic'
 
@@ -34,7 +35,7 @@ export default async function ReviewPage({ params }: PageProps) {
   const isClaimed       = !!app.assigned_moderator_id && !isMyApplication
 
   return (
-    <div className="p-4 md:p-6 max-w-2xl mx-auto flex flex-col gap-6">
+    <DashboardPageWrapper>
 
       {/* Back */}
       <Link
@@ -127,7 +128,7 @@ export default async function ReviewPage({ params }: PageProps) {
         </div>
       )}
 
-    </div>
+    </DashboardPageWrapper>
   )
 }
 

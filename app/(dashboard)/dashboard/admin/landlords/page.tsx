@@ -17,6 +17,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Building2, MapPin, Search, Loader2, ShieldAlert, ShieldCheck } from 'lucide-react'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 
 async function fetchLandlords() {
   const res = await fetch('/api/admin/landlords')
@@ -63,7 +64,7 @@ export default function AdminLandlordsPage() {
   })
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-8 max-w-5xl mx-auto">
+    <DashboardPageWrapper>
 
       <div className="flex items-center justify-between flex-wrap gap-4 border-b border-border/50 pb-5">
         <div>
@@ -207,6 +208,6 @@ export default function AdminLandlordsPage() {
           </Card>
         )}
       </div>
-    </div>
+    </DashboardPageWrapper>
   )
 }

@@ -18,6 +18,7 @@ import {
   Info, AlertTriangle, CheckCircle2, XCircle,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 
 interface SystemConfig {
   maintenance_mode:              boolean
@@ -139,7 +140,7 @@ export default function SuperadminSystemPage() {
   const BannerIcon = ANNOUNCEMENT_TYPES.find(t => t.value === config.announcement_type)?.icon ?? Info
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-8 max-w-2xl mx-auto">
+    <DashboardPageWrapper>
 
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4 border-b border-border/50 pb-5">
@@ -327,6 +328,6 @@ export default function SuperadminSystemPage() {
         </div>
       )}
 
-    </div>
+    </DashboardPageWrapper>
   )
 }

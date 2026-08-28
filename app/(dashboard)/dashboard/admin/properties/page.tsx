@@ -25,6 +25,7 @@ import {
   CheckCircle2, XCircle, AlertCircle,
 } from 'lucide-react'
 import { timeAgo } from '@/lib/date'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 
 const STATUS_CONFIG: Record<string, { label: string; variant: any; icon: any }> = {
   draft:          { label: 'Draft',      variant: 'secondary',   icon: AlertCircle  },
@@ -73,7 +74,7 @@ export default function AdminPropertiesPage() {
   })
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-8 max-w-5xl mx-auto">
+    <DashboardPageWrapper>
 
       {/* Header */}
       <div className="border-b border-border/50 pb-5">
@@ -276,6 +277,6 @@ export default function AdminPropertiesPage() {
           </Card>
         )}
       </div>
-    </div>
+    </DashboardPageWrapper>
   )
 }

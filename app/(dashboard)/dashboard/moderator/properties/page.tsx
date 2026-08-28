@@ -11,6 +11,8 @@ import {
   Inbox, Home, CheckCircle2, XCircle, Images,
 } from 'lucide-react'
 import { timeAgo } from '@/lib/date'
+import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 
 export const dynamic = 'force-dynamic'
 
@@ -69,7 +71,7 @@ export default async function ModeratorPropertiesPage() {
   console.log(pending)
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-8 max-w-7xl mx-auto w-full">
+    <DashboardPageWrapper>
       
       {/* ── Header (Fully separated from Tabs) ──────────────────────── */}
       <div className="flex flex-col gap-2 border-b border-border/50 pb-5">
@@ -136,7 +138,7 @@ export default async function ModeratorPropertiesPage() {
         </TabsContent>
 
       </Tabs>
-    </div>
+    </DashboardPageWrapper>
   )
 }
 

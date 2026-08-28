@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ActivitySquare, Loader2 } from 'lucide-react'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 
 const ACTION_LABELS: Record<string, string> = {
   approved_property:             'Approved property',
@@ -57,7 +58,7 @@ export default function AdminActivityPage() {
   })
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-8 max-w-4xl mx-auto">
+    <DashboardPageWrapper>
 
       <div className="flex items-center justify-between flex-wrap gap-4 border-b border-border/50 pb-5">
         <div>
@@ -150,6 +151,6 @@ export default function AdminActivityPage() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </DashboardPageWrapper>
   )
 }

@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { MapPin, Phone, Building2, Clock, ArrowRight, Inbox, User } from 'lucide-react'
 import { timeAgo } from '@/lib/date'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,7 +22,7 @@ export default async function ModeratorQueuePage() {
     .order('created_at', { ascending: true })
 
   return (
-    <div className="p-4 md:p-6 flex flex-col gap-6 max-w-7xl mx-auto">
+    <DashboardPageWrapper>
 
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -115,6 +116,6 @@ export default async function ModeratorQueuePage() {
         ))}
       </div>
 
-    </div>
+    </DashboardPageWrapper>
   )
 }

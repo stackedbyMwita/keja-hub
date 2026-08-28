@@ -1,8 +1,8 @@
-import { auth } from '@clerk/nextjs/server'
-import { createClient } from '@supabase/supabase-js'
-import { connection } from 'next/server'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Building2, Users, Unlock, ShieldCheck, Star, TrendingUp } from 'lucide-react'
+import { createClient } from '@supabase/supabase-js'
+import { Building2, ShieldCheck, Star, TrendingUp, Unlock, Users } from 'lucide-react'
+import { connection } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
@@ -87,7 +87,7 @@ export default async function AdminMetricsPage() {
   ]
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-8 max-w-5xl mx-auto">
+    <DashboardPageWrapper>
 
       <div className="border-b border-border/50 pb-5">
         <h1 className="text-2xl font-heading font-bold text-foreground">Platform Metrics</h1>
@@ -191,6 +191,6 @@ export default async function AdminMetricsPage() {
         </CardContent>
       </Card>
 
-    </div>
+    </DashboardPageWrapper>
   )
 }

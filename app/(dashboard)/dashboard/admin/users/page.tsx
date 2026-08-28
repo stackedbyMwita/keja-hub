@@ -19,6 +19,7 @@ import {
 import { Users, Search, Loader2, Ban, CheckCircle2 } from 'lucide-react'
 import { useDebounce } from 'use-debounce'
 import { KenyaPhoneBadge } from '@/components/KenyaPhoneBadge'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 
 async function fetchUsers(search: string) {
   const params = search ? `?search=${encodeURIComponent(search)}` : ''
@@ -57,7 +58,7 @@ export default function AdminUsersPage() {
   })
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 flex flex-col gap-8 max-w-5xl mx-auto">
+    <DashboardPageWrapper>
 
       <div className="flex items-center justify-between flex-wrap gap-4 border-b border-border/50 pb-5">
         <div>
@@ -180,6 +181,6 @@ export default function AdminUsersPage() {
           </Card>
         )}
       </div>
-    </div>
+    </DashboardPageWrapper>
   )
 }
