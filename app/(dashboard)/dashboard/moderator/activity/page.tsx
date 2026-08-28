@@ -7,6 +7,7 @@ import {
   ImageIcon, Star, ClipboardList,
 } from 'lucide-react'
 import { redirect } from 'next/navigation'
+import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
 
 export const dynamic = 'force-dynamic'
 
@@ -110,7 +111,8 @@ export default async function ModeratorActivityPage() {
   const totalImages     = entries.filter(l => l.action === 'uploaded_unit_image').length
 
   return (
-    <div className="p-4 md:p-6 flex flex-col gap-6 max-w-3xl mx-auto">
+    <MaxWidthWrapper>
+      <div className="p-4 md:p-6 flex flex-col gap-6">
 
       {/* Header */}
       <div className="border-b border-border/50 pb-4">
@@ -213,5 +215,6 @@ export default async function ModeratorActivityPage() {
       </Card>
 
     </div>
+    </MaxWidthWrapper>
   )
 }

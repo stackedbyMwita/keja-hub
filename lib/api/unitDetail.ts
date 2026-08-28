@@ -1,12 +1,12 @@
 import { createClient } from '@supabase/supabase-js'
-import type { ListingUnit } from './listings'
+import { TYPE_DISPLAY_NAMES, type ListingUnit } from './listings'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
 
-const TYPE_DISPLAY_NAMES: Record<string, string> = {
+const TYPE_DISPLAY_NAME: Record<string, string> = {
   single_room: 'Single Room',
   double_room: 'Double Room',
   bedsitter:   'Bedsitter',
@@ -18,10 +18,7 @@ const TYPE_DISPLAY_NAMES: Record<string, string> = {
   commercial:  'Shop/Commercial Space',
 }
 
-/**
- * Fetches a single unit by its unit_type_id — used on /unit/[unitId] page.
- * Returns the same ListingUnit shape as fetchListings() for consistency.
- */
+// Fetches a single unit by its unit_type_id — used on /unit/[unitId] page
 export async function fetchUnitById(unitId: string): Promise<ListingUnit | null> {
   const { data: unitType, error } = await supabase
     .from('unit_types')

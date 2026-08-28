@@ -14,6 +14,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { PropertyApprovedActions } from '@/components/moderator/PropertyApprovedActions'
 import { PropertyReviewActions } from '@/components/moderator/PropertyReviewActions'
 import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
+import { formatKenyaPhone } from '@/lib/phone'
 
 export const dynamic = 'force-dynamic'
 
@@ -183,7 +184,7 @@ export default async function ModeratorPropertyDetailPage({ params }: PageProps)
             <CardContent className="p-4 flex flex-col gap-2">
               <Row label="Name"  value={landlord?.full_name  ?? '—'} />
               <Row label="Email" value={landlord?.email      ?? '—'} />
-              <Row label="Phone" value={landlord?.phone_number ?? '—'} />
+              <Row label="Phone" value={formatKenyaPhone(landlord?.phone_number ?? '—')} />
             </CardContent>
           </Card>
         </Section>

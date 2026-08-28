@@ -3,10 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-)
+const supabase = createClient(supabaseUrl!, supabaseKey!)
 
 export interface ListingUnit {
   id:            string
@@ -30,7 +27,7 @@ export interface ListingUnit {
   }
 }
 
-const TYPE_DISPLAY_NAMES: Record<string, string> = {
+export const TYPE_DISPLAY_NAMES: Record<string, string> = {
   single_room: 'Single Room',
   double_room: 'Double Room',
   bedsitter: 'Bedsitter',
@@ -47,21 +44,12 @@ export async function fetchListings(): Promise<ListingUnit[]> {
   const { data, error } = await supabase
     .from('public_listings')
     .select(`
-      unit_type_id,
-      type,
-      price,
-      description,
-      amenities,
-      total_count,
-      available_count,
-      property_id,
-      property_name,
-      county,
-      location,
-      address,
-      total_score,
-      cover_image_url,
-      image_count
+      unit_type_id, type, price,
+      description, amenities,
+      total_count, available_count,
+      property_id, property_name,
+      county, location, address, total_score,
+      cover_image_url, image_count
     `)
     .order('total_score', { ascending: false, nullsFirst: false })
 
@@ -76,8 +64,7 @@ export async function fetchListings(): Promise<ListingUnit[]> {
   const { data: properties } = await supabase
     .from('properties')
     .select(`
-      id,
-      landlord_id,
+      id, landlord_id,
       profiles!landlord_id ( full_name, phone_number, email )
     `)
     .in('id', propertyIds)
