@@ -23,11 +23,13 @@ import { timeAgo } from '@/lib/date'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   ActivitySquare,
+  ArrowRight,
   CheckCircle2,
   Loader2,
   ShieldCheck, UserPlus,
   XCircle,
 } from 'lucide-react'
+import Link from 'next/link'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
@@ -187,8 +189,15 @@ export default function AdminModeratorsPage() {
                       </div>
                     ))}
                   </div>
+                 
 
                   <div className="flex gap-3 mt-4 pt-4 border-t border-border/50 flex-wrap">
+                    <Button asChild size="sm" variant="outline" className="gap-1.5 h-8 text-xs">
+                      <Link href={`/dashboard/admin/moderators/${mod.id}`}>
+                        View details
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </Button>
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button

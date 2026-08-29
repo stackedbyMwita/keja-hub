@@ -2,6 +2,7 @@
 
 import { Phone, Mail, MapPin, ExternalLink } from 'lucide-react'
 import { KenyaPhoneBadge } from '../KenyaPhoneBadge'
+import { formatKenyaPhone } from '@/lib/phone'
 
 interface Contact {
   landlord_name: string
@@ -40,7 +41,7 @@ export function ContactDetails({ contact }: ContactDetailsProps) {
         <div className="flex-shrink-0 w-8 h-8 rounded-full bg-muted flex items-center justify-center group-hover:bg-primary/10 transition-colors">
           <Phone className="h-3.5 w-3.5" />
         </div>
-        <KenyaPhoneBadge phone={contact.phone} />
+        <p>{formatKenyaPhone(contact.phone)}</p>
       </a>
 
       {/* Email */}

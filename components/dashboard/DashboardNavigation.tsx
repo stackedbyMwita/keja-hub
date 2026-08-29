@@ -1,22 +1,33 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import {
-  Menu, LayoutDashboard, ClipboardList, ActivitySquare,
-  ShieldCheck, Users, BarChart3, Building2, ImageIcon,
-  ChevronLeft, ArrowLeft, PlusCircle, Home, UserCog, Settings
-} from 'lucide-react'
+  Sheet, SheetContent, SheetTitle, SheetTrigger,
+} from '@/components/ui/sheet'
 import {
   Tooltip, TooltipContent,
   TooltipProvider, TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { cn } from '@/lib/utils'
 import {
-  Sheet, SheetContent, SheetTitle, SheetTrigger,
-} from '@/components/ui/sheet'
-import { Button } from '@/components/ui/button'
+  ActivitySquare,
+  ArrowLeft,
+  BarChart3, Building2,
+  ChevronLeft,
+  ClipboardList,
+  Home,
+  LayoutDashboard,
+  Menu,
+  PlusCircle,
+  Settings,
+  ShieldCheck,
+  UserCog,
+  Users
+} from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+import { AppLogo } from '../logo/Logo'
 
 // --- SHARED TYPES & CONFIGURATION ---
 
@@ -76,46 +87,24 @@ function isActive(pathname: string, item: NavItem): boolean {
   return pathname === item.href || pathname.startsWith(item.href + '/')
 }
 
-const ROLE_COLORS: Record<string, string> = {
-  moderator:  'bg-blue-500/10 text-blue-600 border-blue-500/20 dark:text-blue-400',
-  landlord:   'bg-emerald-500/10 text-emerald-600 border-emerald-500/20 dark:text-emerald-400',
-  admin:      'bg-primary/10 text-primary border-primary/20',
-  superadmin: 'bg-amber-500/10 text-amber-600 border-amber-500/20 dark:text-amber-400',
-}
-
-const ROLE_DOT: Record<string, string> = {
-  moderator:  'bg-blue-500',
-  landlord:   'bg-emerald-500',
-  admin:      'bg-primary',
-  superadmin: 'bg-amber-500',
-}
-
 // --- SHARED INNER CONTENT ---
 
 function SidebarContent({ role, isMobile, setOpen }: { role: string; isMobile?: boolean; setOpen?: (v: boolean) => void }) {
   const pathname  = usePathname()
   const nav       = getNav(role)
-  const roleColor = ROLE_COLORS[role] ?? ROLE_COLORS.admin
-  const roleDot   = ROLE_DOT[role]    ?? ROLE_DOT.admin
 
   return (
     <>
       {isMobile && <SheetTitle className="sr-only">Navigation Menu</SheetTitle>}
 
       {/* Role badge */}
-      <div className="px-4 pt-5 pb-3 shrink-0">
-        <span className={cn(
-          'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border capitalize',
-          roleColor
-        )}>
-          <span className={cn('w-1.5 h-1.5 rounded-full animate-pulse shrink-0', roleDot)} />
-          {role} dashboard
-        </span>
-      </div>
+      <header className="h-16 border-b flex items-center px-4 md:px-6 gap-4 shrink-0">
+        <AppLogo />
+      </header>
 
       {/* Nav */}
       <div className="flex-1 overflow-y-auto">
-        <nav className="px-3 py-2 flex flex-col gap-0.5">
+        <nav className="px-3 py-2 flex flex-col gap-2">
           <TooltipProvider delayDuration={200}>
             {nav.map((item) => {
               const active = isActive(pathname, item)
@@ -192,7 +181,7 @@ function SidebarContent({ role, isMobile, setOpen }: { role: string; isMobile?: 
 // --- EXPORT 1: DESKTOP SIDEBAR ---
 export function DesktopSidebar({ role }: { role: string }) {
   return (
-    <aside className="hidden lg:flex flex-col w-60 min-h-screen border-r border-sidebar-border bg-sidebar shrink-0">
+    <aside className="hidden lg:flex flex-col w-60 min-h-screen border-r border-sidebar-border bg-red shrink-0">
       <SidebarContent role={role} />
     </aside>
   )

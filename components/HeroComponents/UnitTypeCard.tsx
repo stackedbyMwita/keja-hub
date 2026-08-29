@@ -30,6 +30,8 @@ interface UnitTypeCardProps {
   canEdit:          boolean
 }
 
+//17,500
+
 export function UnitTypeCard({
   unit, propertyId, propertyApproved, canEdit,
 }: UnitTypeCardProps) {

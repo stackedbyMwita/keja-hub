@@ -16,13 +16,20 @@ import {
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { Building2, MapPin, Search, Loader2, ShieldAlert, ShieldCheck } from 'lucide-react'
+import {
+  Building2, MapPin, Search,
+  Loader2, ShieldAlert, ShieldCheck,
+} from 'lucide-react'
+import { formatKenyaPhone } from '@/lib/phone'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 
 async function fetchLandlords() {
   const res = await fetch('/api/admin/landlords')
-  if (!res.ok) throw new Error('Failed to fetch')
-  return (await res.json()).data
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Unknown error' }))
+    throw new Error(err.error ?? `HTTP ${res.status}`)
+  }
+  return (await res.json()).data ?? []
 }
 
 export default function AdminLandlordsPage() {
@@ -30,7 +37,7 @@ export default function AdminLandlordsPage() {
   const [search, setSearch] = useState('')
   const [reason, setReason] = useState('')
 
-  const { data: landlords = [], isLoading } = useQuery({
+  const { data: landlords = [], isLoading, error } = useQuery({
     queryKey: ['admin-landlords'],
     queryFn:  fetchLandlords,
   })
@@ -53,12 +60,12 @@ export default function AdminLandlordsPage() {
     onError: (err: Error) => toast.error(err.message),
   })
 
-  const filtered = landlords.filter((l: any) => {
+  const filtered = (landlords as any[]).filter((l: any) => {
     if (!search) return true
     const q = search.toLowerCase()
     return (
-      l.full_name?.toLowerCase().includes(q) ||
-      l.email?.toLowerCase().includes(q) ||
+      l.full_name?.toLowerCase().includes(q)  ||
+      l.email?.toLowerCase().includes(q)       ||
       l.phone_number?.includes(q)
     )
   })
@@ -66,10 +73,13 @@ export default function AdminLandlordsPage() {
   return (
     <DashboardPageWrapper>
 
+      {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4 border-b border-border/50 pb-5">
         <div>
           <h1 className="text-2xl font-heading font-bold text-foreground">Landlords</h1>
-          <p className="text-sm text-muted-foreground mt-1">{landlords.length} registered landlords</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            {landlords.length} registered landlord{landlords.length !== 1 ? 's' : ''}
+          </p>
         </div>
         <div className="relative w-full sm:w-72">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -82,17 +92,28 @@ export default function AdminLandlordsPage() {
         </div>
       </div>
 
+      {/* Error state */}
+      {error && (
+        <div className="p-4 rounded-xl bg-destructive/5 border border-destructive/20">
+          <p className="text-sm font-semibold text-destructive">Failed to load landlords</p>
+          <p className="text-xs text-muted-foreground mt-1">{(error as Error).message}</p>
+        </div>
+      )}
+
+      {/* Loading */}
       {isLoading && (
         <div className="flex items-center justify-center py-16">
           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
         </div>
       )}
 
+      {/* List */}
       <div className="flex flex-col gap-4">
         {filtered.map((landlord: any) => {
-          const app     = landlord.landlord_profiles?.[0]
-          const counts  = landlord.property_counts ?? {}
-          const active  = landlord.is_active
+          // ── Fixed: use landlord_profile (singular) not landlord_profiles[0] ──
+          const app    = landlord.landlord_profile ?? null
+          const counts = landlord.property_counts  ?? {}
+          const active = landlord.is_active
 
           return (
             <Card key={landlord.id} className="border-border/60">
@@ -106,17 +127,23 @@ export default function AdminLandlordsPage() {
                   </Avatar>
 
                   <div className="flex-1 min-w-0">
+
+                    {/* Name + status */}
                     <div className="flex items-start justify-between gap-3 flex-wrap">
                       <div>
-                        <p className="text-base font-bold text-foreground">{landlord.full_name}</p>
+                        <p className="text-base font-bold text-foreground">
+                          {landlord.full_name ?? 'No name'}
+                        </p>
                         <p className="text-sm text-muted-foreground">{landlord.email}</p>
-                        <p className="text-xs text-muted-foreground">{landlord.phone_number}</p>
+                        {landlord.phone_number && (
+                          <p className="text-xs text-muted-foreground">{formatKenyaPhone(landlord.phone_number)}</p>
+                        )}
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <Badge variant={active ? 'default' : 'destructive'}>
                           {active ? 'Active' : 'Suspended'}
                         </Badge>
-                        {app && (
+                        {app?.status && (
                           <Badge variant="outline" className="text-xs capitalize">
                             {app.status}
                           </Badge>
@@ -124,13 +151,15 @@ export default function AdminLandlordsPage() {
                       </div>
                     </div>
 
-                    {app && (
+                    {/* Location from landlord application */}
+                    {app?.location && app?.county && (
                       <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-2">
-                        <MapPin className="h-3 w-3" />
+                        <MapPin className="h-3 w-3 shrink-0" />
                         {app.location}, {app.county}
                       </div>
                     )}
 
+                    {/* Property counts */}
                     <div className="grid grid-cols-3 gap-4 mt-4">
                       {[
                         { label: 'Total properties', value: counts.total    ?? 0 },
@@ -144,11 +173,15 @@ export default function AdminLandlordsPage() {
                       ))}
                     </div>
 
+                    {/* Actions */}
                     <div className="flex gap-3 mt-4 pt-4 border-t border-border/50">
                       {active ? (
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
-                            <Button size="sm" variant="outline" className="gap-1.5 h-8 text-xs border-destructive/30 text-destructive hover:border-destructive/60">
+                            <Button
+                              size="sm" variant="outline"
+                              className="gap-1.5 h-8 text-xs border-destructive/30 text-destructive hover:border-destructive/60"
+                            >
                               <ShieldAlert className="h-3.5 w-3.5" />
                               Suspend landlord
                             </Button>
@@ -172,7 +205,9 @@ export default function AdminLandlordsPage() {
                             <AlertDialogFooter>
                               <AlertDialogCancel>Cancel</AlertDialogCancel>
                               <AlertDialogAction
-                                onClick={() => suspendMutation.mutate({ id: landlord.id, suspend: true, reason })}
+                                onClick={() => suspendMutation.mutate({
+                                  id: landlord.id, suspend: true, reason,
+                                })}
                                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                               >
                                 Suspend
@@ -199,11 +234,13 @@ export default function AdminLandlordsPage() {
           )
         })}
 
-        {!isLoading && filtered.length === 0 && (
+        {!isLoading && !error && filtered.length === 0 && (
           <Card className="border-dashed border-border/60">
             <CardContent className="flex flex-col items-center justify-center py-16 gap-3">
               <Building2 className="h-10 w-10 text-muted-foreground/40" />
-              <p className="text-sm font-medium text-foreground">No landlords found</p>
+              <p className="text-sm font-medium text-foreground">
+                {search ? 'No landlords match your search' : 'No landlords yet'}
+              </p>
             </CardContent>
           </Card>
         )}

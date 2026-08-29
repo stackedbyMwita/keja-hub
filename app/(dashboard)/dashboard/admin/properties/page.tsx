@@ -23,9 +23,11 @@ import {
   Building2, MapPin, Search, Loader2,
   ShieldAlert, ShieldCheck, Star, Clock,
   CheckCircle2, XCircle, AlertCircle,
+  ArrowRight,
 } from 'lucide-react'
 import { timeAgo } from '@/lib/date'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import Link from 'next/link'
 
 const STATUS_CONFIG: Record<string, { label: string; variant: any; icon: any }> = {
   draft:          { label: 'Draft',      variant: 'secondary',   icon: AlertCircle  },
@@ -212,6 +214,12 @@ export default function AdminPropertiesPage() {
 
                     {/* Actions */}
                     <div className="flex gap-3 mt-4 pt-4 border-t border-border/50 flex-wrap">
+                    <Button asChild size="sm" variant="outline" className="gap-1.5 h-8 text-xs">
+                      <Link href={`/dashboard/admin/properties/${property.id}`}>
+                        View details
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </Button>
                       {isApproved && (
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
