@@ -15,6 +15,7 @@ import { AdminPropertyActions } from '@/components/admin/adminPropertyActions'
 import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 import { formatKenyaPhone } from '@/lib/phone'
+import { PropertyOverrideActions, ReassignModeratorAction } from '@/components/admin/PropertyOverrideActions'
 
 export const dynamic = 'force-dynamic'
 
@@ -139,6 +140,18 @@ export default async function AdminPropertyDetailPage({ params }: PageProps) {
         propertyId={propertyId}
         status={property.status}
         propertyName={property.name}
+      />
+      
+      <PropertyOverrideActions
+        propertyId={propertyId}
+        propertyName={property.name}
+        status={property.status}
+      />
+      
+      <ReassignModeratorAction
+        propertyId={propertyId}
+        propertyName={property.name}
+        currentModeratorId={property.approved_by}
       />
 
       <Separator />

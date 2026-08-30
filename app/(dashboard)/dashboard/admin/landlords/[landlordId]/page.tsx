@@ -15,6 +15,7 @@ import { Separator } from '@/components/ui/separator'
 import { AdminLandlordActions } from '@/components/admin/AdminLandlordActions'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 import { formatKenyaPhone } from '@/lib/phone'
+import { LandlordApplicationOverride } from '@/components/admin/LandlordApplicationOverride'
 
 export const dynamic = 'force-dynamic'
 
@@ -141,6 +142,14 @@ export default async function AdminLandlordDetailPage({ params }: PageProps) {
         isActive={landlord.is_active}
         isBanned={landlord.is_banned}
       />
+
+      {app && (
+        <LandlordApplicationOverride
+          landlordId={landlordId}
+          landlordName={landlord.full_name ?? 'this landlord'}
+          applicationStatus={app.status}
+        />
+      )}
 
       <Separator />
 
