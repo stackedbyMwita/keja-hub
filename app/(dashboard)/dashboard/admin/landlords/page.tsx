@@ -22,6 +22,10 @@ import {
 } from 'lucide-react'
 import { formatKenyaPhone } from '@/lib/phone'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
+
+// Add before suspend button:
 
 async function fetchLandlords() {
   const res = await fetch('/api/admin/landlords')
@@ -175,6 +179,12 @@ export default function AdminLandlordsPage() {
 
                     {/* Actions */}
                     <div className="flex gap-3 mt-4 pt-4 border-t border-border/50">
+
+                      <Button asChild size="sm" variant="outline" className="gap-1.5 h-8 text-xs">
+                        <Link href={`/dashboard/admin/landlords/${landlord.id}`}>
+                          View details <ArrowRight className="h-3.5 w-3.5" />
+                        </Link>
+                      </Button>
                       {active ? (
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
