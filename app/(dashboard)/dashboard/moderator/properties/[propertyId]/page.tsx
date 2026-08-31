@@ -16,6 +16,7 @@ import { PropertyReviewActions } from '@/components/moderator/PropertyReviewActi
 import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
 import { formatKenyaPhone } from '@/lib/phone'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import { StatusBadge } from '@/components/Components/StatusBadge'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,14 +31,6 @@ const TYPE_LABELS: Record<string, string> = {
   '1br': '1 Bedroom', '2br': '2 Bedrooms', '3br': '3 Bedrooms',
   '4br_plus': '4+ Bedrooms', commercial: 'Shop/Commercial',
 }
-
-const STATUS_CONFIG = {
-  pending_review: { label: 'Pending Review', variant: 'outline',     icon: Clock        },
-  approved:       { label: 'Approved',       variant: 'default',     icon: CheckCircle2 },
-  rejected:       { label: 'Rejected',       variant: 'destructive', icon: XCircle      },
-  draft:          { label: 'Draft',          variant: 'secondary',   icon: Clock        },
-  suspended:      { label: 'Suspended',      variant: 'destructive', icon: XCircle      },
-} as const
 
 interface PageProps { params: Promise<{ propertyId: string }> }
 
@@ -68,9 +61,6 @@ export default async function ModeratorPropertyDetailPage({ params }: PageProps)
   const isApproved      = property.status === 'approved'
   const isPending       = property.status === 'pending_review'
   const isMyProperty    = property.approved_by === userId
-  const config          = STATUS_CONFIG[property.status as keyof typeof STATUS_CONFIG]
-                          ?? STATUS_CONFIG.draft
-  const Icon            = config.icon
   const totalImages     = units.reduce((a: number, u: any) => a + (u.unit_images?.length ?? 0), 0)
   const hasScores       = property.total_score > 0
 
@@ -114,10 +104,8 @@ export default async function ModeratorPropertyDetailPage({ params }: PageProps)
             </div>
           </div>
         </div>
-        <Badge variant={config.variant as any} className="flex items-center gap-1.5 shrink-0 rounded-full">
-          <Icon className="h-3 w-3" />
-          {config.label}
-        </Badge>
+        <StatusBadge status={property.status} />
+
       </div>
 
       {/* Score card — if scored */}

@@ -1,19 +1,21 @@
+import { StatusBadge } from '@/components/Components/StatusBadge'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import { Card, CardContent } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
+import { timeAgo } from '@/lib/date'
 import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
-import { connection } from 'next/server'
-import Link from 'next/link'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
-  Building2, MapPin, Clock, ArrowRight,
-  Inbox, Home, CheckCircle2, XCircle, Images,
+  Building2,
+  Clock,
+  Home,
+  Images,
+  Inbox,
+  MapPin
 } from 'lucide-react'
-import { timeAgo } from '@/lib/date'
-import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
-import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
-import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
+import Link from 'next/link'
+import { connection } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
@@ -21,12 +23,6 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
-
-const STATUS_CONFIG = {
-  pending_review: { label: 'Pending',  variant: 'outline',     icon: Clock        },
-  approved:       { label: 'Approved', variant: 'default',     icon: CheckCircle2 },
-  rejected:       { label: 'Rejected', variant: 'destructive', icon: XCircle      },
-} as const
 
 export default async function ModeratorPropertiesPage() {
   await connection()
@@ -173,9 +169,6 @@ function PropertyList({
         const unitTypes  = units.map((u: any) => getPropertyTypeLabel(u.type, { short: true }))
         const landlord   = property.profiles
         const imageCount = property.unit_images?.length ?? 0
-        const config     = STATUS_CONFIG[property.status as keyof typeof STATUS_CONFIG]
-          ?? STATUS_CONFIG.pending_review
-        const Icon       = config.icon
 
         return (
           <Card key={property.id} className="hover:shadow-md transition-all duration-200 border-border/60 rounded-2xl overflow-hidden w-full">
@@ -194,10 +187,8 @@ function PropertyList({
                       <p className="text-base font-bold text-foreground truncate">
                         {property.name}
                       </p>
-                      <Badge variant={config.variant as any} className="flex items-center gap-1.5 shrink-0 text-xs px-2 py-1 shadow-sm rounded-full">
-                        <Icon className="h-3.5 w-3.5" />
-                        {config.label}
-                      </Badge>
+                      <StatusBadge status={property.status} />
+
                     </div>
 
                     <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">

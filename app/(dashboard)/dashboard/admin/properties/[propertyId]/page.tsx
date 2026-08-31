@@ -1,21 +1,26 @@
+import { AdminPropertyActions } from '@/components/admin/adminPropertyActions'
+import { PropertyOverrideActions, ReassignModeratorAction } from '@/components/admin/PropertyOverrideActions'
+import { StatusBadge } from '@/components/Components/StatusBadge'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
+import { formatKenyaPhone } from '@/lib/phone'
 import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
-import { connection } from 'next/server'
-import { notFound, redirect } from 'next/navigation'
-import Link from 'next/link'
 import {
-  ChevronLeft, Building2, MapPin, Home,
-  CheckCircle2, Clock, XCircle, AlertCircle,
-  ShieldAlert, Star, Images, User,
+  Building2,
+  ChevronLeft,
+  Home,
+  Images,
+  MapPin,
+  Star,
+  User
 } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
-import { AdminPropertyActions } from '@/components/admin/adminPropertyActions'
-import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
-import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
-import { formatKenyaPhone } from '@/lib/phone'
-import { PropertyOverrideActions, ReassignModeratorAction } from '@/components/admin/PropertyOverrideActions'
+import Link from 'next/link'
+import { notFound, redirect } from 'next/navigation'
+import { connection } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,14 +28,6 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
-
-const STATUS_CONFIG = {
-  draft:          { label: 'Draft',      variant: 'secondary',   icon: AlertCircle  },
-  pending_review: { label: 'Pending',    variant: 'outline',     icon: Clock        },
-  approved:       { label: 'Approved',   variant: 'default',     icon: CheckCircle2 },
-  rejected:       { label: 'Rejected',   variant: 'destructive', icon: XCircle      },
-  suspended:      { label: 'Suspended',  variant: 'destructive', icon: ShieldAlert  },
-} as const
 
 interface PageProps { params: Promise<{ propertyId: string }> }
 
@@ -74,8 +71,6 @@ export default async function AdminPropertyDetailPage({ params }: PageProps) {
 
   const landlord   = (property as any).profiles
   const units      = (property as any).unit_types ?? []
-  const config     = STATUS_CONFIG[property.status as keyof typeof STATUS_CONFIG] ?? STATUS_CONFIG.draft
-  const Icon       = config.icon
   const totalUnits = units.reduce((a: number, u: any) => a + u.total_count, 0)
   const totalImages = units.reduce((a: number, u: any) => a + u.unit_images.length, 0)
 
@@ -104,10 +99,8 @@ export default async function AdminPropertyDetailPage({ params }: PageProps) {
             </div>
           </div>
         </div>
-        <Badge variant={config.variant as any} className="flex items-center gap-1.5 shrink-0">
-          <Icon className="h-3 w-3" />
-          {config.label}
-        </Badge>
+        <StatusBadge status={property.status} />
+
       </div>
 
       {/* Score card */}

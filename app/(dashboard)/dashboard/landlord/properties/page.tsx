@@ -1,15 +1,20 @@
+import { StatusBadge } from '@/components/Components/StatusBadge'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
-import { connection } from 'next/server'
-import Link from 'next/link'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import {
-  Building2, PlusCircle, MapPin, Home,
-  CheckCircle2, Clock, XCircle, AlertCircle, ArrowRight,
+  AlertCircle, ArrowRight,
+  Building2,
+  CheckCircle2, Clock,
+  Home,
+  MapPin,
+  PlusCircle,
+  XCircle,
 } from 'lucide-react'
-import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import Link from 'next/link'
+import { connection } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,14 +22,6 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
-
-const STATUS_CONFIG = {
-  draft:          { label: 'Draft',      variant: 'secondary',   icon: AlertCircle  },
-  pending_review: { label: 'In Review',  variant: 'outline',     icon: Clock        },
-  approved:       { label: 'Approved',   variant: 'default',     icon: CheckCircle2 },
-  rejected:       { label: 'Rejected',   variant: 'destructive', icon: XCircle      },
-  suspended:      { label: 'Suspended',  variant: 'destructive', icon: XCircle      },
-} as const
 
 export default async function LandlordPropertiesPage() {
   await connection()
@@ -83,10 +80,7 @@ export default async function LandlordPropertiesPage() {
       {/* Properties List */}
       <div className="flex flex-col gap-3">
         {props.map((property) => {
-          const config     = STATUS_CONFIG[property.status as keyof typeof STATUS_CONFIG] || STATUS_CONFIG.draft
-          const Icon       = config.icon
           const units      = property.unit_types ?? []
-          
           const totalUnits = units.reduce((a: number, u: any) => a + u.total_count, 0)
           const activeUnits = units.filter((u: any) => u.status === 'active')
           const availUnits = activeUnits.reduce((a: number, u: any) => a + u.available_count, 0)
@@ -114,10 +108,8 @@ export default async function LandlordPropertiesPage() {
                         <h3 className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
                           {property.name}
                         </h3>
-                        <Badge variant={config.variant as any} className="flex rounded-full items-center gap-1 shrink-0 text-xs shadow-none">
-                          <Icon className="h-3.5 w-3.5" />
-                          {config.label}
-                        </Badge>
+                        <StatusBadge status={property.status} />
+
                       </div>
 
                       <div className="flex items-center gap-1.5 text-sm text-muted-foreground mt-1">

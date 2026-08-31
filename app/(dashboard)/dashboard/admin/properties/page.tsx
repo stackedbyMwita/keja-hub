@@ -28,14 +28,7 @@ import {
 import { timeAgo } from '@/lib/date'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 import Link from 'next/link'
-
-const STATUS_CONFIG: Record<string, { label: string; variant: any; icon: any }> = {
-  draft:          { label: 'Draft',      variant: 'secondary',   icon: AlertCircle  },
-  pending_review: { label: 'Pending',    variant: 'outline',     icon: Clock        },
-  approved:       { label: 'Approved',   variant: 'default',     icon: CheckCircle2 },
-  rejected:       { label: 'Rejected',   variant: 'destructive', icon: XCircle      },
-  suspended:      { label: 'Suspended',  variant: 'destructive', icon: ShieldAlert  },
-}
+import { StatusBadge } from '@/components/Components/StatusBadge'
 
 async function fetchProperties(status: string, search: string) {
   const params = new URLSearchParams()
@@ -153,8 +146,6 @@ export default function AdminPropertiesPage() {
       {/* Properties list */}
       <div className="flex flex-col gap-3">
         {properties.map((property: any) => {
-          const config     = STATUS_CONFIG[property.status] ?? STATUS_CONFIG.draft
-          const Icon       = config.icon
           const units      = property.unit_types ?? []
           const totalUnits = units.reduce((a: number, u: any) => a + u.total_count, 0)
           const landlord   = property.profiles
@@ -178,10 +169,8 @@ export default function AdminPropertiesPage() {
                           {property.location}, {property.county}
                         </div>
                       </div>
-                      <Badge variant={config.variant} className="flex items-center gap-1.5 shrink-0 text-xs rounded-full">
-                        <Icon className="h-3 w-3" />
-                        {config.label}
-                      </Badge>
+                      <StatusBadge status={property.status} />
+
                     </div>
 
                     <div className="flex flex-wrap gap-4 mt-3">

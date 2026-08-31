@@ -10,21 +10,9 @@ import {
   Search, XCircle as XCircleIcon
 } from 'lucide-react'
 import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
+import { StatusBadge } from '@/components/Components/StatusBadge'
 
 // These constants need to be accessible here
-const TYPE_LABELS: Record<string, string> = {
-  single_room: 'Single Room', double_room: 'Double Room',
-  bedsitter: 'Bedsitter', studio: 'Studio',
-  '1br': '1 Bed', '2br': '2 Bed', '3br': '3 Bed',
-  '4br_plus': '4+ Bed', commercial: 'Commercial',
-}
-
-const STATUS_CONFIG = {
-  pending_review: { label: 'Pending', variant: 'outline', icon: Clock },
-  approved: { label: 'Approved', variant: 'default', icon: CheckCircle2 },
-  rejected: { label: 'Rejected', variant: 'destructive', icon: XCircle },
-} as const
-
 type SortOption = 'newest' | 'oldest' | 'name_asc' | 'name_desc'
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
@@ -191,9 +179,6 @@ export function PropertyList({
             const unitTypes = units.map((u: any) => getPropertyTypeLabel(u.type, { short: true }))
             const landlord = property.profiles
             const imageCount = property.unit_images?.length ?? 0
-            const config = STATUS_CONFIG[property.status as keyof typeof STATUS_CONFIG]
-              ?? STATUS_CONFIG.pending_review
-            const Icon = config.icon
 
             return (
               <Card 
@@ -212,10 +197,8 @@ export function PropertyList({
                           <p className="text-base font-bold text-foreground truncate group-hover:text-primary transition-colors duration-200">
                             {property.name}
                           </p>
-                          <Badge variant={config.variant as any} className="flex items-center gap-1.5 shrink-0 text-xs px-2 py-1 shadow-sm rounded-full">
-                            <Icon className="h-3.5 w-3.5" />
-                            {config.label}
-                          </Badge>
+                          <StatusBadge status={property.status} />
+
                         </div>
 
                         <div className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground">

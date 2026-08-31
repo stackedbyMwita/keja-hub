@@ -11,6 +11,8 @@ import {
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
+import { ConfirmDialog } from '@/components/Components/ConfirmDialog'
+import { Button } from '@/components/ui/button'
 
 interface UnitImage {
   id:                  string
@@ -114,8 +116,8 @@ export function ImagePreviewGrid({ images, propertyId, unitTypeId }: ImagePrevie
             )}
 
             {/* Delete */}
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
+            <ConfirmDialog
+              trigger={
                 <button
                   disabled={!!deleting}
                   className="w-8 h-8 rounded-full bg-white/20 hover:bg-destructive/80 flex items-center justify-center transition-colors"
@@ -126,28 +128,16 @@ export function ImagePreviewGrid({ images, propertyId, unitTypeId }: ImagePrevie
                     : <Trash2 className="h-3.5 w-3.5 text-white" />
                   }
                 </button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Delete this image?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    {image.is_cover
-                      ? 'This is the cover image. The next image will automatically become the cover.'
-                      : 'This image will be permanently deleted.'
-                    }
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => handleDelete(image.id)}
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  >
-                    Delete
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+              }
+              title="Delete this image?"
+              description={
+                image.is_cover
+                  ? 'This is the cover image. The next image will automatically become the cover.'
+                  : 'This image will be permanently deleted.'
+              }
+              confirmLabel="Delete"
+              onConfirm={() =>handleDelete(image.id)}
+            />
 
           </div>
         </div>

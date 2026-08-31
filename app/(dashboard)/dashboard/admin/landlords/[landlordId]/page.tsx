@@ -1,21 +1,26 @@
+import { AdminLandlordActions } from '@/components/admin/AdminLandlordActions'
+import { LandlordApplicationOverride } from '@/components/admin/LandlordApplicationOverride'
+import { StatusBadge } from '@/components/Components/StatusBadge'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { formatKenyaPhone } from '@/lib/phone'
 import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
-import { connection } from 'next/server'
-import { notFound, redirect } from 'next/navigation'
-import Link from 'next/link'
 import {
-  ChevronLeft, Building2, MapPin, Mail,
-  Phone, Home, CheckCircle2, Clock,
-  XCircle, AlertCircle, ShieldAlert, Star,
+  Building2,
+  ChevronLeft,
+  Home,
+  Mail,
+  MapPin,
+  Phone,
+  Star
 } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Separator } from '@/components/ui/separator'
-import { AdminLandlordActions } from '@/components/admin/AdminLandlordActions'
-import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
-import { formatKenyaPhone } from '@/lib/phone'
-import { LandlordApplicationOverride } from '@/components/admin/LandlordApplicationOverride'
+import Link from 'next/link'
+import { notFound, redirect } from 'next/navigation'
+import { connection } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
@@ -23,14 +28,6 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
-
-const STATUS_CONFIG = {
-  draft:          { label: 'Draft',      variant: 'secondary',   icon: AlertCircle  },
-  pending_review: { label: 'Pending',    variant: 'outline',     icon: Clock        },
-  approved:       { label: 'Approved',   variant: 'default',     icon: CheckCircle2 },
-  rejected:       { label: 'Rejected',   variant: 'destructive', icon: XCircle      },
-  suspended:      { label: 'Suspended',  variant: 'destructive', icon: ShieldAlert  },
-} as const
 
 interface PageProps { params: Promise<{ landlordId: string }> }
 
@@ -210,8 +207,6 @@ export default async function AdminLandlordDetailPage({ params }: PageProps) {
         ) : (
           <div className="flex flex-col gap-2">
             {properties.map((property: any) => {
-              const cfg      = STATUS_CONFIG[property.status as keyof typeof STATUS_CONFIG] ?? STATUS_CONFIG.draft
-              const Icon     = cfg.icon
               const units    = property.unit_types ?? []
               const total    = units.reduce((a: number, u: any) => a + u.total_count, 0)
               const images   = units.reduce((a: number, u: any) => a + (u.unit_images?.length ?? 0), 0)
@@ -232,10 +227,7 @@ export default async function AdminLandlordDetailPage({ params }: PageProps) {
                           <p className="text-sm font-semibold text-foreground truncate group-hover:text-primary transition-colors">
                             {property.name}
                           </p>
-                          <Badge variant={cfg.variant as any} className="flex items-center gap-1 shrink-0 text-xs">
-                            <Icon className="h-3 w-3" />
-                            {cfg.label}
-                          </Badge>
+                          <StatusBadge status={property.status} />
                         </div>
                         <div className="flex items-center gap-1.5 text-xs text-muted-foreground mt-0.5">
                           <MapPin className="h-3 w-3 shrink-0" />

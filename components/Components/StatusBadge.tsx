@@ -4,8 +4,7 @@ import {
   AlertCircle, ShieldAlert, FileEdit,
 } from 'lucide-react'
 
-// ── Supported status types ────────────────────────────────────────────────────
-
+// Supported status types
 type StatusType =
   // Property statuses
   | 'draft' | 'pending_review' | 'approved' | 'rejected' | 'suspended'
@@ -26,7 +25,7 @@ interface StatusConfig {
 }
 
 const STATUS_MAP: Record<string, StatusConfig> = {
-  // ── Property ──────────────────────────────────────────────────────────────
+  // Property
   draft: {
     label: 'Draft', variant: 'secondary', icon: FileEdit,
     cls: '',
@@ -100,8 +99,8 @@ export function StatusBadge({
     <Badge
       variant={cfg.variant}
       className={`
-        inline-flex items-center gap-1 capitalize
-        ${size === 'sm' ? 'text-xs px-2 py-0.5' : 'text-xs px-2.5 py-0.5'}
+        inline-flex items-center gap-1 capitalize rounded-full
+        ${size === 'sm' ? 'text-xs px-2 py-1' : 'text-xs px-2.5 py-1'}
         ${cfg.cls}
         ${className}
       `.trim()}
@@ -111,8 +110,6 @@ export function StatusBadge({
     </Badge>
   )
 }
-
-// ── Convenience: label only ───────────────────────────────────────────────────
 
 export function getStatusLabel(status: string): string {
   return STATUS_MAP[status]?.label ?? status.replace(/_/g, ' ')
