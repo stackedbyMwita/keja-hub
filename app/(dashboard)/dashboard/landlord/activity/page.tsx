@@ -1,12 +1,12 @@
-'use client'
-
 import { ActivityLog } from '@/components/Activity/ActivityLog'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 
-export default function AdminActivityPage() {
+export const dynamic = 'force-dynamic'
+
+export default async function ModeratorActivityPage() {
   return (
     <DashboardPageWrapper>
-      <ActivityLog title="Platform Activity Logs" />
+      <ActivityLog title="My Activity" showActor={false} />
     </DashboardPageWrapper>
   )
 }

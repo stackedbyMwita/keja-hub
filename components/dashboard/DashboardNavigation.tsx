@@ -50,6 +50,7 @@ const LANDLORD_NAV: NavItem[] = [
   { label: 'Overview',      href: '/dashboard/landlord',                icon: LayoutDashboard, exact: true },
   { label: 'My Properties', href: '/dashboard/landlord/properties',     icon: Home,            divider: true },
   { label: 'Add Property',  href: '/dashboard/landlord/properties/new', icon: PlusCircle },
+  { label: 'My Activity',      href: '/dashboard/landlord/activity',   icon: ActivitySquare,  divider: true },
 ]
 
 const ADMIN_NAV: NavItem[] = [
@@ -70,6 +71,7 @@ const SUPERADMIN_NAV: NavItem[] = [
   { label: 'Overview',      href: '/dashboard/admin',            icon: LayoutDashboard, exact: true },
   { label: 'Admins', href: '/dashboard/superadmin/admins', icon: UserCog, divider: true },
   { label: 'System', href: '/dashboard/superadmin/system', icon: Settings },
+  { label: 'Activity Logs', href: '/dashboard/superadmin/activity',   icon: ActivitySquare }
 ]
 
 function getNav(role: string): NavItem[] {
