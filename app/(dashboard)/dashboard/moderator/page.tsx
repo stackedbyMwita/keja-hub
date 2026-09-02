@@ -8,6 +8,8 @@ import {
   Building2, ImageIcon, Star, ArrowRight,
 } from 'lucide-react'
 import Link from 'next/link'
+import { StatItem, StatsGrid } from '@/components/Components/StatsGrid'
+import { ActivityLog } from '@/components/Activity/ActivityLog'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -75,7 +77,7 @@ async function OverviewContent() {
       id, name,
       unit_types ( id, unit_images ( id ) )
     `).eq('approved_by', userId!).eq('status', 'approved'),
-    supabase.from('activity_logs').select('id, action, metadata, created_at').eq('actor_id', userId!).order('created_at', { ascending: false }).limit(6),
+    supabase.from('activity_logs').select('id, action, metadata, created_at').eq('actor_id', userId!).order('created_at', { ascending: false }).limit(10),
   ])
 
   // Image coverage — how many of my approved properties have all unit types covered
@@ -85,20 +87,19 @@ async function OverviewContent() {
   ).length
   const propsFullyCovered   = approvedProps.length - propsWithNoImages
 
-  const queueStats = [
-    { label: 'Landlord applications pending', value: pendingLandlords.count ?? 0,  icon: ClipboardList, href: '/dashboard/moderator/queue',      color: 'text-amber-600',  bg: 'bg-amber-50 dark:bg-amber-950/30',   border: 'border-amber-200 dark:border-amber-800'   },
-    { label: 'Properties pending review',      value: pendingProperties.count ?? 0, icon: Building2,     href: '/dashboard/moderator/properties', color: 'text-blue-600',   bg: 'bg-blue-50 dark:bg-blue-950/30',     border: 'border-blue-200 dark:border-blue-800'     },
-    { label: 'My props needing images',        value: propsWithNoImages,            icon: ImageIcon,     href: '/dashboard/moderator/images',     color: 'text-destructive', bg: 'bg-destructive/5',                   border: 'border-destructive/20'                    },
-    { label: 'My actions this month',          value: myMonthActions.count ?? 0,    icon: CheckCircle2,  href: '/dashboard/moderator/activity',   color: 'text-primary',    bg: 'bg-primary/10',                      border: 'border-primary/20'                        },
+  const queueStats: StatItem[] = [
+    { label: 'Landlord applications pending', value: pendingLandlords.count ?? 0, icon: ClipboardList, href: '/dashboard/moderator/queue' },
+    { label: 'Properties pending review', value: pendingProperties.count ?? 0, icon: Building2, href: '/dashboard/moderator/properties' },
+    { label: 'My actions this month', value: myMonthActions.count ?? 0, icon: CheckCircle2, href: '/dashboard/moderator/activity' },
   ]
 
-  const myStats = [
-    { label: 'Landlords approved', value: myApprovedLandlords.count  ?? 0, icon: CheckCircle2, color: 'text-green-600',   bg: 'bg-green-50 dark:bg-green-950/30'   },
-    { label: 'Landlords rejected', value: myRejectedLandlords.count  ?? 0, icon: XCircle,      color: 'text-destructive', bg: 'bg-destructive/5'                   },
-    { label: 'Properties approved',value: myApprovedProperties.count ?? 0, icon: Building2,    color: 'text-green-600',   bg: 'bg-green-50 dark:bg-green-950/30'   },
-    { label: 'Properties rejected', value: myRejectedProperties.count ?? 0,icon: XCircle,      color: 'text-destructive', bg: 'bg-destructive/5'                   },
-    { label: 'Properties scored',   value: myScoredProperties.count  ?? 0, icon: Star,         color: 'text-primary',     bg: 'bg-primary/10'                      },
-    { label: 'Images uploaded',     value: myImages.count            ?? 0, icon: ImageIcon,    color: 'text-blue-600',    bg: 'bg-blue-50 dark:bg-blue-950/30'     },
+  const myStats: StatItem[] = [
+    { label: 'Landlords approved', value: myApprovedLandlords.count ?? 0, icon: CheckCircle2 },
+    { label: 'Landlords rejected', value: myRejectedLandlords.count ?? 0, icon: XCircle },
+    { label: 'Properties approved',value: myApprovedProperties.count ?? 0, icon: Building2 },
+    { label: 'Properties rejected', value: myRejectedProperties.count ?? 0,icon: XCircle },
+    { label: 'Properties scored', value: myScoredProperties.count ?? 0, icon: Star },
+    { label: 'Images uploaded', value: myImages.count ?? 0, icon: ImageIcon },
   ]
 
   return (
@@ -106,79 +107,14 @@ async function OverviewContent() {
       {/* Queue at a glance */}
       <section className="flex flex-col gap-3">
         <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Queue at a glance</h2>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {queueStats.map((stat) => (
-            <Link key={stat.label} href={stat.href} className="block group">
-              <Card className={`border ${stat.border} transition-all hover:shadow-md group-hover:border-opacity-60 h-full`}>
-                <CardContent className="p-5">
-                  <div className={`w-9 h-9 rounded-xl ${stat.bg} flex items-center justify-center mb-3`}>
-                    <stat.icon className={`h-4 w-4 ${stat.color}`} />
-                  </div>
-                  <p className="text-3xl font-bold text-foreground tabular-nums">{stat.value}</p>
-                  <p className="text-xs text-muted-foreground mt-1 leading-tight">{stat.label}</p>
-                  <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground group-hover:text-foreground transition-colors">
-                    View <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
+        <StatsGrid cols={3} stats={queueStats} />
       </section>
 
       {/* My all-time performance */}
       <section className="flex flex-col gap-3">
         <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">My all-time performance</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-          {myStats.map((stat) => (
-            <Card key={stat.label} className="border-border/60">
-              <CardContent className="p-4 flex flex-col gap-2">
-                <div className={`w-8 h-8 rounded-lg ${stat.bg} flex items-center justify-center`}>
-                  <stat.icon className={`h-3.5 w-3.5 ${stat.color}`} />
-                </div>
-                <p className="text-2xl font-bold text-foreground tabular-nums">{stat.value}</p>
-                <p className="text-xs text-muted-foreground leading-tight">{stat.label}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <StatsGrid cols={3} stats={myStats} />
       </section>
-
-      {/* Image coverage summary */}
-      {approvedProps.length > 0 && (
-        <section className="flex flex-col gap-3">
-          <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Image coverage</h2>
-          <Card className="border-border/60">
-            <CardContent className="p-5 flex items-center gap-6 flex-wrap">
-              <div className="flex items-center gap-3 flex-1 min-w-[200px]">
-                <div className="flex-1 bg-muted rounded-full h-2.5 overflow-hidden">
-                  <div
-                    className="h-2.5 rounded-full bg-primary transition-all"
-                    style={{ width: `${approvedProps.length ? (propsFullyCovered / approvedProps.length) * 100 : 0}%` }}
-                  />
-                </div>
-                <span className="text-sm font-semibold text-foreground tabular-nums whitespace-nowrap">
-                  {propsFullyCovered}/{approvedProps.length}
-                </span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                {propsFullyCovered === approvedProps.length
-                  ? '✅ All your approved properties have images'
-                  : `${propsWithNoImages} propert${propsWithNoImages !== 1 ? 'ies' : 'y'} still need images`
-                }
-              </p>
-              {propsWithNoImages > 0 && (
-                <Link href="/dashboard/moderator/images">
-                  <Badge variant="outline" className="gap-1.5 cursor-pointer hover:bg-muted transition-colors">
-                    <ImageIcon className="h-3 w-3" />
-                    Upload images
-                  </Badge>
-                </Link>
-              )}
-            </CardContent>
-          </Card>
-        </section>
-      )}
 
       {/* Recent activity */}
       <section className="flex flex-col gap-3">
@@ -231,6 +167,7 @@ async function OverviewContent() {
             )}
           </CardContent>
         </Card>
+        <ActivityLog compact limit={10} showActor={false} />
       </section>
     </>
   )

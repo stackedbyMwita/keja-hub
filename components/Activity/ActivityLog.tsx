@@ -1,6 +1,5 @@
 'use client'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -24,6 +23,7 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { useDebounce } from 'use-debounce'
+import { UserAvatar } from '../Components/UserAvatar'
 import {
   CATEGORIES, DATE_RANGES,
   formatAbsoluteTime,
@@ -84,8 +84,7 @@ async function fetchActivity(params: Record<string, any>): Promise<ActivityRespo
   return res.json()
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
-
+// ── Main component
 export function ActivityLog({
   actorId,
   targetId,
@@ -138,7 +137,7 @@ export function ActivityLog({
   // ── Compact mode ──────────────────────────────────────────────────────────
   if (compact) {
     return (
-      <Card className="border-border/60 overflow-hidden">
+      <Card className="overflow-hidden">
         <CardHeader className="pb-3 border-b border-border">
           <CardTitle className="text-sm font-semibold flex items-center gap-2">
             <ActivitySquare className="h-4 w-4" />
@@ -158,7 +157,7 @@ export function ActivityLog({
     )
   }
 
-  // ── Full mode ─────────────────────────────────────────────────────────────
+  // Full mode
   return (
     <div className="flex flex-col gap-5">
 
@@ -177,7 +176,7 @@ export function ActivityLog({
           variant="outline" size="sm"
           onClick={() => refetch()}
           disabled={isFetching}
-          className="gap-2"
+          className="gap-2 rounded-full bg-primary/10 text-primary border-primary/20"
         >
           <RefreshCw className={`h-3.5 w-3.5 ${isFetching ? 'animate-spin' : ''}`} />
           Refresh
@@ -226,7 +225,7 @@ export function ActivityLog({
           <Button
             variant="ghost" size="sm"
             onClick={resetFilters}
-            className="text-xs text-muted-foreground hover:text-foreground h-9"
+            className="text-xs text-muted-foreground hover:text-foreground h-9 rounded-full"
           >
             Clear filters
           </Button>
@@ -318,8 +317,7 @@ export function ActivityLog({
   )
 }
 
-// ── Log list ──────────────────────────────────────────────────────────────────
-
+// Log list
 function LogList({ logs, showActor }: { logs: LogEntry[]; showActor: boolean }) {
   return (
     <div className="flex flex-col divide-y divide-border">
@@ -343,12 +341,12 @@ function LogRow({ log, showActor }: { log: LogEntry; showActor: boolean }) {
 
       {/* Actor avatar — only in full mode */}
       {showActor && actor && (
-        <Avatar className="w-7 h-7 shrink-0 mt-0.5">
-          <AvatarImage src={actor.avatar_url ?? undefined} />
-          <AvatarFallback className="text-xs font-semibold bg-muted">
-            {actor.full_name?.charAt(0) ?? '?'}
-          </AvatarFallback>
-        </Avatar>
+        <UserAvatar
+          name={actor.full_name}
+          imageUrl={actor.avatar_url}
+          userId={actor.id}
+          size="md"
+        />
       )}
 
       {/* Content */}
@@ -374,7 +372,7 @@ function LogRow({ log, showActor }: { log: LogEntry; showActor: boolean }) {
             <p className="text-xs text-muted-foreground">
               by <span className="font-medium text-foreground">{actor.full_name ?? actor.email}</span>
             </p>
-            <Badge variant="outline" className="text-xs capitalize py-0 h-4">
+            <Badge variant="outline" className="text-xs rounded-full capitalize py-0 h-4">
               {actor.role}
             </Badge>
           </div>
@@ -414,8 +412,7 @@ function LogRow({ log, showActor }: { log: LogEntry; showActor: boolean }) {
   )
 }
 
-// ── Skeleton ──────────────────────────────────────────────────────────────────
-
+// Skeleton
 function LogSkeleton({ rows = 5 }: { rows?: number }) {
   return (
     <div className="flex flex-col divide-y divide-border animate-pulse">
@@ -437,8 +434,7 @@ function LogSkeleton({ rows = 5 }: { rows?: number }) {
   )
 }
 
-// ── Empty state ───────────────────────────────────────────────────────────────
-
+// Empty state
 function EmptyState({ hasFilters, onClear }: { hasFilters?: boolean; onClear?: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center py-16 gap-3">
@@ -452,7 +448,7 @@ function EmptyState({ hasFilters, onClear }: { hasFilters?: boolean; onClear?: (
             No results match your current filters
           </p>
           {onClear && (
-            <Button variant="outline" size="sm" onClick={onClear} className="h-8 text-xs">
+            <Button variant="outline" size="sm" onClick={onClear} className="h-8 rounded-full text-xs">
               Clear filters
             </Button>
           )}

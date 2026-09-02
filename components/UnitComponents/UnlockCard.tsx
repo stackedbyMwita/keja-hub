@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { useAuth } from '@clerk/nextjs'
 import { UnlockModal } from './UnlockModal'
 import { AuthModal } from '@/app/(auth)/AuthModal'
+import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
 
 interface Contact {
   landlord_name: string
@@ -23,13 +24,6 @@ interface UnlockCardProps {
   available: boolean
   propertyName: string
   contact: Contact
-}
-
-const TYPE_LABELS: Record<string, string> = {
-  bedsitter: 'Bedsitter',
-  studio: 'Studio',
-  '1br': '1 Bedroom',
-  '2br': '2 Bedroom',
 }
 
 // MVP unlock price — will be real Mpesa amount later
@@ -79,7 +73,7 @@ export function UnlockCard({
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground font-medium">Type</span>
             <span className="font-semibold text-foreground">
-              {TYPE_LABELS[type] ?? type}
+              {getPropertyTypeLabel(type)}
             </span>
           </div>
 

@@ -72,7 +72,7 @@ export default function AdminPropertiesPage() {
     <DashboardPageWrapper>
 
       {/* Header */}
-      <div className="border-b border-border/50 pb-5">
+      <div className="pb-5">
         <h1 className="text-2xl font-heading font-bold text-foreground">Properties</h1>
         <p className="text-sm text-muted-foreground mt-1">
           {properties.length} propert{properties.length !== 1 ? 'ies' : 'y'} shown

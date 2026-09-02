@@ -27,53 +27,71 @@ interface StatusConfig {
 const STATUS_MAP: Record<string, StatusConfig> = {
   // Property
   draft: {
-    label: 'Draft', variant: 'secondary', icon: FileEdit,
-    cls: '',
+    label: 'Draft',
+    variant: 'outline',
+    icon: FileEdit,
+    cls: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800/60 dark:text-slate-300 dark:border-slate-700',
   },
   pending_review: {
-    label: 'Pending review', variant: 'outline', icon: Clock,
-    cls: 'border-amber-300 text-amber-700 dark:border-amber-700 dark:text-amber-400',
+    label: 'Pending review',
+    variant: 'outline',
+    icon: Clock,
+    cls: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800/50',
   },
   approved: {
-    label: 'Approved', variant: 'default', icon: CheckCircle2,
-    cls: 'bg-green-600 hover:bg-green-600 text-white border-transparent',
+    label: 'Approved',
+    variant: 'outline',
+    icon: CheckCircle2,
+    cls: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800/50',
   },
   rejected: {
-    label: 'Rejected', variant: 'destructive', icon: XCircle,
-    cls: '',
+    label: 'Rejected',
+    variant: 'outline',
+    icon: XCircle,
+    cls: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800/50',
   },
   suspended: {
-    label: 'Suspended', variant: 'destructive', icon: ShieldAlert,
-    cls: '',
+    label: 'Suspended',
+    variant: 'outline',
+    icon: ShieldAlert,
+    cls: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800/50',
   },
 
   // ── Landlord application ─────────────────────────────────────────────────
   pending: {
-    label: 'Pending', variant: 'outline', icon: Clock,
-    cls: 'border-amber-300 text-amber-700 dark:border-amber-700 dark:text-amber-400',
+    label: 'Pending',
+    variant: 'outline',
+    icon: Clock,
+    cls: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800/50',
   },
 
   // ── User ─────────────────────────────────────────────────────────────────
   active: {
-    label: 'Active', variant: 'default', icon: CheckCircle2,
-    cls: 'bg-green-600 hover:bg-green-600 text-white border-transparent',
+    label: 'Active',
+    variant: 'outline',
+    icon: CheckCircle2,
+    cls: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800/50',
   },
   inactive: {
-    label: 'Inactive', variant: 'secondary', icon: AlertCircle,
-    cls: '',
+    label: 'Inactive',
+    variant: 'outline',
+    icon: AlertCircle,
+    cls: 'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800/60 dark:text-slate-300 dark:border-slate-700',
   },
   banned: {
-    label: 'Banned', variant: 'destructive', icon: XCircle,
-    cls: '',
+    label: 'Banned',
+    variant: 'outline',
+    icon: XCircle,
+    cls: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800/50',
   },
 }
 
 function getFallback(status: string): StatusConfig {
   return {
     label:   status.replace(/_/g, ' '),
-    variant: 'secondary',
+    variant: 'outline',
     icon:    AlertCircle,
-    cls:     '',
+    cls:     'bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800/60 dark:text-slate-300 dark:border-slate-700',
   }
 }
 
@@ -100,7 +118,7 @@ export function StatusBadge({
       variant={cfg.variant}
       className={`
         inline-flex items-center gap-1 capitalize rounded-full
-        ${size === 'sm' ? 'text-xs px-2 py-1' : 'text-xs px-2.5 py-1'}
+        ${size === 'sm' ? 'text-xs px-2 py-2' : 'text-xs px-4 py-4'}
         ${cfg.cls}
         ${className}
       `.trim()}

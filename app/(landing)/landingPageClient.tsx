@@ -1,18 +1,17 @@
 'use client'
 
-import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
-import { useAuth } from '@clerk/nextjs'
-import { useRouter } from 'next/navigation'
-import { useMemo, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { AuthModal } from '../(auth)/AuthModal'
-import { PriceRange, UnitType } from '@/components/HeroComponents/Filters'
-import { FiltersGemini } from '@/components/HeroComponents/FiltersGemini'
-import { Navbar } from '@/components/LandlordComponents/navbar/Navbar'
-import { HeroGemini } from '@/components/HeroComponents/HeroGemini'
+import { Filters, PriceRange, UnitType } from '@/components/HeroComponents/Filters'
+import { HeroSection } from '@/components/HeroComponents/HeroSection'
 import { ListingsGridGemini } from '@/components/HeroComponents/ListingsGridGemini'
 import { FooterMinimal } from '@/components/LandlordComponents/footer/footer-minimal'
+import { Navbar } from '@/components/LandlordComponents/navbar/Navbar'
+import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
 import type { ListingUnit } from '@/lib/api/listings'
+import { useAuth } from '@clerk/nextjs'
+import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
+import { useMemo, useState } from 'react'
+import { AuthModal } from '../(auth)/AuthModal'
 
 interface LandingPageProps {
   initialListings: ListingUnit[]
@@ -29,7 +28,7 @@ export default function LandingPage({ initialListings }: LandingPageProps) {
   const router = useRouter()
   const { isSignedIn } = useAuth()
 
-  // ── TanStack Query — hydrated with server-fetched data ──────────────────
+  // TanStack Query — hydrated with server-fetched data
   const { data: units = initialListings } = useQuery({
     queryKey:     ['listings'],
     queryFn:      fetchListingsClient,
@@ -39,12 +38,12 @@ export default function LandingPage({ initialListings }: LandingPageProps) {
     refetchInterval: 5 * 60 * 1000, // background refetch every 5 minutes
   })
 
-  // ── Filter state ────────────────────────────────────────────────────────
+  // Filter state
   const [searchQuery, setSearchQuery] = useState('')
   const [activeType, setActiveType]   = useState<UnitType>('all')
   const [activePriceRange, setActivePriceRange] = useState<PriceRange>('all')
 
-  // ── Auth modal state ─────────────────────────────────────────────────────
+  // Auth modal state
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [pendingUnitId, setPendingUnitId] = useState<string | null>(null)
 
@@ -95,10 +94,10 @@ export default function LandingPage({ initialListings }: LandingPageProps) {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
       />
+      
+      <HeroSection />
 
-      <HeroGemini />
-
-      <FiltersGemini
+      <Filters
         activeType={activeType}
         activePriceRange={activePriceRange}
         onTypeChange={setActiveType}

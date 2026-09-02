@@ -1,26 +1,25 @@
 'use client'
 
-import { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
+import { UserAvatar } from '@/components/Components/UserAvatar'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel,
   AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { Users, Search, Loader2, Ban, CheckCircle2 } from 'lucide-react'
-import { useDebounce } from 'use-debounce'
-import { KenyaPhoneBadge } from '@/components/KenyaPhoneBadge'
-import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import { formatKenyaPhone } from '@/lib/phone'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Ban, CheckCircle2, Loader2, Search, Users } from 'lucide-react'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { useDebounce } from 'use-debounce'
 
 async function fetchUsers(search: string) {
   const params = search ? `?search=${encodeURIComponent(search)}` : ''
@@ -61,7 +60,7 @@ export default function AdminUsersPage() {
   return (
     <DashboardPageWrapper>
 
-      <div className="flex items-center justify-between flex-wrap gap-4 border-b border-border/50 pb-5">
+      <div className="flex items-center justify-between flex-wrap gap-4 pb-5">
         <div>
           <h1 className="text-2xl font-heading font-bold text-foreground">Users</h1>
           <p className="text-sm text-muted-foreground mt-1">{users.length} users shown</p>
@@ -88,12 +87,12 @@ export default function AdminUsersPage() {
           <Card key={user.id} className="border-border/60">
             <CardContent className="p-4 md:p-5">
               <div className="flex items-center gap-4">
-                <Avatar className="w-10 h-10 shrink-0">
-                  <AvatarImage src={user.avatar_url} />
-                  <AvatarFallback className="bg-muted text-foreground font-semibold text-sm">
-                    {user.full_name?.charAt(0) ?? 'U'}
-                  </AvatarFallback>
-                </Avatar>
+                <UserAvatar
+                  name={user.full_name}
+                  imageUrl={user.avatar_url}
+                  userId={user.id}
+                  size="md"
+                />
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-3 flex-wrap">

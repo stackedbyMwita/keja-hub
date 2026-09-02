@@ -1,16 +1,16 @@
 'use client'
 
+import { UserAvatar } from '@/components/Components/UserAvatar'
+import { Button } from '@/components/ui/button'
 import {
+  Show,
   SignInButton,
   SignUpButton,
   UserButton,
   useUser,
-  Show,
 } from '@clerk/nextjs'
-import { Suspense } from 'react'
-import { Button } from '@/components/ui/button'
-import Image from 'next/image'
 import { ChevronsUpDown, LogIn } from 'lucide-react'
+import { Suspense } from 'react'
 
 type AuthButtonProps = {
   variant?: 'default' | 'expanded'
@@ -66,12 +66,18 @@ function SignedInExpanded() {
   return (
     <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/40 w-full">
       {/* Avatar */}
-      <Image
+      {/* <Image
         src={user.imageUrl}
         alt="avatar"
         width={40}
         height={40}
         className="rounded-full"
+      /> */}
+      <UserAvatar
+        name={user.fullName}
+        imageUrl={user.imageUrl}
+        userId={user.id}
+        size="md"
       />
 
       {/* User info */}

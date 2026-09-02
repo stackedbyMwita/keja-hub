@@ -1,9 +1,9 @@
 import { Card, CardContent } from '@/components/ui/card'
-import { LucideIcon } from 'lucide-react'
+import { ChevronRight, ChevronRightCircle, LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// Types
 
 type StatColor = 'default' | 'blue' | 'green' | 'amber' | 'red' | 'purple' | 'primary'
 
@@ -12,7 +12,7 @@ export interface StatItem {
   value:    number | string
   icon:     LucideIcon
   color?:   StatColor
-  sub?:     string           // subtitle below value
+  sub?:     string
   href?:    string           // makes the card clickable
   trend?:   number           // positive = growth %, negative = decline %
 }
@@ -20,11 +20,10 @@ export interface StatItem {
 interface StatsGridProps {
   stats:    StatItem[]
   cols?:    2 | 3 | 4 | 6    // grid columns — default 4
-  compact?: boolean           // smaller padding
+  compact?: boolean // smaller padding
 }
 
-// ── Color map ─────────────────────────────────────────────────────────────────
-
+// Color map
 const COLOR_MAP: Record<StatColor, { icon: string; bg: string; border: string }> = {
   default: { icon: 'text-foreground',  bg: 'bg-muted',                                     border: 'border-border'                                     },
   primary: { icon: 'text-primary',     bg: 'bg-primary/10',                                border: 'border-primary/20'                                 },
@@ -86,7 +85,8 @@ export function StatsGrid({ stats, cols = 4, compact = false }: StatsGridProps) 
             {/* Clickable hint */}
             {stat.href && (
               <p className="text-xs text-muted-foreground group-hover:text-foreground transition-colors flex items-center gap-1 mt-auto pt-1">
-                View →
+                View
+                <ChevronRightCircle size={16}/>
               </p>
             )}
           </CardContent>
@@ -96,7 +96,7 @@ export function StatsGrid({ stats, cols = 4, compact = false }: StatsGridProps) 
           return (
             <Link key={stat.label} href={stat.href} className="block group">
               <Card className={cn(
-                'border transition-all hover:shadow-md group-hover:border-opacity-60 h-full',
+                'transition-all hover:shadow-md group-hover:border-opacity-60 h-full',
                 colors.border
               )}>
                 {content}
@@ -106,7 +106,7 @@ export function StatsGrid({ stats, cols = 4, compact = false }: StatsGridProps) 
         }
 
         return (
-          <Card key={stat.label} className={cn('border h-full', colors.border)}>
+          <Card key={stat.label} className={cn('h-full', colors.border)}>
             {content}
           </Card>
         )

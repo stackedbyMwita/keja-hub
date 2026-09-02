@@ -1,5 +1,6 @@
 'use client'
 
+import { UserAvatar } from '@/components/Components/UserAvatar'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel,
@@ -7,7 +8,6 @@ import {
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -90,7 +90,7 @@ export default function AdminModeratorsPage() {
     <DashboardPageWrapper>
 
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-4 border-b border-border/50 pb-5">
+      <div className="flex items-center justify-between flex-wrap gap-4 pb-5">
         <div>
           <h1 className="text-2xl font-heading font-bold text-foreground">Moderators</h1>
           <p className="text-sm text-muted-foreground mt-1">
@@ -157,13 +157,12 @@ export default function AdminModeratorsPage() {
           <Card key={mod.id} className="border-border/60">
             <CardContent className="p-5 md:p-6">
               <div className="flex items-start gap-4">
-
-                <Avatar className="w-11 h-11 shrink-0">
-                  <AvatarImage src={mod.avatar_url} />
-                  <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
-                    {mod.full_name?.charAt(0) ?? 'M'}
-                  </AvatarFallback>
-                </Avatar>
+                <UserAvatar
+                  name={mod.full_name}
+                  imageUrl={mod.avatar_url}
+                  userId={mod.id}
+                  size="md"
+                />
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-3 flex-wrap">

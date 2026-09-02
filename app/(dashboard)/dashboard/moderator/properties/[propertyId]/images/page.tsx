@@ -14,13 +14,7 @@ import { ImagePreviewGrid } from './_components/ImagePreviewGrid'
 import { ImageUploadZone } from './_components/ImageUploadZone'
 import { UploadConfirmButton } from './_components/UploadConfirmButton'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
-
-const TYPE_LABELS: Record<string, string> = {
-  single_room: 'Single Room', double_room: 'Double Room',
-  bedsitter: 'Bedsitter', studio: 'Studio',
-  '1br': '1 Bedroom', '2br': '2 Bedrooms', '3br': '3 Bedrooms',
-  '4br_plus': '4+ Bedrooms', commercial: 'Shop/Commercial',
-}
+import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
 
 interface PendingImage {
   id: string; file: File; preview: string
@@ -176,7 +170,7 @@ export default function ModeratorImagesPage() {
               <div className="flex items-center justify-between gap-3">
                 <CardTitle className="flex items-center gap-2 text-sm font-semibold">
                   <Home className="h-4 w-4 text-primary" />
-                  {TYPE_LABELS[unit.type] ?? unit.type}
+                  {getPropertyTypeLabel(unit.type)}
                 </CardTitle>
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-muted-foreground">
@@ -210,7 +204,7 @@ export default function ModeratorImagesPage() {
               {/* Upload zone */}
               <ImageUploadZone
                 unitTypeId={unit.id}
-                unitTypeLabel={TYPE_LABELS[unit.type] ?? unit.type}
+                unitTypeLabel={getPropertyTypeLabel(unit.type)}
                 onImagesReady={handleImagesReady}
                 existingCount={unit.unit_images.length}
               />

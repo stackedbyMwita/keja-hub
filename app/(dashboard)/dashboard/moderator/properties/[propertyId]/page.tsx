@@ -1,22 +1,22 @@
-import { auth } from '@clerk/nextjs/server'
-import { createClient } from '@supabase/supabase-js'
-import { connection } from 'next/server'
-import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import {
-  ChevronLeft, MapPin, Building2, Home,
-  CheckCircle2, Clock, XCircle, Images, Trophy,
-} from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { Card, CardContent } from '@/components/ui/card'
+import { StatusBadge } from '@/components/Components/StatusBadge'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 import { PropertyApprovedActions } from '@/components/moderator/PropertyApprovedActions'
 import { PropertyReviewActions } from '@/components/moderator/PropertyReviewActions'
-import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
+import { Card, CardContent } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
 import { formatKenyaPhone } from '@/lib/phone'
-import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
-import { StatusBadge } from '@/components/Components/StatusBadge'
+import { auth } from '@clerk/nextjs/server'
+import { createClient } from '@supabase/supabase-js'
+import {
+  Building2,
+  ChevronLeft,
+  Home,
+  MapPin
+} from 'lucide-react'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { connection } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
@@ -24,13 +24,6 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
-
-const TYPE_LABELS: Record<string, string> = {
-  single_room: 'Single Room', double_room: 'Double Room',
-  bedsitter: 'Bedsitter', studio: 'Studio',
-  '1br': '1 Bedroom', '2br': '2 Bedrooms', '3br': '3 Bedrooms',
-  '4br_plus': '4+ Bedrooms', commercial: 'Shop/Commercial',
-}
 
 interface PageProps { params: Promise<{ propertyId: string }> }
 
@@ -210,8 +203,9 @@ export default async function ModeratorPropertyDetailPage({ params }: PageProps)
                     <div className="flex items-center gap-2">
                       <Home className="h-4 w-4 text-primary shrink-0" />
                       <p className="text-sm font-semibold text-foreground">
-                        {TYPE_LABELS[unit.type] ?? unit.type}
+                        {getPropertyTypeLabel(unit.type)}
                       </p>
+                      
                     </div>
                     <div className="flex items-center gap-2">
                       {isApproved && (

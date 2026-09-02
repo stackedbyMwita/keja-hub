@@ -5,7 +5,7 @@ import Image from 'next/image'
 import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
 import HeroStats from './HeroStats'
 
-// Explicitly type the variants to fix the TypeScript error
+// variants
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -31,7 +31,7 @@ const itemVariants: Variants = {
   },
 }
 
-export function HeroGemini() {
+export function HeroSection() {
   return (
     <section className="relative pt-16 pb-12 lg:pt-24 lg:pb-16 border-b border-border overflow-hidden">
       
@@ -43,7 +43,7 @@ export function HeroGemini() {
         
         {/* ── Left — Text Content ─────────────────────────────────────── */}
         <motion.div 
-          className="flex flex-col gap-6 max-w-2xl w-full"
+          className="flex flex-col gap-6 max-w-2xl w-full items-center text-center md:text-right md:items-end"
           variants={containerVariants}
           initial="hidden"
           animate="visible"

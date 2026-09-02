@@ -30,7 +30,7 @@ const itemVariants: Variants = {
 export default function HeroStats() {
   return (
     <motion.div
-      className="flex items-center gap-8 pt-4"
+      className="flex items-center gap-6 pt-4"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -50,7 +50,7 @@ export default function HeroStats() {
             variants={itemVariants}
             className="group cursor-default transition-transform duration-300 hover:-translate-y-1"
           >
-            <p className="text-3xl font-bold text-foreground tabular-nums tracking-tight group-hover:text-primary transition-colors">
+            <p className="text-lg font-black text-foreground tabular-nums tracking-tight group-hover:text-primary transition-colors">
               <CountUp 
                 end={stat.value} 
                 suffix={stat.suffix} 
@@ -60,7 +60,7 @@ export default function HeroStats() {
                 scrollSpyOnce={true}
               />
             </p>
-            <p className="text-xs font-medium text-muted-foreground mt-1 uppercase tracking-wider">
+            <p className="text-xs font-medium text-muted-foreground mt-1 tracking-wider">
               {stat.label}
             </p>
           </motion.div>

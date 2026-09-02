@@ -11,12 +11,30 @@ const supabase = createClient(
 )
 
 // HELPERS
-function getAvatar(data: any): string {
+/**
+ * Replace your getAvatar function in app/api/webhooks/clerk/route.ts
+ * with this version — returns null instead of DiceBear fallback.
+ * The UserAvatar component handles initials rendering client-side.
+ */
+
+function getAvatar(data: any): string | null {
+  // Google OAuth — real photo
   const google = data.external_accounts?.find(
     (a: any) => a.provider === 'google'
   )
   if (google?.image_url) return google.image_url
-  return `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.username ?? data.id}`
+
+  // Clerk hosted image (if user uploaded one)
+  if (
+    data.image_url &&
+    !data.image_url.includes('dicebear') &&
+    data.has_image === true
+  ) {
+    return data.image_url
+  }
+
+  // No real image — return null, UserAvatar handles initials
+  return null
 }
 
 function getName(data: any): { first: string | null; last: string | null; full: string | null } {

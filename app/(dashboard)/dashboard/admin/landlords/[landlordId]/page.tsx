@@ -1,8 +1,8 @@
 import { AdminLandlordActions } from '@/components/admin/AdminLandlordActions'
 import { LandlordApplicationOverride } from '@/components/admin/LandlordApplicationOverride'
 import { StatusBadge } from '@/components/Components/StatusBadge'
+import { UserAvatar } from '@/components/Components/UserAvatar'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -94,12 +94,12 @@ export default async function AdminLandlordDetailPage({ params }: PageProps) {
 
       {/* Header */}
       <div className="flex items-start gap-4 flex-wrap">
-        <Avatar className="w-14 h-14 shrink-0">
-          <AvatarImage src={landlord.avatar_url} />
-          <AvatarFallback className="bg-primary/10 text-primary font-bold text-lg">
-            {landlord.full_name?.charAt(0) ?? 'L'}
-          </AvatarFallback>
-        </Avatar>
+        <UserAvatar
+          name={landlord.full_name}
+          imageUrl={landlord.avatar_url}
+          userId={landlord.id}
+          size="md"
+        />
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <h1 className="text-xl font-semibold text-foreground">

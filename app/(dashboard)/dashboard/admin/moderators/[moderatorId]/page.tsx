@@ -1,19 +1,26 @@
+import { AdminModeratorDetailActions } from '@/components/admin/AdminModeratorDetailActions'
+import { StatItem, StatsGrid } from '@/components/Components/StatsGrid'
+import { UserAvatar } from '@/components/Components/UserAvatar'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
 import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
-import { connection } from 'next/server'
-import { notFound, redirect } from 'next/navigation'
-import Link from 'next/link'
 import {
-  ChevronLeft, ShieldCheck, CheckCircle2,
-  XCircle, Star, ImageIcon, ClipboardList,
-  ActivitySquare, Mail, Phone,
+  ActivitySquare,
+  CheckCircle2,
+  ChevronLeft,
+  ClipboardList,
+  ImageIcon,
+  Mail, Phone,
+  ShieldCheck,
+  Star,
+  XCircle,
 } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Separator } from '@/components/ui/separator'
-import { AdminModeratorDetailActions } from '@/components/admin/AdminModeratorDetailActions'
-import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import Link from 'next/link'
+import { notFound, redirect } from 'next/navigation'
+import { connection } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 
@@ -88,13 +95,37 @@ export default async function AdminModeratorDetailPage({ params }: PageProps) {
   const monthActions   = activity.filter(l => l.created_at >= monthStart).length
   const lastActive     = activity[0]?.created_at ?? null
 
-  const stats = [
-    { label: 'Approved',       value: totalApproved, icon: CheckCircle2, color: 'text-green-600',   bg: 'bg-green-50 dark:bg-green-950/30'  },
-    { label: 'Rejected',       value: totalRejected, icon: XCircle,      color: 'text-destructive', bg: 'bg-destructive/5'                  },
-    { label: 'Scored',         value: totalScored,   icon: Star,         color: 'text-primary',     bg: 'bg-primary/10'                     },
-    { label: 'Images',         value: totalImages,   icon: ImageIcon,    color: 'text-blue-600',    bg: 'bg-blue-50 dark:bg-blue-950/30'    },
-    { label: 'This month',     value: monthActions,  icon: ActivitySquare,color: 'text-amber-600',  bg: 'bg-amber-50 dark:bg-amber-950/30'  },
-    { label: 'Total actions',  value: activity.length,icon: ClipboardList,color: 'text-foreground', bg: 'bg-muted'                          },
+  const stats: StatItem[] = [
+    {
+      label: 'Approved',
+      value: totalApproved,
+      icon: CheckCircle2
+    },
+    {
+      label: 'Rejected',
+      value: totalRejected,
+      icon: XCircle
+    },
+    {
+      label: 'Scored',
+      value: totalScored,  
+      icon: Star
+    },
+    {
+      label: 'Images',
+      value: totalImages, 
+      icon: ImageIcon
+    },
+    {
+      label: 'This month',
+      value: monthActions,
+      icon: ActivitySquare
+    },
+    {
+      label: 'Total actions',
+      value: activity.length,
+      icon: ClipboardList
+    },
   ]
 
   return (
@@ -112,12 +143,12 @@ export default async function AdminModeratorDetailPage({ params }: PageProps) {
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-4">
-          <Avatar className="w-14 h-14 shrink-0">
-            <AvatarImage src={moderator.avatar_url} />
-            <AvatarFallback className="bg-blue-50 dark:bg-blue-950/30 text-blue-600 font-bold text-lg">
-              {moderator.full_name?.charAt(0) ?? 'M'}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar
+            name={moderator.full_name}
+            imageUrl={moderator.avatar_url}
+            userId={moderator.id}
+            size="md"
+          />
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="text-xl font-semibold text-foreground">
@@ -163,21 +194,7 @@ export default async function AdminModeratorDetailPage({ params }: PageProps) {
         <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
           Performance
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {stats.map((stat) => (
-            <Card key={stat.label} className="border-border/60">
-              <CardContent className="p-4 flex items-center gap-3">
-                <div className={`w-8 h-8 rounded-lg ${stat.bg} flex items-center justify-center shrink-0`}>
-                  <stat.icon className={`h-4 w-4 ${stat.color}`} />
-                </div>
-                <div>
-                  <p className="text-xl font-bold text-foreground tabular-nums">{stat.value}</p>
-                  <p className="text-xs text-muted-foreground">{stat.label}</p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <StatsGrid cols={3} stats={stats}/>
       </div>
 
       {/* Info row */}

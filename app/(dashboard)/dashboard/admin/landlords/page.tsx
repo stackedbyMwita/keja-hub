@@ -1,29 +1,31 @@
 'use client'
 
-import { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
+import { UserAvatar } from '@/components/Components/UserAvatar'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel,
   AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import {
-  Building2, MapPin, Search,
-  Loader2, ShieldAlert, ShieldCheck,
-} from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import { formatKenyaPhone } from '@/lib/phone'
-import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  ArrowRight,
+  Building2,
+  Loader2,
+  MapPin, Search,
+  ShieldAlert, ShieldCheck,
+} from 'lucide-react'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 // Add before suspend button:
 
@@ -78,7 +80,7 @@ export default function AdminLandlordsPage() {
     <DashboardPageWrapper>
 
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-4 border-b border-border/50 pb-5">
+      <div className="flex items-center justify-between flex-wrap gap-4 pb-5">
         <div>
           <h1 className="text-2xl font-heading font-bold text-foreground">Landlords</h1>
           <p className="text-sm text-muted-foreground mt-1">
@@ -123,12 +125,12 @@ export default function AdminLandlordsPage() {
             <Card key={landlord.id} className="border-border/60">
               <CardContent className="p-5 md:p-6">
                 <div className="flex items-start gap-4">
-                  <Avatar className="w-11 h-11 shrink-0">
-                    <AvatarImage src={landlord.avatar_url} />
-                    <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
-                      {landlord.full_name?.charAt(0) ?? 'L'}
-                    </AvatarFallback>
-                  </Avatar>
+                  <UserAvatar
+                    name={landlord.full_name}
+                    imageUrl={landlord.avatar_url}
+                    userId={landlord.id}
+                    size="md"
+                  />
 
                   <div className="flex-1 min-w-0">
 

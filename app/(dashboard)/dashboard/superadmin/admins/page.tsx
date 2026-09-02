@@ -1,20 +1,20 @@
 'use client'
 
-import { useState } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import { Card, CardContent } from '@/components/ui/card'
+import { UserAvatar } from '@/components/Components/UserAvatar'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import { KenyaPhoneBadge } from '@/components/KenyaPhoneBadge'
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog'
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
-import { Crown, UserPlus, Loader2, XCircle, CheckCircle2, ArrowDownCircle } from 'lucide-react'
-import { KenyaPhoneBadge } from '@/components/KenyaPhoneBadge'
 import { timeAgo } from '@/lib/date'
-import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { ArrowDownCircle, CheckCircle2, Crown, Loader2, UserPlus, XCircle } from 'lucide-react'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 async function fetchAdmins() {
   const res = await fetch('/api/superadmin/admins')
@@ -133,12 +133,12 @@ export default function SuperadminAdminsPage() {
           <Card key={admin.id} className="border-border/60">
             <CardContent className="p-5 md:p-6">
               <div className="flex items-start gap-4">
-                <Avatar className="w-11 h-11 shrink-0">
-                  <AvatarImage src={admin.avatar_url} />
-                  <AvatarFallback className="bg-amber-100 text-amber-700 font-semibold text-sm dark:bg-amber-950/40 dark:text-amber-400">
-                    {admin.full_name?.charAt(0) ?? 'A'}
-                  </AvatarFallback>
-                </Avatar>
+                <UserAvatar
+                  name={admin.full_name}
+                  imageUrl={admin.avatar_url}
+                  userId={admin.id}
+                  size="md"
+                />
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-3 flex-wrap">

@@ -15,13 +15,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { EditUnitSheet } from '../LandlordComponents/properties/EditUnitSheet'
-
-const TYPE_LABELS: Record<string, string> = {
-  single_room: 'Single Room', double_room: 'Double Room',
-  bedsitter: 'Bedsitter', studio: 'Studio',
-  '1br': '1 Bedroom', '2br': '2 Bedrooms', '3br': '3 Bedrooms',
-  '4br_plus': '4+ Bedrooms', commercial: 'Shop/Commercial',
-}
+import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
 
 interface UnitTypeCardProps {
   unit:             any
@@ -110,7 +104,7 @@ export function UnitTypeCard({
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-semibold text-foreground">
-                  {TYPE_LABELS[unit.type] ?? unit.type}
+                  {getPropertyTypeLabel(unit.type)}
                 </p>
                 <p className="text-xs text-muted-foreground">
                   KES {unit.price.toLocaleString()}/mo · {unit.total_count} total unit{unit.total_count !== 1 ? 's' : ''}
@@ -153,7 +147,7 @@ export function UnitTypeCard({
                     <AlertDialogHeader>
                       <AlertDialogTitle>Delete this unit type?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This will permanently delete the {TYPE_LABELS[unit.type]} unit type and cannot be undone.
+                        This will permanently delete the {getPropertyTypeLabel(unit.type)} unit type and cannot be undone.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

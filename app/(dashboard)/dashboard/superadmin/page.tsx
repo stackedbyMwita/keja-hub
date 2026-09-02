@@ -65,7 +65,7 @@ export default async function SuperadminOverviewPage() {
     <DashboardPageWrapper>
 
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-4 border-b border-border/50 pb-5">
+      <div className="flex items-center justify-between flex-wrap gap-4 pb-5">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <Crown className="h-5 w-5 text-amber-500" />

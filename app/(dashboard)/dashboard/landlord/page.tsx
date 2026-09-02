@@ -9,6 +9,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 import { PropertyList, PropertyStatus } from '@/components/Components/DataTable'
 import { StatCard } from '@/components/Components/StatCard'
+import { StatItem, StatsGrid } from '@/components/Components/StatsGrid'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -16,6 +17,8 @@ const supabase = createClient(
 )
 
 export const dynamic = 'force-dynamic'
+
+
 
 export default async function LandlordOverviewPage() {
   await connection()
@@ -56,6 +59,29 @@ export default async function LandlordOverviewPage() {
     }
   })
 
+  const stats: StatItem[] = [
+    {
+      label: 'Total properties',
+      value: totalProps ?? 0,
+      icon: Building2
+    },
+    {
+      label: 'Total units',
+      value: totalUnits ?? 0,
+      icon: Home
+    },
+    {
+      label: 'Available units',
+      value: availableUnits ?? 0,
+      icon: Building2
+    },
+    {
+      label: 'Approved properties',
+      value: approvedProps ?? 0,
+      icon: CheckCircle2
+    },
+  ]
+
   return (
     <DashboardPageWrapper>
       
@@ -76,36 +102,7 @@ export default async function LandlordOverviewPage() {
       </div>
 
       {/* Analytics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard 
-          title="Total properties" 
-          value={totalProps} 
-          icon={Building2} 
-          iconBg="bg-primary/10"
-          iconColor="text-primary"
-        />
-        <StatCard 
-          title="Total units" 
-          value={totalUnits} 
-          icon={Home} 
-          iconBg="bg-blue-500/10"
-          iconColor="text-blue-500 dark:text-blue-400"
-        />
-        <StatCard 
-          title="Available units" 
-          value={availableUnits} 
-          icon={CheckCircle2} 
-          iconBg="bg-emerald-500/10"
-          iconColor="text-emerald-600 dark:text-emerald-400"
-        />
-        <StatCard 
-          title="Approved" 
-          value={approvedProps} 
-          icon={CheckCircle2} 
-          iconBg="bg-primary/10"
-          iconColor="text-primary"
-        />
-      </div>
+      <StatsGrid cols={4} stats={stats} />
 
       {/* Conditional Rendering: Empty State vs Data List */}
       {totalProps === 0 ? (

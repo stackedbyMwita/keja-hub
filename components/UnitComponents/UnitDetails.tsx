@@ -3,6 +3,7 @@
 import { MapPin, CheckCircle2, XCircle } from 'lucide-react'
 import { motion, Variants } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
 
 interface Unit {
   id: string
@@ -19,13 +20,6 @@ interface Unit {
 
 interface UnitDetailsProps {
   unit: Unit
-}
-
-const TYPE_LABELS: Record<string, string> = {
-  bedsitter: 'Bedsitter',
-  studio: 'Studio',
-  '1br': '1 Bedroom',
-  '2br': '2 Bedroom',
 }
 
 // Explicitly type the variants to fix the TypeScript error
@@ -55,7 +49,7 @@ export function UnitDetails({ unit }: UnitDetailsProps) {
       <motion.div variants={itemVariants} className="flex flex-col gap-4 pb-8 border-b border-border/60">
         <div className="flex flex-wrap items-center gap-3">
           <span className="inline-flex items-center h-7 px-3 rounded-full text-xs font-semibold bg-muted text-foreground border border-border shadow-sm">
-            {TYPE_LABELS[unit.type] ?? unit.type}
+            {getPropertyTypeLabel(unit.type)}
           </span>
           <span
             className={cn(

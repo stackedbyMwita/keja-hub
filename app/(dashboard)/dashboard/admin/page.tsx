@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Users, Building2, ShieldCheck, Unlock, Clock, AlertTriangle, ArrowRight, CheckCircle2 } from 'lucide-react'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import { StatItem, StatsGrid } from '@/components/Components/StatsGrid'
 
 export const dynamic = 'force-dynamic'
 
@@ -37,11 +38,11 @@ export default async function AdminOverviewPage() {
     supabase.from('activity_logs').select('id, action, metadata, created_at, profiles!activity_logs_actor_id_fkey(full_name, role)').order('created_at', { ascending: false }).limit(8),
   ])
 
-  const stats = [
-    { label: 'Total users', value: totalUsers.count ?? 0, sub: `+${newUsersMonth.count ?? 0} this month`, icon: Users, color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-950/30' },
-    { label: 'Landlords', value: totalLandlords.count ?? 0, sub: 'Active landlords', icon: Building2, color: 'text-primary', bg: 'bg-primary/10' },
-    { label: 'Moderators', value: totalModerators.count ?? 0, sub: 'Active moderators', icon: ShieldCheck, color: 'text-green-600', bg: 'bg-green-50 dark:bg-green-950/30' },
-    { label: 'Contact unlocks', value: totalUnlocks.count ?? 0, sub: `${monthUnlocks.count ?? 0} this month`,   icon: Unlock,      color: 'text-amber-600', bg: 'bg-amber-50 dark:bg-amber-950/30' },
+  const stats: StatItem[] = [
+    { label: 'Total users', value: totalUsers.count ?? 0, sub: `+${newUsersMonth.count ?? 0} this month`, icon: Users },
+    { label: 'Landlords', value: totalLandlords.count ?? 0, sub: 'Active landlords', icon: Building2 },
+    { label: 'Moderators', value: totalModerators.count ?? 0, sub: 'Active moderators', icon: ShieldCheck },
+    { label: 'Contact unlocks', value: totalUnlocks.count ?? 0, sub: `${monthUnlocks.count ?? 0} this month`,   icon: Unlock },
   ]
 
   const attention = [
@@ -72,28 +73,13 @@ export default async function AdminOverviewPage() {
     <DashboardPageWrapper>
 
       {/* Header */}
-      <div className="border-b border-border/50 pb-5">
+      <div className="pb-5">
         <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground">Admin Overview</h1>
         <p className="text-sm text-muted-foreground mt-1">Platform activity summary</p>
       </div>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {stats.map((stat) => (
-          <Card key={stat.label} className="border-border/60">
-            <CardHeader className="pb-2 pt-5 px-5">
-              <div className={`w-9 h-9 rounded-xl ${stat.bg} flex items-center justify-center`}>
-                <stat.icon className={`h-4 w-4 ${stat.color}`} />
-              </div>
-            </CardHeader>
-            <CardContent className="px-5 pb-5">
-              <p className="text-3xl font-bold text-foreground tabular-nums">{stat.value.toLocaleString()}</p>
-              <p className="text-xs font-semibold text-foreground mt-1">{stat.label}</p>
-              <p className="text-xs text-muted-foreground mt-0.5">{stat.sub}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <StatsGrid cols={4} stats={stats} />
 
       {/* Attention items */}
       <Card className="border-border/60">

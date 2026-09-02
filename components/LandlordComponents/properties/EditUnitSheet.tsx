@@ -13,19 +13,13 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
+import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
 
 const COMMON_AMENITIES = [
   'Water included','Electricity','Security','Parking',
   'WiFi ready','En-suite','Balcony','Generator backup',
   'Borehole water','CCTV','Close to town','Gated compound',
 ]
-
-const TYPE_LABELS: Record<string, string> = {
-  single_room: 'Single Room', double_room: 'Double Room',
-  bedsitter: 'Bedsitter', studio: 'Studio',
-  '1br': '1 Bedroom', '2br': '2 Bedrooms', '3br': '3 Bedrooms',
-  '4br_plus': '4+ Bedrooms', commercial: 'Shop/Commercial',
-}
 
 interface EditUnitSheetProps {
   open:       boolean
@@ -90,7 +84,7 @@ export function EditUnitSheet({ open, onClose, propertyId, unit }: EditUnitSheet
     <Sheet open={open} onOpenChange={onClose}>
       <SheetContent className="w-full sm:max-w-md overflow-y-auto">
         <SheetHeader className="mb-6">
-          <SheetTitle>Edit {TYPE_LABELS[unit.type] ?? unit.type}</SheetTitle>
+          <SheetTitle>Edit {getPropertyTypeLabel(unit.type)}</SheetTitle>
           <SheetDescription>
             Update price, count, and details. Unit type cannot be changed.
           </SheetDescription>

@@ -168,7 +168,7 @@ function PropertyList({
         const totalUnits = units.reduce((a: number, u: any) => a + u.total_count, 0)
         const unitTypes  = units.map((u: any) => getPropertyTypeLabel(u.type, { short: true }))
         const landlord   = property.profiles
-        const imageCount = property.unit_images?.length ?? 0
+        const imageCount = unitTypes.reduce((acc: number, u: any) => acc + u.unit_images.length, 0)
 
         return (
           <Card key={property.id} className="hover:shadow-md transition-all duration-200 border-border/60 rounded-2xl overflow-hidden w-full">

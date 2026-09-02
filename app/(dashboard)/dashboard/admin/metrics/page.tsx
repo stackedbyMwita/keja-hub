@@ -1,3 +1,4 @@
+import { StatItem, StatsGrid } from '@/components/Components/StatsGrid'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { createClient } from '@supabase/supabase-js'
@@ -47,49 +48,41 @@ export default async function AdminMetricsPage() {
   const userGrowth   = newUsersLastMonth.count ? Math.round(((newUsersMonth.count ?? 0) - (newUsersLastMonth.count ?? 0)) / (newUsersLastMonth.count ?? 1) * 100) : 0
   const unlockGrowth = lastMonthUnlocks.count  ? Math.round(((monthUnlocks.count ?? 0) - (lastMonthUnlocks.count ?? 0)) / (lastMonthUnlocks.count ?? 1) * 100) : 0
 
-  const stats = [
+  const stats: StatItem[] = [
     {
-      title: 'Total users',
+      label: 'Total users',
       value: (totalUsers.count ?? 0).toLocaleString(),
       sub:   `+${newUsersMonth.count ?? 0} this month`,
-      growth: userGrowth,
+      trend: userGrowth,
       icon:   Users,
-      color:  'text-blue-600',
-      bg:     'bg-blue-50 dark:bg-blue-950/30',
     },
     {
-      title: 'Active landlords',
+      label: 'Active landlords',
       value: (totalLandlords.count ?? 0).toLocaleString(),
       sub:   `${((totalLandlords.count ?? 0) / Math.max(totalUsers.count ?? 1, 1) * 100).toFixed(1)}% conversion rate`,
-      growth: null,
+      trend: 0,
       icon:   Building2,
-      color:  'text-primary',
-      bg:     'bg-primary/10',
     },
     {
-      title: 'Contact unlocks',
+      label: 'Contact unlocks',
       value: (totalUnlocks.count ?? 0).toLocaleString(),
       sub:   `${monthUnlocks.count ?? 0} this month`,
-      growth: unlockGrowth,
+      trend: unlockGrowth,
       icon:   Unlock,
-      color:  'text-amber-600',
-      bg:     'bg-amber-50 dark:bg-amber-950/30',
     },
     {
-      title: 'Properties approved',
+      label: 'Properties approved',
       value: (approvedProps.count ?? 0).toLocaleString(),
       sub:   `${approvedActivities.count ?? 0} approved this month`,
-      growth: null,
+      trend: 0,
       icon:   ShieldCheck,
-      color:  'text-green-600',
-      bg:     'bg-green-50 dark:bg-green-950/30',
     },
   ]
 
   return (
     <DashboardPageWrapper>
 
-      <div className="border-b border-border/50 pb-5">
+      <div className="pb-5">
         <h1 className="text-2xl font-heading font-bold text-foreground">Platform Metrics</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Overview of KéjaLink platform performance
@@ -97,7 +90,8 @@ export default async function AdminMetricsPage() {
       </div>
 
       {/* Key stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <StatsGrid cols={4} stats={stats} />
+      {/* <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat) => (
           <Card key={stat.title} className="border-border/60">
             <CardContent className="p-5">
@@ -116,7 +110,7 @@ export default async function AdminMetricsPage() {
             </CardContent>
           </Card>
         ))}
-      </div>
+      </div> */}
 
       {/* Property breakdown */}
       <Card className="border-border/60">
