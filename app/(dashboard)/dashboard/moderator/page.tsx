@@ -88,7 +88,7 @@ async function OverviewContent() {
   const propsFullyCovered   = approvedProps.length - propsWithNoImages
 
   const queueStats: StatItem[] = [
-    { label: 'Landlord applications pending', value: pendingLandlords.count ?? 0, icon: ClipboardList, href: '/dashboard/moderator/queue' },
+    { label: 'Landlord applications pending', value: pendingLandlords.count ?? 0, icon: ClipboardList, href: '/dashboard/moderator/landlord' },
     { label: 'Properties pending review', value: pendingProperties.count ?? 0, icon: Building2, href: '/dashboard/moderator/properties' },
     { label: 'My actions this month', value: myMonthActions.count ?? 0, icon: CheckCircle2, href: '/dashboard/moderator/activity' },
   ]

@@ -1,8 +1,7 @@
 'use client'
 
-import { Phone, Mail, MapPin, ExternalLink } from 'lucide-react'
-import { KenyaPhoneBadge } from '../KenyaPhoneBadge'
 import { formatKenyaPhone } from '@/lib/phone'
+import { ExternalLink, Mail, MapPin, Phone } from 'lucide-react'
 
 interface Contact {
   landlord_name: string
@@ -17,11 +16,6 @@ interface ContactDetailsProps {
 }
 
 export function ContactDetails({ contact }: ContactDetailsProps) {
-  const formattedPhone = contact.phone.replace(
-    /^254(\d{3})(\d{3})(\d{3})$/,
-    '+254 $1 $2 $3'
-  )
-
   return (
     <div className="flex flex-col gap-3 pt-4 border-t border-border">
       <p className="text-xs font-semibold text-muted-foreground tracking-widest">

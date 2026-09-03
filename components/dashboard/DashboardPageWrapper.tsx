@@ -10,7 +10,7 @@ export function DashboardPageWrapper({
   return (
     <div 
       // w-full ensures it shrinks on mobile, max-w-7xl caps it at 1280px on desktop
-      className={cn("flex flex-col gap-6 w-full max-w-7xl m-2 mx-auto", className)} 
+      className={cn("flex flex-col gap-6 w-full max-w-7xl m-2 md:py-10 mx-auto", className)} 
       {...props}
     >
       {children}

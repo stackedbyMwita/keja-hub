@@ -4,19 +4,7 @@ import { MapPin, CheckCircle2, XCircle } from 'lucide-react'
 import { motion, Variants } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
-
-interface Unit {
-  id: string
-  type: string
-  name: string
-  property_name: string
-  price: number
-  county: string
-  location: string
-  description: string
-  amenities: string[]
-  available: boolean
-}
+import { Unit } from '@/types'
 
 interface UnitDetailsProps {
   unit: Unit

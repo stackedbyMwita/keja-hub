@@ -27,8 +27,6 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-// Add before suspend button:
-
 async function fetchLandlords() {
   const res = await fetch('/api/admin/landlords')
   if (!res.ok) {

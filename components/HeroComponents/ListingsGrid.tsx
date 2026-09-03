@@ -22,17 +22,17 @@ interface ListingsGridProps {
 export function ListingsGrid({ units, onUnitClick }: ListingsGridProps) {
   if (units.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 text-center">
-        <p className="text-2xl font-heading text-foreground mb-2">No units found</p>
-        <p className="text-sm text-muted-foreground max-w-xs">
-          Try adjusting your filters or search query to see more results.
+      <div className="flex flex-col items-center justify-center py-32 text-center px-4">
+        <h3 className="text-2xl font-semibold text-foreground mb-3">No exact matches</h3>
+        <p className="text-base text-muted-foreground max-w-md">
+          Try changing or removing some of your filters or adjusting your search area to find more homes.
         </p>
       </div>
     )
   }
 
   return (
-    <div className="grid py-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10">
+    <div className="grid py-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-3 gap-y-8 sm:gap-x-6 sm:gap-y-10">
       {units.map((unit) => (
         <ListingCard
           key={unit.id}

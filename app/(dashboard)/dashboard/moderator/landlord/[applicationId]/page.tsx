@@ -7,6 +7,7 @@ import { Separator } from '@/components/ui/separator'
 import { Badge } from '@/components/ui/badge'
 import { ReviewActions } from './_components/ReviewActions'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import { formatKenyaPhone } from '@/lib/phone'
 
 export const dynamic = 'force-dynamic'
 
@@ -66,8 +67,8 @@ export default async function ReviewPage({ params }: PageProps) {
       {/* Landlord details */}
       <Section title="Contact details">
         <Row label="Full name"       value={app.full_name} />
-        <Row label="Phone"           value={app.phone_number} />
-        <Row label="WhatsApp"        value={app.whatsapp_number ?? 'Not provided'} />
+        <Row label="Phone"           value={formatKenyaPhone(app.phone_number)} />
+        <Row label="WhatsApp"        value={formatKenyaPhone(app.whatsapp_number) ?? 'Not provided'} />
       </Section>
 
       <Separator />

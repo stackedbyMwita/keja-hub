@@ -1,31 +1,10 @@
+import type { ListingUnit } from '@/types'
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 const supabase = createClient(supabaseUrl!, supabaseKey!)
-
-export interface ListingUnit {
-  id:            string
-  type:          string
-  name:          string
-  property_name: string
-  price:         number
-  county:        string
-  location:      string
-  description:   string
-  amenities:     string[]
-  available:     boolean
-  cover_image:   string
-  images:        string[]
-  contact: {
-    landlord_name: string
-    phone:         string
-    email:         string
-    full_address:  string
-    maps_url:      string
-  }
-}
 
 export const TYPE_DISPLAY_NAMES: Record<string, string> = {
   single_room: 'Single Room',

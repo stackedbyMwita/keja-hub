@@ -2,16 +2,16 @@
 
 import { Filters, PriceRange, UnitType } from '@/components/HeroComponents/Filters'
 import { HeroSection } from '@/components/HeroComponents/HeroSection'
-import { ListingsGridGemini } from '@/components/HeroComponents/ListingsGridGemini'
 import { FooterMinimal } from '@/components/LandlordComponents/footer/footer-minimal'
 import { Navbar } from '@/components/LandlordComponents/navbar/Navbar'
 import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
-import type { ListingUnit } from '@/lib/api/listings'
 import { useAuth } from '@clerk/nextjs'
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 import { AuthModal } from '../(auth)/AuthModal'
+import { ListingsGrid } from '@/components/HeroComponents/ListingsGrid'
+import type { ListingUnit } from '@/types'
 
 interface LandingPageProps {
   initialListings: ListingUnit[]
@@ -106,7 +106,7 @@ export default function LandingPage({ initialListings }: LandingPageProps) {
       />
 
       <MaxWidthWrapper>
-        <ListingsGridGemini
+        <ListingsGrid
           units={filteredUnits}
           onUnitClick={handleUnitClick}
         />
