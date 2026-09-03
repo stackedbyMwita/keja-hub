@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
-import { TYPE_DISPLAY_NAMES } from './listings'
 import type { ListingUnit } from '@/types'
+import { TYPE_LABELS } from '../constants/propertyTypes'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -49,7 +49,7 @@ export async function fetchUnitById(unitId: string): Promise<ListingUnit | null>
   return {
     id:            unitType.id,
     type:          unitType.type,
-    name:          TYPE_DISPLAY_NAMES[unitType.type] ?? unitType.type,
+    name:          TYPE_LABELS[unitType.type] ?? unitType.type,
     property_name: property.name,
     price:         unitType.price,
     county:        property.county,

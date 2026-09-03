@@ -10,7 +10,6 @@ interface UnitDetailsProps {
   unit: Unit
 }
 
-// Explicitly type the variants to fix the TypeScript error
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -33,7 +32,7 @@ export function UnitDetails({ unit }: UnitDetailsProps) {
       className="flex flex-col gap-10"
     >
 
-      {/* ── Header ──────────────────────────────────────────────────────── */}
+      {/* Header */}
       <motion.div variants={itemVariants} className="flex flex-col gap-4 pb-8 border-b border-border/60">
         <div className="flex flex-wrap items-center gap-3">
           <span className="inline-flex items-center h-7 px-3 rounded-full text-xs font-semibold bg-muted text-foreground border border-border shadow-sm">
@@ -65,7 +64,7 @@ export function UnitDetails({ unit }: UnitDetailsProps) {
         </div>
       </motion.div>
 
-      {/* ── Description ─────────────────────────────────────────────────── */}
+      {/* Description */}
       <motion.div variants={itemVariants} className="flex flex-col gap-4 pb-8 border-b border-border/60">
         <h2 className="text-xl font-bold text-foreground">About this unit</h2>
         <p className="text-base text-muted-foreground leading-relaxed whitespace-pre-line">
@@ -73,7 +72,7 @@ export function UnitDetails({ unit }: UnitDetailsProps) {
         </p>
       </motion.div>
 
-      {/* ── Amenities ───────────────────────────────────────────────────── */}
+      {/* Amenities */}
       <motion.div variants={itemVariants} className="flex flex-col gap-5 pb-8 border-b border-border/60">
         <h2 className="text-xl font-bold text-foreground">What&apos;s included</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -89,7 +88,7 @@ export function UnitDetails({ unit }: UnitDetailsProps) {
         </div>
       </motion.div>
 
-      {/* ── Verification notice ──────────────────────────────────────────── */}
+      {/* Verification notice */}
       <motion.div variants={itemVariants} className="flex items-start gap-4 p-5 rounded-2xl bg-primary/5 border border-primary/15 shadow-sm">
         <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
           <CheckCircle2 className="h-5 w-5 text-primary" />

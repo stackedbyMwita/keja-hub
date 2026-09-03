@@ -1,13 +1,5 @@
-/**
- * KéjaLink UserAvatar
- * Consistent avatar across the entire app.
- * Shows real photo if available, falls back to styled initials.
- */
-
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
-
-// ── Color palette — deterministic from name/id ────────────────────────────────
 
 const COLORS = [
   { bg: 'bg-blue-100 dark:bg-blue-950/60',   text: 'text-blue-700 dark:text-blue-300'   },
@@ -37,8 +29,6 @@ function getInitials(name: string | null | undefined): string {
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase()
 }
 
-// ── Size map ──────────────────────────────────────────────────────────────────
-
 const SIZE_MAP = {
   xs:  { avatar: 'w-6 h-6',   text: 'text-[10px] font-bold' },
   sm:  { avatar: 'w-8 h-8',   text: 'text-xs font-bold'     },
@@ -50,12 +40,10 @@ const SIZE_MAP = {
 
 type AvatarSize = keyof typeof SIZE_MAP
 
-// ── Component ─────────────────────────────────────────────────────────────────
-
 interface UserAvatarProps {
   name?:      string | null
   imageUrl?:  string | null
-  userId?:    string        // used as color seed if no name
+  userId?:    string
   size?:      AvatarSize
   className?: string
 }

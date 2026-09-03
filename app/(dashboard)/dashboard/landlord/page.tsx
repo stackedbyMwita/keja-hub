@@ -1,15 +1,15 @@
 import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
-import { connection } from 'next/server'
+import { Building2, CheckCircle2, Home, PlusCircle } from 'lucide-react'
 import Link from 'next/link'
-import { Building2, Home, CheckCircle2, PlusCircle } from 'lucide-react'
+import { connection } from 'next/server'
 
+import { PropertyList } from '@/components/Components/DataTable'
+import { StatItem, StatsGrid } from '@/components/Components/StatsGrid'
+import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
-import { PropertyList, PropertyStatus } from '@/components/Components/DataTable'
-import { StatCard } from '@/components/Components/StatCard'
-import { StatItem, StatsGrid } from '@/components/Components/StatsGrid'
+import { PropertyStatus } from '@/types'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,

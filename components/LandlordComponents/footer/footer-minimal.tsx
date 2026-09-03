@@ -1,7 +1,7 @@
+import { AppLogo } from "@/components/logo/Logo"
 import { APP_CONSTANTS } from "@/constants"
 import { FOOTER_COLUMNS, FOOTER_SOCIALS } from "@/constants/menus"
 import Link from "next/link"
-import { AppLogo } from "@/components/logo/Logo"
 import { Grain } from "./grain-texture/grain"
 import { WordMark } from "./WordMark"
 

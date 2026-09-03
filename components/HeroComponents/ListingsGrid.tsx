@@ -1,18 +1,7 @@
 'use client'
 
+import { Unit } from '@/types'
 import { ListingCard } from './ListingsCard'
-
-interface Unit {
-  id: string
-  type: string
-  name: string
-  property_name: string
-  price: number
-  county: string
-  location: string
-  cover_image: string
-  available: boolean
-}
 
 interface ListingsGridProps {
   units: Unit[]

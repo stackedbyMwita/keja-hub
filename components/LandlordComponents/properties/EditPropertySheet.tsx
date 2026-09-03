@@ -1,28 +1,20 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
-import { Loader2, ChevronDown } from 'lucide-react'
-import {
-  Sheet, SheetContent, SheetHeader,
-  SheetTitle, SheetDescription,
-} from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import {
+  Sheet, SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet'
+import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
-
-const KENYAN_COUNTIES = [
-  'Baringo','Bomet','Bungoma','Busia','Elgeyo-Marakwet','Embu','Garissa',
-  'Homa Bay','Isiolo','Kajiado','Kakamega','Kericho','Kiambu','Kilifi',
-  'Kirinyaga','Kisii','Kisumu','Kitui','Kwale','Laikipia','Lamu','Machakos',
-  'Makueni','Mandera','Marsabit','Meru','Migori','Mombasa',"Murang'a",
-  'Nairobi','Nakuru','Nandi','Narok','Nyamira','Nyandarua','Nyeri',
-  'Samburu','Siaya','Taita-Taveta','Tana River','Tharaka-Nithi','Trans Nzoia',
-  'Turkana','Uasin Gishu','Vihiga','Wajir','West Pokot',
-]
+import { ChevronDown, Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 interface EditPropertySheetProps {
   open:       boolean
@@ -114,7 +106,7 @@ export function EditPropertySheet({
                     errors.county ? 'border-destructive' : 'border-input'
                   )}
                 >
-                  {KENYAN_COUNTIES.map(c => <option key={c} value={c}>{c}</option>)}
+                  <option value="kakamega">Kakamega</option>
                 </select>
                 <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
               </div>

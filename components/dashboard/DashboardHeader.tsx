@@ -1,8 +1,7 @@
-import { MobileNav } from '@/components/dashboard/DashboardNavigation' // Update import path!
-import ThemeSwitch from '@/components/theme/ThemeToggle'
-import { AuthButton } from '../LandlordComponents/navbar/AuthButton'
-import { AppLogo } from '../logo/Logo'
-import { cn } from '@/lib/utils'
+import { MobileNav } from '@/components/dashboard/DashboardNavigation'; // Update import path!
+import ThemeSwitch from '@/components/theme/ThemeToggle';
+import { cn } from '@/lib/utils';
+import { AuthButton } from '../LandlordComponents/navbar/AuthButton';
 
 const ROLE_COLORS: Record<string, string> = {
   moderator:  'bg-blue-500/10 text-blue-600 border-blue-500/20 dark:text-blue-400',
@@ -24,15 +23,13 @@ export function DashboardHeader({ role }: { role: string }) {
   const roleDot   = ROLE_DOT[role]    ?? ROLE_DOT.admin
   return (
     <header className="h-16 border-b border-border bg-card/80 backdrop-blur flex items-center px-4 md:px-6 gap-4 shrink-0">
-      
-      {/* Mobile button lives inside the header flow safely */}
       <MobileNav role={role} />
-      <div className="px-4 pt-5 pb-3 shrink-0">
+      <div className="py-4 shrink-0">
         <span className={cn(
           'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold border capitalize',
           roleColor
         )}>
-          <span className={cn('w-1.5 h-1.5 rounded-full animate-pulse shrink-0', roleDot)} />
+          <span className={cn('w-2.5 h-2.5 rounded-full animate-pulse shrink-0', roleDot)} />
           {role} dashboard
         </span>
       </div>

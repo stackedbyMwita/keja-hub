@@ -1,17 +1,6 @@
+import { Property, PropertyStatus } from '@/types'
 import { ArrowRight, Building2, CheckCircle2, Clock, MapPin, XCircle } from 'lucide-react'
 import Link from 'next/link'
-
-// You can move these types to a shared types file later
-export type PropertyStatus = 'Approved' | 'Pending' | 'Rejected'
-
-export interface Property {
-  id: string
-  name: string
-  location: string
-  totalUnits: number
-  availableUnits: number
-  status: PropertyStatus
-}
 
 interface PropertyListProps {
   title?: string
@@ -25,7 +14,6 @@ export function PropertyList({
   viewAllLink = "/dashboard/properties" 
 }: PropertyListProps) {
   
-  // Helper to quickly style badges based on status
   const getStatusStyles = (status: PropertyStatus) => {
     switch (status) {
       case 'Approved':

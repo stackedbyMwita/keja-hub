@@ -17,7 +17,7 @@ const containerVariants: Variants = {
       duration: 0.7,
       delay: 0.5,
       ease: "easeOut",
-      staggerChildren: 0.2, // Staggers the appearance of each stat
+      staggerChildren: 0.2,
     },
   },
 };

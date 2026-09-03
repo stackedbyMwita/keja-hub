@@ -1,4 +1,4 @@
-export const TYPE_LABELS = {
+export const TYPE_LABELS: Record<string, string>  = {
   single_room: 'Single Room',
   double_room: 'Double Room',
   bedsitter: 'Bedsitter',

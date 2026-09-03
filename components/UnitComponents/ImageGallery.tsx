@@ -1,9 +1,9 @@
 'use client'
 
-import Image from 'next/image'
-import { useState, useCallback, useEffect } from 'react'
-import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { ChevronLeft, ChevronRight, X } from 'lucide-react'
+import Image from 'next/image'
+import { useCallback, useEffect, useState } from 'react'
 
 interface ImageGalleryProps {
   images: string[]
@@ -15,7 +15,7 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState(0)
 
-  // Lightbox keyboard navigation
+  // lightbox keyboard navigation
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (!lightboxOpen) return
@@ -31,7 +31,7 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [handleKeyDown])
 
-  // Lock body scroll when lightbox is open
+  // lock body scroll when lightbox is open
   useEffect(() => {
     document.body.style.overflow = lightboxOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
@@ -44,7 +44,7 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
 
   return (
     <>
-      {/* ── Main gallery ──────────────────────────────────────────────────── */}
+      {/* Main gallery */}
       <div className="flex flex-col gap-4 unit-page">
         
         {/* Main image */}
@@ -75,7 +75,6 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
               key={i}
               onClick={() => setActiveIndex(i)}
               className={cn(
-                // THE FIX IS HERE: Added overflow-hidden and rounded-xl so the image cannot spill over the edges
                 'thumbnail-image relative flex-shrink-0 w-24 h-20 rounded-xl overflow-hidden transition-all',
                 activeIndex === i
                   ? 'ring-2 ring-primary ring-offset-2 ring-offset-background opacity-100'
@@ -94,7 +93,7 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
         </div>
       </div>
 
-      {/* ── Lightbox ──────────────────────────────────────────────────────── */}
+      {/* Lightbox */}
       {lightboxOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center unit-page">
           {/* Backdrop */}
@@ -103,7 +102,6 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
             onClick={() => setLightboxOpen(false)}
           />
 
-          {/* Close */}
           <button
             onClick={() => setLightboxOpen(false)}
             className="absolute top-6 right-6 z-10 p-3 rounded-full bg-muted/50 hover:bg-muted text-foreground transition-colors border border-border/50"
@@ -111,7 +109,6 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
             <X className="h-5 w-5" />
           </button>
 
-          {/* Prev */}
           {images.length > 1 && (
             <button
               onClick={(e) => {
@@ -124,7 +121,6 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
             </button>
           )}
 
-          {/* Image */}
           <div className="relative w-full max-w-5xl mx-4 sm:mx-20 aspect-[4/3] md:aspect-[16/9]">
             <Image
               src={images[lightboxIndex]}
@@ -149,7 +145,7 @@ export function ImageGallery({ images, alt }: ImageGalleryProps) {
             </button>
           )}
 
-          {/* Lightbox counter */}
+          {/* lightbox counter */}
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-muted/50 backdrop-blur-md text-foreground text-xs font-semibold border border-border/50">
             {lightboxIndex + 1} / {images.length}
           </div>

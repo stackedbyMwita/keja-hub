@@ -22,3 +22,5 @@ export const APP_CONSTANTS: AppConstantsProps = {
   footerColumns: FOOTER_COLUMNS,
   footerSocials: FOOTER_SOCIALS,
 }
+
+export const UNLOCK_PRICE: Number = 0

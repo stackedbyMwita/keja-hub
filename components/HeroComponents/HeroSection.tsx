@@ -41,14 +41,12 @@ export function HeroSection() {
 
       <MaxWidthWrapper className="py-0 flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
         
-        {/* ── Left — Text Content ─────────────────────────────────────── */}
         <motion.div 
           className="flex flex-col gap-6 max-w-2xl w-full items-center text-center md:text-right md:items-end"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          {/* Badge */}
           <motion.div variants={itemVariants}>
             <span className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-primary uppercase tracking-widest bg-primary/10 rounded-full border border-primary/20 backdrop-blur-sm shadow-sm transition-colors hover:bg-primary/15">
               <span className="relative flex h-2 w-2">
@@ -58,8 +56,6 @@ export function HeroSection() {
               Verified listings only
             </span>
           </motion.div>
-
-          {/* Headline */}
           <motion.h1 
             variants={itemVariants}
             className="font-heading text-5xl md:text-6xl lg:text-7xl text-foreground leading-[1.1] tracking-tight"
@@ -71,7 +67,6 @@ export function HeroSection() {
             </span>.
           </motion.h1>
 
-          {/* Subtext */}
           <motion.p 
             variants={itemVariants}
             className="text-lg text-muted-foreground max-w-md leading-relaxed"
@@ -80,24 +75,20 @@ export function HeroSection() {
             No fraud, no ghost houses — just real homes at honest prices.
           </motion.p>
 
-          {/* Stats Component */}
           <motion.div variants={itemVariants} className="pt-2">
             <HeroStats />
           </motion.div>
 
         </motion.div>
 
-        {/* ── Right — Interactive Floating Image ──────────────────────────────────── */}
         <motion.div 
           className="relative hidden md:block flex-shrink-0 w-full max-w-[420px]"
           initial={{ opacity: 0, scale: 0.85, rotate: -2 }}
           animate={{ opacity: 1, scale: 1, rotate: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
         >
-          {/* Decorative Backing Glow */}
           <div className="absolute -inset-4 bg-gradient-to-tr from-primary/30 via-transparent to-transparent rounded-[2rem] blur-2xl -z-10" />
 
-          {/* Image Container with Floating Physics */}
           <motion.div 
             animate={{ y: [0, -15, 0] }}
             transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
@@ -117,7 +108,6 @@ export function HeroSection() {
               />
             </motion.div>
 
-            {/* Floating Status Badge */}
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}

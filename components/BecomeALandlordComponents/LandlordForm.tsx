@@ -6,16 +6,6 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
-const KENYAN_COUNTIES = [
-  'Baringo','Bomet','Bungoma','Busia','Elgeyo-Marakwet','Embu','Garissa',
-  'Homa Bay','Isiolo','Kajiado','Kakamega','Kericho','Kiambu','Kilifi',
-  'Kirinyaga','Kisii','Kisumu','Kitui','Kwale','Laikipia','Lamu','Machakos',
-  'Makueni','Mandera','Marsabit','Meru','Migori','Mombasa','Murang\'a',
-  'Nairobi','Nakuru','Nandi','Narok','Nyamira','Nyandarua','Nyeri',
-  'Samburu','Siaya','Taita-Taveta','Tana River','Tharaka-Nithi','Trans Nzoia',
-  'Turkana','Uasin Gishu','Vihiga','Wajir','West Pokot',
-]
-
 interface DefaultValues {
   full_name: string
   phone_number: string
@@ -128,7 +118,7 @@ export function LandlordForm({ mode, defaultValues }: LandlordFormProps) {
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
-      {/* ── Personal details ─────────────────────────────────────────── */}
+      {/* Personal details */}
       <div className="flex flex-col gap-3 pb-5 border-b border-border">
         <h2 className="text-sm font-semibold text-foreground uppercase tracking-widest">
           Personal details
@@ -192,7 +182,7 @@ export function LandlordForm({ mode, defaultValues }: LandlordFormProps) {
         </Field>
       </div>
 
-      {/* ── Property details ─────────────────────────────────────────── */}
+      {/* Property details */}
       <div className="flex flex-col gap-3 pb-5 border-b border-border">
         <h2 className="text-sm font-semibold text-foreground uppercase tracking-widest">
           Property details
@@ -207,9 +197,7 @@ export function LandlordForm({ mode, defaultValues }: LandlordFormProps) {
             className={cn(inputClass(errors.county), 'appearance-none cursor-pointer')}
           >
             <option value="">Select county...</option>
-            {KENYAN_COUNTIES.map(c => (
-              <option key={c} value={c}>{c}</option>
-            ))}
+            <option value="kakamega">Kakamega</option>
           </select>
         </Field>
 
@@ -287,7 +275,7 @@ export function LandlordForm({ mode, defaultValues }: LandlordFormProps) {
         </Field>
       </div>
 
-      {/* ── Additional notes ─────────────────────────────────────────── */}
+      {/* Additional notes */}
       <div className="flex flex-col gap-3">
         <h2 className="text-sm font-semibold text-foreground uppercase tracking-widest">
           Additional info
@@ -328,7 +316,7 @@ export function LandlordForm({ mode, defaultValues }: LandlordFormProps) {
   }
 }
 
-// ── Shared components ─────────────────────────────────────────────────────────
+// Shared components
 function Field({
   label, error, hint, required, children,
 }: {

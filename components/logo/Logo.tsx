@@ -2,6 +2,7 @@
 
 import { cn } from '@/lib/utils'
 import { useLogo } from '../HeroComponents/providers/logo-provider'
+import Link from 'next/link'
 
 interface LogoProps {
   name?: string
@@ -37,7 +38,7 @@ export function AppLogo({
 
   return (
 
-      <div className={cn('flex items-center gap-2', className)}>
+      <Link href="/" className={cn('flex items-center gap-2', className)}>
         <div
           className={cn(
             'flex items-center justify-center rounded-lg  font-semibold text-primary bg-primary/10',
@@ -58,6 +59,6 @@ export function AppLogo({
             )}
           </span>
         )}
-      </div>
+      </Link>
   )
 }

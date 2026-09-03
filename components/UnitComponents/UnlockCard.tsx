@@ -7,27 +7,8 @@ import { useAuth } from '@clerk/nextjs'
 import { UnlockModal } from './UnlockModal'
 import { AuthModal } from '@/app/(auth)/AuthModal'
 import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
-
-interface Contact {
-  landlord_name: string
-  phone: string
-  email: string
-  full_address: string
-  maps_url: string
-}
-
-interface UnlockCardProps {
-  price: number
-  type: string
-  location: string
-  county: string
-  available: boolean
-  propertyName: string
-  contact: Contact
-}
-
-// MVP unlock price — will be real Mpesa amount later
-const UNLOCK_PRICE = 0
+import { UnlockCardProps } from '@/types'
+import { UNLOCK_PRICE } from '@/constants'
 
 export function UnlockCard({
   price,

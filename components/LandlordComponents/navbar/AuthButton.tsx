@@ -65,14 +65,6 @@ function SignedInExpanded() {
 
   return (
     <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/40 w-full">
-      {/* Avatar */}
-      {/* <Image
-        src={user.imageUrl}
-        alt="avatar"
-        width={40}
-        height={40}
-        className="rounded-full"
-      /> */}
       <UserAvatar
         name={user.fullName}
         imageUrl={user.imageUrl}
@@ -90,7 +82,6 @@ function SignedInExpanded() {
         </span>
       </div>
 
-      {/* Right side action */}
       <div className="ml-auto">
         <ChevronsUpDown size={20} className='text-muted-foreground/50' />
       </div>

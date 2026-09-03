@@ -3,18 +3,7 @@
 import Image from 'next/image'
 import { MapPin } from 'lucide-react'
 import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
-
-interface Unit {
-  id: string
-  type: string
-  name: string
-  property_name: string
-  price: number
-  county: string
-  location: string
-  cover_image: string
-  available: boolean
-}
+import { Unit } from '@/types'
 
 interface ListingCardProps {
   unit: Unit

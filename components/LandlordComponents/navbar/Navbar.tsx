@@ -3,11 +3,11 @@
 import { AppLogo } from '@/components/logo/Logo'
 import { SearchBar } from '@/components/Navbar/SearchBar'
 import ThemeToggle from '@/components/theme/ThemeToggle'
-import { Menu, LayoutDashboard } from 'lucide-react'
+import { useAuth } from '@clerk/nextjs'
+import { LayoutDashboard, Menu } from 'lucide-react'
 import Link from 'next/link'
 import { Suspense, useState } from 'react'
 import { AuthButton } from './AuthButton'
-import { useAuth } from '@clerk/nextjs'
 
 import { Button } from '@/components/ui/button'
 import {

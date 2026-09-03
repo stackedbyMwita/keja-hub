@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { X, Info, AlertTriangle, CheckCircle2, XCircle } from 'lucide-react'
+import { AlertTriangle, CheckCircle2, Info, XCircle } from 'lucide-react'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -7,10 +7,27 @@ const supabase = createClient(
 )
 
 const TYPE_CONFIG = {
-  info:    { icon: Info,         bg: 'bg-blue-50 dark:bg-blue-950/30',   border: 'border-blue-200 dark:border-blue-800',   text: 'text-blue-800 dark:text-blue-200'   },
-  warning: { icon: AlertTriangle, bg: 'bg-amber-50 dark:bg-amber-950/30', border: 'border-amber-200 dark:border-amber-800', text: 'text-amber-800 dark:text-amber-200' },
-  success: { icon: CheckCircle2,  bg: 'bg-green-50 dark:bg-green-950/30', border: 'border-green-200 dark:border-green-800', text: 'text-green-800 dark:text-green-200' },
-  error:   { icon: XCircle,       bg: 'bg-red-50 dark:bg-red-950/30',     border: 'border-red-200 dark:border-red-800',     text: 'text-red-800 dark:text-red-200'     },
+  info: {
+    icon: Info,
+    bg: 'bg-blue-50 dark:bg-blue-950/30',
+    border: 'border-blue-200 dark:border-blue-800',
+    text: 'text-blue-800 dark:text-blue-200'   },
+
+  warning: { 
+    icon: AlertTriangle,
+    bg: 'bg-amber-50 dark:bg-amber-950/30',
+    border: 'border-amber-200 dark:border-amber-800',
+    text: 'text-amber-800 dark:text-amber-200' },
+  success: { 
+    icon: CheckCircle2,
+    bg: 'bg-green-50 dark:bg-green-950/30',
+    border: 'border-green-200 dark:border-green-800',
+    text: 'text-green-800 dark:text-green-200' },
+  error:   { 
+    icon: XCircle,
+    bg: 'bg-red-50 dark:bg-red-950/30',
+    border: 'border-red-200 dark:border-red-800',
+    text: 'text-red-800 dark:text-red-200'     },
 } as const
 
 export async function AnnouncementBanner() {
@@ -22,9 +39,9 @@ export async function AnnouncementBanner() {
 
   if (!config?.announcement_active || !config?.announcement_text) return null
 
-  const type   = (config.announcement_type ?? 'info') as keyof typeof TYPE_CONFIG
-  const cfg    = TYPE_CONFIG[type] ?? TYPE_CONFIG.info
-  const Icon   = cfg.icon
+  const type = (config.announcement_type ?? 'info') as keyof typeof TYPE_CONFIG
+  const cfg = TYPE_CONFIG[type] ?? TYPE_CONFIG.info
+  const Icon = cfg.icon
 
   return (
     <div className={`w-full border-b ${cfg.bg} ${cfg.border}`}>

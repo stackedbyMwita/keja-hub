@@ -1,21 +1,11 @@
 import { Badge } from '@/components/ui/badge'
 import {
-  CheckCircle2, Clock, XCircle,
-  AlertCircle, ShieldAlert, FileEdit,
+  AlertCircle,
+  CheckCircle2, Clock,
+  FileEdit,
+  ShieldAlert,
+  XCircle,
 } from 'lucide-react'
-
-// Supported status types
-type StatusType =
-  // Property statuses
-  | 'draft' | 'pending_review' | 'approved' | 'rejected' | 'suspended'
-  // Landlord application statuses
-  | 'pending'
-  // User statuses
-  | 'active' | 'inactive' | 'banned'
-  // Unit type statuses
-  | 'active' | 'draft'
-  // Generic
-  | string
 
 interface StatusConfig {
   label:   string
@@ -57,7 +47,7 @@ const STATUS_MAP: Record<string, StatusConfig> = {
     cls: 'bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800/50',
   },
 
-  // ── Landlord application ─────────────────────────────────────────────────
+  // Landlord application
   pending: {
     label: 'Pending',
     variant: 'outline',
@@ -65,7 +55,7 @@ const STATUS_MAP: Record<string, StatusConfig> = {
     cls: 'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800/50',
   },
 
-  // ── User ─────────────────────────────────────────────────────────────────
+  // User
   active: {
     label: 'Active',
     variant: 'outline',
@@ -95,11 +85,11 @@ function getFallback(status: string): StatusConfig {
   }
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+// Component
 
 interface StatusBadgeProps {
   status:    string
-  showIcon?: boolean   // default true
+  showIcon?: boolean
   size?:     'sm' | 'md'
   className?: string
 }

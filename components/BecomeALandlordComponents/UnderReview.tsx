@@ -14,8 +14,6 @@ export function UnderReview({ applicationDate }: UnderReviewProps) {
 
   return (
     <div className="flex flex-col items-center text-center gap-8 max-w-md mx-auto py-12">
-
-      {/* Icon */}
       <div className="relative">
         <div className="w-20 h-20 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
           <Clock className="h-9 w-9 text-primary" />
@@ -25,7 +23,6 @@ export function UnderReview({ applicationDate }: UnderReviewProps) {
         </div>
       </div>
 
-      {/* Text */}
       <div className="flex flex-col gap-2">
         <h1 className="font-heading text-3xl text-foreground">
           Application under review
@@ -38,7 +35,6 @@ export function UnderReview({ applicationDate }: UnderReviewProps) {
         </p>
       </div>
 
-      {/* Steps */}
       <div className="w-full flex flex-col gap-3 text-left">
         {[
           { label: 'Application submitted',       done: true  },
@@ -66,7 +62,6 @@ export function UnderReview({ applicationDate }: UnderReviewProps) {
         ))}
       </div>
 
-      {/* Contact note */}
       <div className="w-full p-4 rounded-xl bg-muted/50 border border-border flex flex-col gap-2">
         <p className="text-xs font-medium text-foreground">
           Our moderator may reach out to you directly

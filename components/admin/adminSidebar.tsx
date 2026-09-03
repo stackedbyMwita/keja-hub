@@ -1,14 +1,18 @@
 'use client'
 
+import { AppLogo } from '@/components/logo/Logo'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { cn } from '@/lib/utils'
+import {
+  ActivitySquare, ArrowLeft,
+  BarChart3,
+  Building2,
+  Crown,
+  LayoutDashboard, ShieldCheck,
+  Users,
+} from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { cn } from '@/lib/utils'
-import { AppLogo } from '@/components/logo/Logo'
-import {
-  LayoutDashboard, ShieldCheck, Building2,
-  Users, BarChart3, ActivitySquare, ArrowLeft, Crown,
-} from 'lucide-react'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 interface NavItem {
   label:    string

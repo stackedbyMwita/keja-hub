@@ -1,4 +1,4 @@
-import { AlertCircle, Clock, CheckCircle2, XCircle, ShieldAlert } from 'lucide-react'
+import { AlertCircle, CheckCircle2, Clock, ShieldAlert, XCircle } from 'lucide-react'
 
 interface StatusBannerProps {
   status:          string

@@ -2,11 +2,7 @@
 
 import React, { createContext, useContext } from 'react'
 
-type LogoConfig = {
-  name: string
-  icon?: React.ReactNode
-}
-
+type LogoConfig = { name: string, icon?: React.ReactNode }
 const LogoContext = createContext<LogoConfig | null>(null)
 
 export function LogoProvider({

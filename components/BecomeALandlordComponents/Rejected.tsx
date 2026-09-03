@@ -22,7 +22,6 @@ export function Rejected({ rejectionReason, existingData }: RejectedProps) {
   return (
     <div className="flex flex-col gap-6">
 
-      {/* Rejection notice */}
       <div className="flex items-start gap-4 p-5 rounded-xl bg-destructive/5 border border-destructive/20">
         <div className="w-9 h-9 rounded-full bg-destructive/10 flex items-center justify-center flex-shrink-0">
           <XCircle className="h-5 w-5 text-destructive" />
@@ -47,7 +46,6 @@ export function Rejected({ rejectionReason, existingData }: RejectedProps) {
         </div>
       </div>
 
-      {/* Resubmit form — pre-filled with existing data */}
       <LandlordForm
         mode="reapply"
         defaultValues={existingData}

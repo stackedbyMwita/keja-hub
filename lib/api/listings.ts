@@ -1,24 +1,13 @@
 import type { ListingUnit } from '@/types'
 import { createClient } from '@supabase/supabase-js'
+import { TYPE_LABELS } from '../constants/propertyTypes'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 const supabase = createClient(supabaseUrl!, supabaseKey!)
 
-export const TYPE_DISPLAY_NAMES: Record<string, string> = {
-  single_room: 'Single Room',
-  double_room: 'Double Room',
-  bedsitter: 'Bedsitter',
-  studio: 'Studio',
-  '1br':       '1 Bedroom Apartment',
-  '2br':       '2 Bedroom Apartment',
-  '3br':       '3 Bedroom Apartment',
-  '4br_plus':  '4+ Bedroom House',
-  commercial:  'Shop/Commercial Space',
-}
-
-// Fetches listings from the public_listings
+// fetch listings from public_listings
 export async function fetchListings(): Promise<ListingUnit[]> {
   const { data, error } = await supabase
     .from('public_listings')
@@ -75,7 +64,7 @@ export async function fetchListings(): Promise<ListingUnit[]> {
     return {
       id:            row.unit_type_id,
       type:          row.type,
-      name:          TYPE_DISPLAY_NAMES[row.type] ?? row.type,
+      name:          TYPE_LABELS[row.type] ?? row.type,
       property_name: row.property_name,
       price:         row.price,
       county:        row.county,

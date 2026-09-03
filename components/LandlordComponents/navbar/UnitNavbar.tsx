@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, Suspense } from 'react'
-import Link from 'next/link'
 import { useAuth } from '@clerk/nextjs'
-import { Menu, LayoutDashboard, Search } from 'lucide-react'
+import { LayoutDashboard, Menu, Search } from 'lucide-react'
+import Link from 'next/link'
+import { Suspense, useState } from 'react'
 
+import { AuthButton } from '@/components/LandlordComponents/navbar/AuthButton'
 import { AppLogo } from '@/components/logo/Logo'
 import ThemeToggle from '@/components/theme/ThemeToggle'
-import { AuthButton } from '@/components/LandlordComponents/navbar/AuthButton'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,

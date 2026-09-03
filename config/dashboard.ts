@@ -40,14 +40,13 @@ export const NAV_CONFIG: Record<string, NavItem[]> = {
   ],
 }
 
-// Superadmin inherits admin nav
+// superadmin inherits admin nav
 NAV_CONFIG.superadmin = [...NAV_CONFIG.admin]
 
 export function getNavByRole(role: string): NavItem[] {
   return NAV_CONFIG[role] || []
 }
 
-// ... keep your NAV_CONFIG imports and arrays the same ...
 export const ROLE_STYLES: Record<string, { badge: string, dot: string, label: string, activeLink: string }> = {
   landlord: { 
     badge: 'bg-primary/10 text-primary border-primary/20', 

@@ -1,16 +1,18 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
-import { Loader2, Star, Trophy } from 'lucide-react'
-import {
-  Sheet, SheetContent, SheetHeader,
-  SheetTitle, SheetDescription,
-} from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import {
+  Sheet, SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
+import { Loader2, Trophy } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 const METRICS = [
   { key: 'score_security',    label: 'Security',                   description: 'Guards, lighting, perimeter' },

@@ -1,10 +1,10 @@
 'use client'
 
-import { useTheme } from 'next-themes'
-import * as SwitchPrimitives from '@radix-ui/react-switch'
-import { Sun, Moon } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
+import * as SwitchPrimitives from '@radix-ui/react-switch'
+import { Moon, Sun } from 'lucide-react'
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
 
 export default function ThemeSwitch() {
   const { theme, setTheme } = useTheme()

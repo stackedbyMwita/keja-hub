@@ -1,17 +1,17 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { Images, Trophy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Images, Trophy } from 'lucide-react'
+import Link from 'next/link'
+import { useState } from 'react'
 import { ScoringSheet } from './ScoringSheet'
 
 interface PropertyApprovedActionsProps {
-  propertyId:      string
-  propertyName:    string
-  imageCount:      number
-  hasScores:       boolean
-  existingScores?: Record<string, number>
+  propertyId: string
+  propertyName: string
+  imageCount: number
+  hasScores: boolean
+  existingScores: Record<string, number>
 }
 
 export function PropertyApprovedActions({

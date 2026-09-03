@@ -1,11 +1,5 @@
 'use client'
 
-import { useState, useRef } from 'react'
-import { Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,9 +11,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
+import { Loader2 } from 'lucide-react'
+import { useState } from 'react'
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// Types
 
 interface ReasonField {
   label?:       string
@@ -29,38 +28,26 @@ interface ReasonField {
 }
 
 interface ConfirmDialogProps {
-  // Trigger
-  trigger:       React.ReactNode
-
-  // Dialog content
-  title:         string
-  description?:  string | React.ReactNode
-
-  // Confirm button
+  trigger: React.ReactNode
+  title: string
+  description?: string | React.ReactNode
   confirmLabel?: string
-  variant?:      'default' | 'destructive' | 'warning'
-
-  // Optional reason field inside the dialog
-  reasonField?:  ReasonField
-
-  // Callbacks
-  onConfirm:     (reason?: string) => Promise<void> | void
-
-  // State
-  disabled?:     boolean
+  variant?: 'default' | 'destructive' | 'warning'
+  reasonField?: ReasonField
+  onConfirm: (reason?: string) => Promise<void> | void
+  disabled?: boolean
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
-
+// Component
 export function ConfirmDialog({
   trigger,
   title,
   description,
   confirmLabel = 'Confirm',
-  variant      = 'default',
+  variant = 'default',
   reasonField,
   onConfirm,
-  disabled     = false,
+  disabled = false,
 }: ConfirmDialogProps) {
   const [open, setOpen]     = useState(false)
   const [reason, setReason] = useState('')
@@ -68,9 +55,9 @@ export function ConfirmDialog({
   const [error, setError]   = useState('')
 
   const confirmBtnCls = {
-    default:     '',
+    default: '',
     destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-    warning:     'bg-amber-600 text-white hover:bg-amber-700',
+    warning: 'bg-amber-600 text-white hover:bg-amber-700',
   }[variant]
 
   function handleClose() {
@@ -81,7 +68,6 @@ export function ConfirmDialog({
   }
 
   async function handleConfirm() {
-    // Validate reason if required
     if (reasonField?.required && !reason.trim()) {
       setError(`${reasonField.label ?? 'This field'} is required`)
       return

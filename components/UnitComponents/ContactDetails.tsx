@@ -1,18 +1,11 @@
 'use client'
 
-import { formatKenyaPhone } from '@/lib/phone'
+import { formatKenyaPhone } from '@/lib/utils'
+import { UnitContact } from '@/types'
 import { ExternalLink, Mail, MapPin, Phone } from 'lucide-react'
 
-interface Contact {
-  landlord_name: string
-  phone: string
-  email: string
-  full_address: string
-  maps_url: string
-}
-
 interface ContactDetailsProps {
-  contact: Contact
+  contact: UnitContact
 }
 
 export function ContactDetails({ contact }: ContactDetailsProps) {

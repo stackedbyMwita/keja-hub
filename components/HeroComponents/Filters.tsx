@@ -1,9 +1,10 @@
 'use client'
 
-import { SlidersHorizontal } from 'lucide-react'
 import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
+import { UNIT_FILTER_OPTIONS, type UnitType } from '@/lib/constants/units'
+import { SlidersHorizontal } from 'lucide-react'
 
-export type UnitType = 'all' | 'single' | 'bedsitter' | 'double' | '1br' | '2br'
+export type { UnitType }
 export type PriceRange = 'all' | '0-5000' | '5000-8000' | '8000-15000' | '15000-25000' | '25000+'
 
 interface FiltersProps {
@@ -13,15 +14,6 @@ interface FiltersProps {
   onPriceChange: (range: PriceRange) => void
   resultCount: number
 }
-
-const UNIT_TYPES: { label: string; value: UnitType }[] = [
-  { label: 'All types', value: 'all' },
-  { label: 'Singles', value: 'single' },
-  { label: 'Bedsitter', value: 'bedsitter' },
-  { label: 'Double', value: 'double' },
-  { label: '1 Bedroom', value: '1br' },
-  { label: '2 Bedrooms', value: '2br' },
-]
 
 const PRICE_RANGES: { label: string; value: PriceRange }[] = [
   { label: 'Any price', value: 'all' },
@@ -56,7 +48,7 @@ export function Filters({
             {/* Row 1: Unit Types */}
             <div className="flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               <div className="inline-flex items-center p-1 bg-muted/60 dark:bg-muted/30 rounded-full border border-border/60 shrink-0">
-                {UNIT_TYPES.map((type) => {
+                {UNIT_FILTER_OPTIONS.map((type) => {
                   const isActive = activeType === type.value
                   return (
                     <button

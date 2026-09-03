@@ -1,11 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useUser } from '@clerk/nextjs'
-import { Phone, Loader2, ChevronDown, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useUser } from '@clerk/nextjs'
+import { CheckCircle2, ChevronDown, Loader2, Phone } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 const HEARD_FROM_OPTIONS = [
   'Social media (Facebook, Instagram, TikTok)',
@@ -30,7 +30,7 @@ export function DetailsForm() {
   const [phoneError, setPhoneError]   = useState<string | null>(null)
   const [termsError, setTermsError]   = useState<string | null>(null)
 
-  // ── Guard: if already onboarded, skip this page ──────────────────────────
+  // if already onboarded, skip this page
   useEffect(() => {
     if (!isLoaded) return
     const meta = user?.publicMetadata as any
@@ -80,8 +80,6 @@ export function DetailsForm() {
         return
       }
 
-      // ── Force Clerk to reload the session token so middleware
-      // reads the updated onboarding_status on the very next request ────────
       await user?.reload()
 
       router.push(redirectUrl)
@@ -93,7 +91,6 @@ export function DetailsForm() {
     }
   }
 
-  // Show loading while Clerk loads
   if (!isLoaded) {
     return (
       <div className="flex items-center justify-center h-64">

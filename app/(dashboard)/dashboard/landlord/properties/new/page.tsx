@@ -14,6 +14,7 @@ import { Separator } from '@/components/ui/separator'
 import Link from 'next/link'
 import { ChevronLeft } from 'lucide-react'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import { UNIT_TYPES } from '@/lib/constants/units'
 
 const KENYAN_COUNTIES = [
   'Baringo','Bomet','Bungoma','Busia','Elgeyo-Marakwet','Embu','Garissa',
@@ -23,18 +24,6 @@ const KENYAN_COUNTIES = [
   'Nairobi','Nakuru','Nandi','Narok','Nyamira','Nyandarua','Nyeri',
   'Samburu','Siaya','Taita-Taveta','Tana River','Tharaka-Nithi','Trans Nzoia',
   'Turkana','Uasin Gishu','Vihiga','Wajir','West Pokot',
-]
-
-const UNIT_TYPES = [
-  { value: 'single_room',  label: 'Single Room'   },
-  { value: 'double_room',  label: 'Double Room'   },
-  { value: 'bedsitter',    label: 'Bedsitter'     },
-  { value: 'studio',       label: 'Studio'        },
-  { value: '1br',          label: '1 Bedroom'     },
-  { value: '2br',          label: '2 Bedrooms'    },
-  { value: '3br',          label: '3 Bedrooms'    },
-  { value: '4br_plus',     label: '4+ Bedrooms'   },
-  { value: 'commercial',   label: 'Shop/Commercial'},
 ]
 
 const COMMON_AMENITIES = [

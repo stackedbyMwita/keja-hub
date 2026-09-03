@@ -1,30 +1,21 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
-import { Loader2, ChevronDown } from 'lucide-react'
-import {
-  Sheet, SheetContent, SheetHeader,
-  SheetTitle, SheetDescription,
-} from '@/components/ui/sheet'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import {
+  Sheet, SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet'
+import { Textarea } from '@/components/ui/textarea'
+import { UNIT_TYPES } from '@/lib/constants/units'
 import { cn } from '@/lib/utils'
-
-const UNIT_TYPES = [
-  { value: 'single_room', label: 'Single Room'    },
-  { value: 'double_room', label: 'Double Room'    },
-  { value: 'bedsitter',   label: 'Bedsitter'      },
-  { value: 'studio',      label: 'Studio'         },
-  { value: '1br',         label: '1 Bedroom'      },
-  { value: '2br',         label: '2 Bedrooms'     },
-  { value: '3br',         label: '3 Bedrooms'     },
-  { value: '4br_plus',    label: '4+ Bedrooms'    },
-  { value: 'commercial',  label: 'Shop/Commercial' },
-]
+import { ChevronDown, Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 const COMMON_AMENITIES = [
   'Water included','Electricity','Security','Parking',

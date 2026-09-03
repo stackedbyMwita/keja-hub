@@ -1,28 +1,8 @@
-import { LucideIcon, Inbox } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import Link from 'next/link'
 import { cn } from '@/lib/utils'
-
-// ── Types ─────────────────────────────────────────────────────────────────────
-
-interface EmptyStateAction {
-  label: string
-  href?: string
-  onClick?: () => void
-  variant?: 'default' | 'outline'
-}
-
-interface EmptyStateProps {
-  icon?:        LucideIcon
-  title:        string
-  description?: string
-  action?:      EmptyStateAction
-  size?:        'sm' | 'md' | 'lg'
-  bordered?:    boolean   // wrap in dashed border card
-  className?:   string
-}
-
-// ── Component ─────────────────────────────────────────────────────────────────
+import { EmptyStateProps } from '@/types'
+import { Inbox } from 'lucide-react'
+import Link from 'next/link'
 
 export function EmptyState({
   icon: Icon = Inbox,

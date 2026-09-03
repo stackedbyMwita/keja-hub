@@ -1,9 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card'
-import { ChevronRight, ChevronRightCircle, LucideIcon } from 'lucide-react'
-import Link from 'next/link'
 import { cn } from '@/lib/utils'
-
-// Types
+import { ChevronRightCircle, LucideIcon } from 'lucide-react'
+import Link from 'next/link'
 
 type StatColor = 'default' | 'blue' | 'green' | 'amber' | 'red' | 'purple' | 'primary'
 
@@ -13,14 +11,14 @@ export interface StatItem {
   icon:     LucideIcon
   color?:   StatColor
   sub?:     string
-  href?:    string           // makes the card clickable
-  trend?:   number           // positive = growth %, negative = decline %
+  href?:    string
+  trend?:   number
 }
 
 interface StatsGridProps {
   stats:    StatItem[]
-  cols?:    2 | 3 | 4 | 6    // grid columns — default 4
-  compact?: boolean // smaller padding
+  cols?:    2 | 3 | 4 | 6
+  compact?: boolean
 }
 
 // Color map
@@ -41,7 +39,7 @@ const COLS_MAP: Record<number, string> = {
   6: 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-6',
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+// Component
 
 export function StatsGrid({ stats, cols = 4, compact = false }: StatsGridProps) {
   return (

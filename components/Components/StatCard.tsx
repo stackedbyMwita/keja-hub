@@ -4,7 +4,7 @@ interface StatCardProps {
   title: string
   value: string | number
   icon: LucideIcon
-  trend?: string // Optional: e.g., "+2 this week"
+  trend?: string
   iconBg?: string
   iconColor?: string
 }
@@ -30,8 +30,6 @@ export function StatCard({
           <Icon className={`h-6 w-6 ${iconColor}`} />
         </div>
       </div>
-      
-      {/* Optional Trend/Subtitle */}
       {trend && (
         <div className="mt-4 flex items-center text-sm text-muted-foreground">
           <span>{trend}</span>

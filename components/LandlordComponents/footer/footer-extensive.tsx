@@ -1,14 +1,14 @@
+import { AppLogo } from "@/components/logo/Logo"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { APP_CONSTANTS } from "@/constants"
 import { FOOTER_COLUMNS, FOOTER_SOCIALS } from "@/constants/menus"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { AppLogo } from "@/components/logo/Logo"
 import { Grain } from "./grain-texture/grain"
 
+import MaxWidthWrapper from "@/components/UIComponents/layout/MaxWidthWrapper"
 import { Mail } from "lucide-react"
 import { WordMark } from "./WordMark"
-import MaxWidthWrapper from "@/components/UIComponents/layout/MaxWidthWrapper"
 
 export function FooterExtensive() {
   return (

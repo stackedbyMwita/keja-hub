@@ -6,7 +6,7 @@ import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrappe
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { formatKenyaPhone } from '@/lib/phone'
+import { formatKenyaPhone } from '@/lib/utils'
 import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
 import {

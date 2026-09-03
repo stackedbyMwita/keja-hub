@@ -1,11 +1,11 @@
+import { QueryProvider } from '@/app/providers/query-provider';
 import { Toaster } from '@/components/toast/toaster';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { APP_CONSTANTS } from '@/constants';
 import { ClerkProvider } from '@clerk/nextjs';
 import { ThemeProvider } from 'next-themes';
 import React from 'react';
 import { LogoProvider } from './logo-provider';
-import { QueryProvider } from '@/app/providers/query-provider';
-import { TooltipProvider } from '@/components/ui/tooltip';
 
 export default function Providers({ children }: { children: React.ReactNode}) {
   const Icon = APP_CONSTANTS.logoMark

@@ -1,15 +1,13 @@
-import { notFound } from 'next/navigation'
-import { connection } from 'next/server'
-import Link from 'next/link'
-import { ChevronLeft } from 'lucide-react'
+import { UnitNavbar } from '@/components/LandlordComponents/navbar/UnitNavbar'
 import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
 import { ImageGallery } from '@/components/UnitComponents/ImageGallery'
 import { UnitDetails } from '@/components/UnitComponents/UnitDetails'
 import { UnlockCard } from '@/components/UnitComponents/UnlockCard'
 import { fetchUnitById } from '@/lib/api/unitDetail'
-import { Navbar } from '@/components/LandlordComponents/navbar/Navbar'
-import { UnitNavbar } from '@/components/LandlordComponents/navbar/UnitNavbar'
-
+import { ChevronLeft } from 'lucide-react'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { connection } from 'next/server'
 
 export const dynamic = 'force-dynamic'
 

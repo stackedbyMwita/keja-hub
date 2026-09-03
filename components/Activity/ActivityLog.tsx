@@ -31,44 +31,7 @@ import {
   getActionConfig,
   getTarget,
 } from './ActivityUtils'
-
-// Types
-export interface ActivityLogProps {
-  actorId?:    string
-  targetId?:   string
-  targetType?: string
-  actions?:    string[]
-  compact?:    boolean
-  showActor?:  boolean
-  title?:      string
-  limit?:      number
-}
-
-interface LogEntry {
-  id:          string
-  action:      string
-  target_type: string
-  target_id:   string
-  metadata:    any
-  created_at:  string
-  profiles:    {
-    id:        string
-    full_name: string | null
-    email:     string
-    role:      string
-    avatar_url:string | null
-  } | null
-}
-
-interface ActivityResponse {
-  data:       LogEntry[]
-  total:      number
-  page:       number
-  pageSize:   number
-  totalPages: number
-}
-
-// ── Fetcher ───────────────────────────────────────────────────────────────────
+import { ActivityLogProps, ActivityResponse, LogEntry } from '@/types'
 
 function buildUrl(params: Record<string, string | number | undefined | null>): string {
   const url = new URLSearchParams()
