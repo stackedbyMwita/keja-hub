@@ -1,14 +1,40 @@
 import { createClient } from '@supabase/supabase-js'
-import type { ListingUnit } from '@/types'
-import { TYPE_LABELS } from '../constants/propertyTypes'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 )
 
-// Fetches a single unit by its unit_type_id — used on /unit/[unitId] page
-export async function fetchUnitById(unitId: string): Promise<ListingUnit | null> {
+const TYPE_DISPLAY_NAMES: Record<string, string> = {
+  single_room: 'Single Room',
+  double_room: 'Double Room',
+  bedsitter:   'Bedsitter',
+  studio:      'Studio',
+  '1br':       '1 Bedroom Apartment',
+  '2br':       '2 Bedroom Apartment',
+  '3br':       '3 Bedroom Apartment',
+  '4br_plus':  '4+ Bedroom House',
+  commercial:  'Shop/Commercial Space',
+}
+
+// ── Public unit data — NO contact info ───────────────────────────────────────
+export interface PublicUnit {
+  id:            string
+  type:          string
+  name:          string
+  property_name: string
+  price:         number
+  county:        string
+  location:      string
+  description:   string
+  amenities:     string[]
+  available:     boolean
+  cover_image:   string
+  images:        string[]
+  // contact is intentionally excluded
+}
+
+export async function fetchUnitById(unitId: string): Promise<PublicUnit | null> {
   const { data: unitType, error } = await supabase
     .from('unit_types')
     .select(`
@@ -16,7 +42,7 @@ export async function fetchUnitById(unitId: string): Promise<ListingUnit | null>
       total_count, available_count, status,
       property_id,
       properties!inner (
-        id, name, county, location, address, status, total_score, landlord_id
+        id, name, county, location, address, status, total_score
       ),
       unit_images ( image_url, is_cover )
     `)
@@ -30,26 +56,19 @@ export async function fetchUnitById(unitId: string): Promise<ListingUnit | null>
 
   const property = (unitType as any).properties
 
-  // Only return if the property is approved and unit is active
+  // Only return approved + active units
   if (property.status !== 'approved' || unitType.status !== 'active') {
     return null
   }
 
-  // Fetch landlord contact
-  const { data: landlordProfile } = await supabase
-    .from('profiles')
-    .select('full_name, email, phone_number')
-    .eq('id', property.landlord_id)
-    .single()
-
-  const images = (unitType.unit_images ?? [])
+  const images = ((unitType as any).unit_images ?? [])
     .sort((a: any, b: any) => (b.is_cover ? 1 : 0) - (a.is_cover ? 1 : 0))
     .map((img: any) => img.image_url)
 
   return {
     id:            unitType.id,
     type:          unitType.type,
-    name:          TYPE_LABELS[unitType.type] ?? unitType.type,
+    name:          TYPE_DISPLAY_NAMES[unitType.type] ?? unitType.type,
     property_name: property.name,
     price:         unitType.price,
     county:        property.county,
@@ -59,12 +78,5 @@ export async function fetchUnitById(unitId: string): Promise<ListingUnit | null>
     available:     unitType.available_count > 0,
     cover_image:   images[0] ?? '/placeholder-unit.jpg',
     images:        images.length > 0 ? images : ['/placeholder-unit.jpg'],
-    contact: {
-      landlord_name: landlordProfile?.full_name    ?? 'KéjaLink Landlord',
-      phone:         landlordProfile?.phone_number ?? '',
-      email:         landlordProfile?.email        ?? '',
-      full_address:  property.address ?? property.location,
-      maps_url:      `https://maps.google.com/?q=${encodeURIComponent(property.location + ', ' + property.county)}`,
-    },
   }
 }

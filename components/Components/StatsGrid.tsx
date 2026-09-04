@@ -1,19 +1,8 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
+import { StatColor, StatItem } from '@/types'
 import { ChevronRightCircle, LucideIcon } from 'lucide-react'
 import Link from 'next/link'
-
-type StatColor = 'default' | 'blue' | 'green' | 'amber' | 'red' | 'purple' | 'primary'
-
-export interface StatItem {
-  label:    string
-  value:    number | string
-  icon:     LucideIcon
-  color?:   StatColor
-  sub?:     string
-  href?:    string
-  trend?:   number
-}
 
 interface StatsGridProps {
   stats:    StatItem[]
@@ -21,7 +10,6 @@ interface StatsGridProps {
   compact?: boolean
 }
 
-// Color map
 const COLOR_MAP: Record<StatColor, { icon: string; bg: string; border: string }> = {
   default: { icon: 'text-foreground',  bg: 'bg-muted',                                     border: 'border-border'                                     },
   primary: { icon: 'text-primary',     bg: 'bg-primary/10',                                border: 'border-primary/20'                                 },
@@ -40,7 +28,6 @@ const COLS_MAP: Record<number, string> = {
 }
 
 // Component
-
 export function StatsGrid({ stats, cols = 4, compact = false }: StatsGridProps) {
   return (
     <div className={cn('grid gap-4', COLS_MAP[cols] ?? COLS_MAP[4])}>

@@ -125,7 +125,7 @@ export function ActivityLog({
     <div className="flex flex-col gap-5">
 
       {/* Header */}
-      <div className="flex items-center justify-between flex-wrap gap-3 border-b border-border/50 pb-4">
+      <div className="flex items-center justify-between flex-wrap gap-3 pb-4">
         <div>
           <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
             <ActivitySquare className="h-5 w-5 text-muted-foreground" />

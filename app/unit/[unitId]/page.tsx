@@ -1,13 +1,13 @@
-import { UnitNavbar } from '@/components/LandlordComponents/navbar/UnitNavbar'
+import { notFound } from 'next/navigation'
+import { connection } from 'next/server'
+import Link from 'next/link'
+import { ChevronLeft } from 'lucide-react'
 import MaxWidthWrapper from '@/components/UIComponents/layout/MaxWidthWrapper'
 import { ImageGallery } from '@/components/UnitComponents/ImageGallery'
 import { UnitDetails } from '@/components/UnitComponents/UnitDetails'
 import { UnlockCard } from '@/components/UnitComponents/UnlockCard'
 import { fetchUnitById } from '@/lib/api/unitDetail'
-import { ChevronLeft } from 'lucide-react'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { connection } from 'next/server'
+import { UnitNavbar } from '@/components/LandlordComponents/navbar/UnitNavbar'
 
 export const dynamic = 'force-dynamic'
 
@@ -30,8 +30,6 @@ export default async function UnitPage({ params }: PageProps) {
   const { unitId } = await params
   const unit = await fetchUnitById(unitId)
 
-  console.log(unit)
-
   if (!unit) notFound()
 
   return (
@@ -40,7 +38,7 @@ export default async function UnitPage({ params }: PageProps) {
       <div className="min-h-screen bg-background pb-20">
         <MaxWidthWrapper className="py-6 md:py-10">
 
-          {/* ── Back link ───────────────────────────────────────────────── */}
+          {/* Back link */}
           <Link
             href="/"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-all mb-6 group"
@@ -51,12 +49,12 @@ export default async function UnitPage({ params }: PageProps) {
             Back to listings
           </Link>
 
-          {/* ── Image gallery — full width ───────────────────────────── */}
+          {/* Image gallery */}
           <div className="mb-10 lg:mb-12">
             <ImageGallery images={unit.images} alt={unit.property_name} />
           </div>
 
-          {/* ── Two-column layout ────────────────────────────────────── */}
+          {/* Two-column layout */}
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-12 xl:gap-20">
 
             {/* Left — details */}
@@ -67,13 +65,13 @@ export default async function UnitPage({ params }: PageProps) {
             {/* Right — sticky unlock card */}
             <div className="relative">
               <UnlockCard
+                unitTypeId={unit.id}
                 price={unit.price}
                 type={unit.type}
                 location={unit.location}
                 county={unit.county}
                 available={unit.available}
                 propertyName={unit.property_name}
-                contact={unit.contact}
               />
             </div>
 

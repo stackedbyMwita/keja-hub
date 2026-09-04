@@ -116,3 +116,37 @@ export interface ActivityResponse {
   pageSize:   number
   totalPages: number
 }
+
+export interface PublicUnit {
+  id:            string
+  type:          string
+  name:          string
+  property_name: string
+  price:         number
+  county:        string
+  location:      string
+  description:   string
+  amenities:     string[]
+  available:     boolean
+  cover_image:   string
+  images:        string[]
+  contact: {
+    landlord_name: string
+      phone: string
+      email: string
+      full_address: string
+      maps_url:string
+  }
+}
+
+export type StatColor = 'default' | 'blue' | 'green' | 'amber' | 'red' | 'purple' | 'primary'
+
+export interface StatItem {
+  label:    string
+  value:    number | string
+  icon:     LucideIcon
+  color?:   StatColor
+  sub?:     string
+  href?:    string
+  trend?:   number
+}

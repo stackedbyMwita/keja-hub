@@ -21,6 +21,7 @@ import {
   PlusCircle,
   Settings,
   ShieldCheck,
+  Unlock,
   UserCog,
   Users
 } from 'lucide-react'
@@ -54,13 +55,15 @@ const LANDLORD_NAV: NavItem[] = [
 ]
 
 const ADMIN_NAV: NavItem[] = [
-  { label: 'Overview',      href: '/dashboard/admin',            icon: LayoutDashboard, exact: true },
-  { label: 'Moderators',    href: '/dashboard/admin/moderators', icon: ShieldCheck,     divider: true },
-  { label: 'Landlords',     href: '/dashboard/admin/landlords',  icon: Building2 },
-  { label: 'Users',         href: '/dashboard/admin/users',      icon: Users },
-  { label: 'Properties',    href: '/dashboard/admin/properties', icon: Home },
-  { label: 'Metrics',       href: '/dashboard/admin/metrics',    icon: BarChart3,       divider: true },
-  { label: 'Activity Logs', href: '/dashboard/admin/activity',   icon: ActivitySquare },
+  { label: 'Overview', href: '/dashboard/admin', icon: LayoutDashboard, exact: true },
+  { label: 'Moderators', href: '/dashboard/admin/moderators', icon: ShieldCheck, divider: true },
+  { label: 'Landlords', href: '/dashboard/admin/landlords', icon: Building2 },
+  { label: 'Users', href: '/dashboard/admin/users', icon: Users },
+  { label: 'Properties', href: '/dashboard/admin/properties', icon: Home },
+  { label: 'Metrics', href: '/dashboard/admin/metrics', icon: BarChart3, divider: true },
+  { label: 'Unlocks', href: '/dashboard/admin/unlocks', icon: Unlock, divider: true },
+  { label: 'Activity Logs', href: '/dashboard/admin/activity', icon: ActivitySquare },
+  
 ]
 
 const SUPERADMIN_NAV: NavItem[] = [
@@ -71,6 +74,8 @@ const SUPERADMIN_NAV: NavItem[] = [
   { label: 'Overview',      href: '/dashboard/admin',            icon: LayoutDashboard, exact: true },
   { label: 'Admins', href: '/dashboard/superadmin/admins', icon: UserCog, divider: true },
   { label: 'System', href: '/dashboard/superadmin/system', icon: Settings },
+  
+  { label: 'Unlocks', href: '/dashboard/superadmin/unlocks', icon: Unlock, divider: true },
   { label: 'Activity Logs', href: '/dashboard/superadmin/activity',   icon: ActivitySquare }
 ]
 

@@ -38,7 +38,7 @@ export function AppLogo({
 
   return (
 
-      <Link href="/" className={cn('flex items-center gap-2', className)}>
+      <div className={cn('flex items-center gap-2', className)}>
         <div
           className={cn(
             'flex items-center justify-center rounded-lg  font-semibold text-primary bg-primary/10',
@@ -59,6 +59,6 @@ export function AppLogo({
             )}
           </span>
         )}
-      </Link>
+      </div>
   )
 }
