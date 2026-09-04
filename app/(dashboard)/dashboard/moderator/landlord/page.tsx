@@ -1,11 +1,11 @@
-import { createClient } from '@supabase/supabase-js'
-import Link from 'next/link'
-import { Badge } from '@/components/ui/badge'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { MapPin, Phone, Building2, Clock, ArrowRight, Inbox, User } from 'lucide-react'
-import { timeAgo } from '@/lib/date'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { timeAgo } from '@/lib/utils'
+import { createClient } from '@supabase/supabase-js'
+import { ArrowRight, Building2, Clock, Inbox, MapPin, Phone, User } from 'lucide-react'
+import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
 

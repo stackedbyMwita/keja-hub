@@ -1,7 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { StatColor, StatItem } from '@/types'
-import { ChevronRightCircle, LucideIcon } from 'lucide-react'
+import { ChevronRightCircle } from 'lucide-react'
 import Link from 'next/link'
 
 interface StatsGridProps {

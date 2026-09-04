@@ -7,7 +7,8 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Users, Building2, ShieldCheck, Unlock, Clock, AlertTriangle, ArrowRight, CheckCircle2 } from 'lucide-react'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
-import { StatItem, StatsGrid } from '@/components/Components/StatsGrid'
+import { StatsGrid } from '@/components/Components/StatsGrid'
+import { StatItem } from '@/types'
 
 export const dynamic = 'force-dynamic'
 

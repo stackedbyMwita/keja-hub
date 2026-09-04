@@ -3,7 +3,7 @@ import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrappe
 import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
-import { timeAgo } from '@/lib/date'
+import { timeAgo } from '@/lib/utils'
 import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
 import {

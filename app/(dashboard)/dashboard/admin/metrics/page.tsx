@@ -1,6 +1,7 @@
-import { StatItem, StatsGrid } from '@/components/Components/StatsGrid'
+import { StatsGrid } from '@/components/Components/StatsGrid'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { StatItem } from '@/types'
 import { createClient } from '@supabase/supabase-js'
 import { Building2, ShieldCheck, Star, TrendingUp, Unlock, Users } from 'lucide-react'
 import { connection } from 'next/server'

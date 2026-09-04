@@ -1,10 +1,11 @@
 import { AdminModeratorDetailActions } from '@/components/admin/AdminModeratorDetailActions'
-import { StatItem, StatsGrid } from '@/components/Components/StatsGrid'
+import { StatsGrid } from '@/components/Components/StatsGrid'
 import { UserAvatar } from '@/components/Components/UserAvatar'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { StatItem } from '@/types'
 import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
 import {

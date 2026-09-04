@@ -185,7 +185,6 @@ export default function AdminUnlocksPage() {
               <div className="flex flex-col divide-y divide-border">
                 {(data?.top_users ?? []).map((user: any, i: number) => {
                   const profile = user.profile
-                  console.log(profile)
                   const isSuspicious = data?.suspicious?.some(
                     (s: any) => s.user_id === user.user_id
                   )

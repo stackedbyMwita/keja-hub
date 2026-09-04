@@ -8,8 +8,9 @@ import {
   Building2, ImageIcon, Star, ArrowRight,
 } from 'lucide-react'
 import Link from 'next/link'
-import { StatItem, StatsGrid } from '@/components/Components/StatsGrid'
+import { StatsGrid } from '@/components/Components/StatsGrid'
 import { ActivityLog } from '@/components/Activity/ActivityLog'
+import { StatItem } from '@/types'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,

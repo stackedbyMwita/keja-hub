@@ -5,11 +5,11 @@ import Link from 'next/link'
 import { connection } from 'next/server'
 
 import { PropertyList } from '@/components/Components/DataTable'
-import { StatItem, StatsGrid } from '@/components/Components/StatsGrid'
+import { StatsGrid } from '@/components/Components/StatsGrid'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { PropertyStatus } from '@/types'
+import { PropertyStatus, StatItem } from '@/types'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,

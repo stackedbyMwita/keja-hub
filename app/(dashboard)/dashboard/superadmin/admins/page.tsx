@@ -2,7 +2,6 @@
 
 import { UserAvatar } from '@/components/Components/UserAvatar'
 import { DashboardPageWrapper } from '@/components/dashboard/DashboardPageWrapper'
-import { KenyaPhoneBadge } from '@/components/KenyaPhoneBadge'
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -10,7 +9,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { timeAgo } from '@/lib/date'
+import { formatKenyaPhone, timeAgo } from '@/lib/utils'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ArrowDownCircle, CheckCircle2, Crown, Loader2, UserPlus, XCircle } from 'lucide-react'
 import { useState } from 'react'
@@ -145,7 +144,7 @@ export default function SuperadminAdminsPage() {
                     <div>
                       <p className="text-base font-bold text-foreground">{admin.full_name ?? 'No name'}</p>
                       <p className="text-sm text-muted-foreground">{admin.email}</p>
-                      <KenyaPhoneBadge phone={admin.phone_number} />
+                      <p className="text-sm text-muted-foreground">{formatKenyaPhone(admin.phone_number)}</p>
                     </div>
                     <Badge variant={admin.is_active ? 'default' : 'secondary'} className="shrink-0">
                       {admin.is_active ? 'Active' : 'Deactivated'}

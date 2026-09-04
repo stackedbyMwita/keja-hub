@@ -5,7 +5,7 @@ import { PropertyReviewActions } from '@/components/moderator/PropertyReviewActi
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { getPropertyTypeLabel } from '@/lib/constants/propertyTypes'
-import { formatKenyaPhone } from '@/lib/phone'
+import { formatKenyaPhone } from '@/lib/utils'
 import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
 import {
@@ -58,7 +58,7 @@ export default async function ModeratorPropertyDetailPage({ params }: PageProps)
   const hasScores       = property.total_score > 0
 
   // Build existing scores object for the scoring sheet
-  const existingScores = hasScores ? {
+  const existingScores: Record<string, number> = hasScores ? {
     score_security:    property.score_security,
     score_water:       property.score_water,
     score_electricity: property.score_electricity,
@@ -69,7 +69,7 @@ export default async function ModeratorPropertyDetailPage({ params }: PageProps)
     score_sanitation:  property.score_sanitation,
     score_value:       property.score_value,
     score_landlord:    property.score_landlord,
-  } : undefined
+  } : {};
 
   return (
     <DashboardPageWrapper>
